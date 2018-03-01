@@ -3,13 +3,18 @@
  */
 class DBHelper {
 
+/* TODO : global var server + subfolder */
+
   /**
    * Database URL.
    * Change this to restaurants.json file location on your server.
    */
   static get DATABASE_URL() {
-    const port = 8000 // Change this to your server port
-    return `http://localhost:${port}/data/restaurants.json`;
+    const port = 8080 // Change this to your server port
+	const server = "http://192.168.178.23";
+    const subfolder = "/mws-restaurant-stage-1";
+    //return `http://localhost:${port}/data/restaurants.json`;
+    return `${server}:${port}${subfolder}/data/restaurants.json`;
   }
 
   /**
@@ -149,8 +154,11 @@ class DBHelper {
   /**
    * Restaurant image URL.
    */
-  static imageUrlForRestaurant(restaurant) {
-    return (`/img/${restaurant.photograph}`);
+  static imageUrlForRestaurant(restaurant,size) {
+	const subfolder = "/mws-restaurant-stage-1";
+	//add suffix 100, 200, 400 or 800w
+	let filename = (restaurant.photograph).replace(".jpg",`_${size}w.jpg`)
+    return (`${subfolder}/img/${filename}`);
   }
 
   /**

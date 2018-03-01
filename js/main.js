@@ -138,13 +138,7 @@ fillRestaurantsHTML = (restaurants = self.restaurants) => {
 createRestaurantHTML = (restaurant) => {
   const li = document.createElement('li');
 
-  /*
-  const image = document.createElement('img');
-  image.className = 'restaurant-img';
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
-  li.append(image);
-  */
-  
+  // Add figure element with picture
   const figure = document.createElement('figure');
   li.append(figure);
 	const picture = document.createElement('picture');
@@ -164,27 +158,27 @@ createRestaurantHTML = (restaurant) => {
 	  const image = document.createElement('img');
 	  image.className = 'restaurant-img';
 	  image.src = DBHelper.imageUrlForRestaurant(restaurant,100);
-	  picture.append(image);	
+	  picture.append(image);
 	const figcaption = document.createElement('figcaption');
+  figcaption.innerHTML = restaurant.name;
 	figure.append(figcaption);
-	  
-  
-  const name = document.createElement('h1');
-  name.innerHTML = restaurant.name;
-  li.append(name);
 
-  const neighborhood = document.createElement('p');
-  neighborhood.innerHTML = restaurant.neighborhood;
-  li.append(neighborhood);
-
-  const address = document.createElement('p');
-  address.innerHTML = restaurant.address;
-  li.append(address);
-
-  const more = document.createElement('a');
-  more.innerHTML = 'View Details';
-  more.href = DBHelper.urlForRestaurant(restaurant);
-  li.append(more)
+  // div with textual content and button
+  const div = document.createElement('div');
+  li.append(div);
+    const name = document.createElement('h1');
+    name.innerHTML = restaurant.name;
+    div.append(name);
+    const neighborhood = document.createElement('p');
+    neighborhood.innerHTML = restaurant.neighborhood;
+    div.append(neighborhood);
+    const address = document.createElement('p');
+    address.innerHTML = restaurant.address;
+    div.append(address);
+    const more = document.createElement('a');
+    more.innerHTML = 'View Details';
+    more.href = DBHelper.urlForRestaurant(restaurant);
+    div.append(more)
 
   return li
 }

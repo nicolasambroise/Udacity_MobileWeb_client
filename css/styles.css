@@ -84,17 +84,23 @@ nav h1 a {
 	max-width: 100%;
 }
 #breadcrumb {
-    padding: 10px 40px 16px;
+    padding: 10px 0;
     list-style: none;
     background-color: #eee;
     font-size: 17px;
     margin: 0;
-    width: calc(50% - 80px);
+    /*width: calc(50% - 80px);*/
+		width:100%;
 }
 
 /* Display list items side by side */
 #breadcrumb li {
     display: inline;
+}
+
+/* Marge for breadcrumb */
+#breadcrumb li:first-child {
+		padding-left: 20px;
 }
 
 /* Add a slash symbol (/) before/behind each list item */
@@ -213,18 +219,22 @@ nav h1 a {
 
 /* ====================== Restaurant Details ====================== */
 .inside header {
-  position: fixed;
+  width:100%;
+	/*position: fixed;
   top: 0;
-  width: 100%;
-  z-index: 1000;
+  z-index: 1000;*/
 }
 .inside #map-container {
   background: blue none repeat scroll 0 0;
-  height: 87%;
-  position: fixed;
   right: 0;
-  top: 80px;
+	height:200px;
+	width:100%;
+	/*
+	height: 87%;
+	position: fixed;
+	top: 80px;
   width: 50%;
+	*/
 }
 .inside #map {
   background-color: #ccc;
@@ -232,9 +242,12 @@ nav h1 a {
   width: 100%;
 }
 .inside #footer {
-  bottom: 0;
+  /*
+	bottom: 0;
   position: absolute;
-  width: 50%;
+  */
+	width: 100%;
+  padding: 25px 0;
 }
 #restaurant-name {
   color: #f18200;
@@ -247,7 +260,7 @@ nav h1 a {
   line-height: 1.1;
 }
 #restaurant-img {
-	width: 90%;
+	/*width: 90%;*/
 }
 #restaurant-address {
   font-size: 12pt;
@@ -263,20 +276,24 @@ nav h1 a {
   padding: 2px 0;
   text-align: center;
   text-transform: uppercase;
-	width: 90%;
+	/*width: 90%;*/
 }
 #restaurant-container, #reviews-container {
   border-bottom: 1px solid #d9d9d9;
   border-top: 1px solid #fff;
+	/*
   padding: 140px 40px 30px;
   width: 50%;
+	*/
+	text-align: center;
 }
 #reviews-container {
-  padding: 30px 40px 80px;
+  padding: 15px;
+	text-align: left;
 }
 #reviews-container h2 {
   color: #f58500;
-  font-size: 24pt;
+  font-size: 20pt;
   font-weight: 300;
   letter-spacing: -1px;
   padding-bottom: 1pt;
@@ -287,17 +304,19 @@ nav h1 a {
 }
 #reviews-list li {
   background-color: #fff;
-    border: 2px solid #f3f3f3;
+  border: 2px solid #f3f3f3;
   display: block;
   list-style-type: none;
-  margin: 0 0 30px;
+  margin: 0 0 20px;
   overflow: hidden;
-  padding: 0 20px 20px;
+  padding: 0 10px 10px;
   position: relative;
-  width: 85%;
+}
+#reviews-list li > div{
+  display:flex;
 }
 #reviews-list li p {
-  margin: 0 0 10px;
+  margin: 10px;
 }
 #restaurant-hours td {
   color: #666;

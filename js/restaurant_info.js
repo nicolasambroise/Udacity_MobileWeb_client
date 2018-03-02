@@ -55,9 +55,27 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
 
-  const image = document.getElementById('restaurant-img');
-  image.className = 'restaurant-img'
-  image.src = DBHelper.imageUrlForRestaurant(restaurant);
+  const resto = document.getElementById('restaurant-img');
+  const figure = document.createElement('figure');
+  resto.append(figure);
+  	const picture = document.createElement('picture');
+  	figure.append(picture);
+  	  const source_x1 = document.createElement('source');
+  	  source_x1.media = "(min-width:800px)";
+  	  source_x1.srcset = DBHelper.imageUrlForRestaurant(restaurant,800);
+  	  picture.append(source_x1);
+  	  const source_x2 = document.createElement('source');
+  	  source_x2.media = "(min-width:500px)";
+  	  source_x2.srcset = DBHelper.imageUrlForRestaurant(restaurant,400);
+  	  picture.append(source_x2);
+  	  const image = document.createElement('img');
+  	  image.className = 'restaurant-img';
+  	  image.src = DBHelper.imageUrlForRestaurant(restaurant,200);
+      image.alt = restaurant.name;
+  	  picture.append(image);
+  	const figcaption = document.createElement('figcaption');
+    figcaption.innerHTML = restaurant.name;
+	figure.append(figcaption);
 
   const cuisine = document.getElementById('restaurant-cuisine');
   cuisine.innerHTML = restaurant.cuisine_type;
@@ -117,17 +135,19 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
  */
 createReviewHTML = (review) => {
   const li = document.createElement('li');
-  const name = document.createElement('p');
-  name.innerHTML = review.name;
-  li.appendChild(name);
+  const div = document.createElement('div');
+  li.appendChild(div);
+    const name = document.createElement('p');
+    name.innerHTML = review.name;
+    div.appendChild(name);
 
-  const date = document.createElement('p');
-  date.innerHTML = review.date;
-  li.appendChild(date);
+    const date = document.createElement('p');
+    date.innerHTML = review.date;
+    div.appendChild(date);
 
-  const rating = document.createElement('p');
-  rating.innerHTML = `Rating: ${review.rating}`;
-  li.appendChild(rating);
+    const rating = document.createElement('p');
+    rating.innerHTML = `Rating: ${review.rating}`;
+    div.appendChild(rating);
 
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;

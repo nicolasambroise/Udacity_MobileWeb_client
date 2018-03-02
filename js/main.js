@@ -158,6 +158,7 @@ createRestaurantHTML = (restaurant) => {
 	  const image = document.createElement('img');
 	  image.className = 'restaurant-img';
 	  image.src = DBHelper.imageUrlForRestaurant(restaurant,100);
+    image.alt = restaurant.name;
 	  picture.append(image);
 	const figcaption = document.createElement('figcaption');
   figcaption.innerHTML = restaurant.name;

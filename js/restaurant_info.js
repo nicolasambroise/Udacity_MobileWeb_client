@@ -92,6 +92,8 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
  * Create restaurant operating hours HTML table and add it to the webpage.
  */
 fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
+  // TODO: Display "Open until Xpm" or "Close"
+  // TODO: full operating Hours Table in a collapse div
   const hours = document.getElementById('restaurant-hours');
   for (let key in operatingHours) {
     const row = document.createElement('tr');
@@ -123,6 +125,7 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     container.appendChild(noReviews);
     return;
   }
+  // TODO: Display by default a max of 10 reviews, add a "more" button if > 10 reviews
   const ul = document.getElementById('reviews-list');
   reviews.forEach(review => {
     ul.appendChild(createReviewHTML(review));
@@ -148,6 +151,11 @@ createReviewHTML = (review) => {
     const rating = document.createElement('p');
     rating.innerHTML = `Rating: ${review.rating}`;
     div.appendChild(rating);
+
+    // TODO: Display Stars number based on the review rating
+    const star = document.createElement('i');
+    star.className = "fa fa-star";
+    div.appendChild(star);
 
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;

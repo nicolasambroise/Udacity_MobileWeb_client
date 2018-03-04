@@ -170,12 +170,22 @@ createRestaurantHTML = (restaurant) => {
     const name = document.createElement('h1');
     name.innerHTML = restaurant.name;
     div.append(name);
-    const neighborhood = document.createElement('p');
-    neighborhood.innerHTML = restaurant.neighborhood;
-    div.append(neighborhood);
+    const tag = document.createElement('div');
+    div.append(tag);
+      const cuisine = document.createElement('p');
+      cuisine.className = 'restaurant-cuisine';
+      cuisine.innerHTML = restaurant.cuisine_type;
+      tag.append(cuisine);
+      const neighborhood = document.createElement('p');
+      neighborhood.className = 'restaurant-neighborhood';
+      neighborhood.innerHTML = restaurant.neighborhood;
+      tag.append(neighborhood);
     const address = document.createElement('p');
+    address.className = 'restaurant-address';
     address.innerHTML = restaurant.address;
     div.append(address);
+
+    // TODO: improve the display of the button !
     const more = document.createElement('a');
     more.innerHTML = 'View Details';
     more.href = DBHelper.urlForRestaurant(restaurant);

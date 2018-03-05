@@ -1,0 +1,20 @@
+{
+  "short_name": "Time4Food",
+  "name": "Time 4 Food",
+  "start_url": "./?launcher=web_app_manifest",  
+  "icons": [
+    {
+      "src": "/logo/BSicon_REST.png",
+      "sizes": "16x16",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo/BSicon_REST.svg",
+      "sizes": "48x48"
+    }
+  ],
+  "background_color": "#f3f3f3",
+  "theme_color": "#444",
+  "display": "standalone",
+  "orientation": "portrait"
+}

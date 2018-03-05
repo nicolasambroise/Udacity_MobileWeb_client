@@ -131,6 +131,9 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     ul.appendChild(createReviewHTML(review));
   });
   container.appendChild(ul);
+
+  // add click event to un-blur
+  reviewUnblur();
 }
 
 /**
@@ -138,20 +141,18 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
  */
 createReviewHTML = (review) => {
   const li = document.createElement('li');
+  li.className = "blur";
   const div = document.createElement('div');
   li.appendChild(div);
     const name = document.createElement('p');
     name.innerHTML = review.name;
     div.appendChild(name);
-
     const date = document.createElement('p');
     date.innerHTML = review.date;
     div.appendChild(date);
-
     const rating = document.createElement('p');
     rating.innerHTML = `Rating: ${review.rating}`;
     div.appendChild(rating);
-
     for (let indexCount = 0; indexCount < 5; indexCount++) {
       let rating = parseInt(review.rating);
       let star = document.createElement('i');
@@ -159,12 +160,9 @@ createReviewHTML = (review) => {
       div.appendChild(star);
     };
 
-
-
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;
   li.appendChild(comments);
-
   return li;
 }
 
@@ -192,4 +190,21 @@ getParameterByName = (name, url) => {
   if (!results[2])
     return '';
   return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+/**
+ * Display Full review on Click
+ * TODO : Finish feature
+ */
+reviewUnblur = () => {
+  const review_blured = document.getElementsByClassName("blur");
+  console.log(review_blured.length)
+  for(let i = 0; i < review_blured.length; i++)
+  {
+     //review_blured.item(i).addEventListener('click', reviewUnblurEvent(review_blured.item(i)));
+  }
+}
+reviewUnblurEvent = (dom_element) => {
+  console.log(dom_element)
+  dom_element.classList.remove("blur");
 }

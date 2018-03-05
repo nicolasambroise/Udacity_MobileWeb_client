@@ -152,10 +152,14 @@ createReviewHTML = (review) => {
     rating.innerHTML = `Rating: ${review.rating}`;
     div.appendChild(rating);
 
-    // TODO: Display Stars number based on the review rating
-    const star = document.createElement('i');
-    star.className = "fa fa-star";
-    div.appendChild(star);
+    for (let indexCount = 0; indexCount < 5; indexCount++) {
+      let rating = parseInt(review.rating);
+      let star = document.createElement('i');
+      star.className = rating > indexCount ? "fa fa-star" : "fa fa-star-o";
+      div.appendChild(star);
+    };
+
+
 
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;

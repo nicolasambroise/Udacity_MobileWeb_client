@@ -144,11 +144,11 @@ createRestaurantHTML = (restaurant) => {
 	const picture = document.createElement('picture');
 	figure.append(picture);
 	  const source_x1 = document.createElement('source');
-	  source_x1.media = "(min-width:1200px)";
+	  source_x1.media = "(min-width:2100px)";
 	  source_x1.srcset = DBHelper.imageUrlForRestaurant(restaurant,800);
 	  picture.append(source_x1);
 	  const source_x2 = document.createElement('source');
-	  source_x2.media = "(min-width:800px)";
+	  source_x2.media = "(min-width:1200px)";
 	  source_x2.srcset = DBHelper.imageUrlForRestaurant(restaurant,400);
 	  picture.append(source_x2);
 	  const source_x3 = document.createElement('source');

@@ -150,14 +150,14 @@ createReviewHTML = (review) => {
     const date = document.createElement('p');
     date.innerHTML = review.date;
     div.appendChild(date);
-    const rating = document.createElement('p');
+    const rating = document.createElement('div');
     rating.innerHTML = `Rating: ${review.rating}`;
     div.appendChild(rating);
     for (let indexCount = 0; indexCount < 5; indexCount++) {
       let rating = parseInt(review.rating);
       let star = document.createElement('i');
       star.className = rating > indexCount ? "fa fa-star" : "fa fa-star-o";
-      div.appendChild(star);
+      rating.appendChild(star);
     };
 
   const comments = document.createElement('p');
@@ -194,17 +194,12 @@ getParameterByName = (name, url) => {
 
 /**
  * Display Full review on Click
- * TODO : Finish feature
  */
 reviewUnblur = () => {
-  const review_blured = document.getElementsByClassName("blur");
-  console.log(review_blured.length)
-  for(let i = 0; i < review_blured.length; i++)
-  {
-     //review_blured.item(i).addEventListener('click', reviewUnblurEvent(review_blured.item(i)));
-  }
-}
-reviewUnblurEvent = (dom_element) => {
-  console.log(dom_element)
-  dom_element.classList.remove("blur");
+  const review_blured = document.querySelectorAll(".blur");
+  Array.from(review_blured).forEach(review => {
+      review.addEventListener('click', function(event) {
+        review.classList.remove("blur");
+      });
+  });
 }

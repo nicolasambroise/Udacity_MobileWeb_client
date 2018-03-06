@@ -397,6 +397,8 @@ nav h1 a {
 }
 #reviews-list li > div{
   display:flex;
+	-webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
 }
 #reviews-list li p {
   margin: 10px;
@@ -405,32 +407,34 @@ nav h1 a {
 	margin-top: 10px;
   line-height: 1.5;
 }
-#reviews-list .blur{
-	height:120px;
-	overflow-y: hidden;
-}
-#reviews-list .blur:before {
-  content: "";
-  position: absolute;
-  z-index: 1;
-  bottom: 0;
-  left: 0;
-  pointer-events: none;
-  background-image: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255, 1) 90%);
-  width: 100%;
-  height: 4em;
-}
-#reviews-list li.blur:hover:after {
-  content: "⏷";
-  position: absolute;
-  z-index: 1;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-	font-size: 24pt;
-  height: 1.2em;
-  color: black;
-  text-align: center;
+@media screen and (max-width: 799px) {
+	#reviews-list .blur{
+		height:120px;
+		overflow-y: hidden;
+	}
+	#reviews-list .blur:before {
+	  content: "";
+	  position: absolute;
+	  z-index: 1;
+	  bottom: 0;
+	  left: 0;
+	  pointer-events: none;
+	  background-image: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255, 1) 90%);
+	  width: 100%;
+	  height: 4em;
+	}
+	#reviews-list li.blur:hover:after {
+	  content: "⏷";
+	  position: absolute;
+	  z-index: 1;
+	  bottom: 0;
+	  left: 0;
+	  width: 100%;
+		font-size: 24pt;
+	  height: 1.2em;
+	  color: black;
+	  text-align: center;
+	}
 }
 #restaurant-hours td {
   color: #666;

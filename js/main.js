@@ -163,7 +163,7 @@ createRestaurantHTML = (restaurant) => {
   // div with textual content and button
   const div = document.createElement('div');
   li.append(div);
-    const name = document.createElement('h1');
+    const name = document.createElement('h2');
     name.innerHTML = restaurant.name;
     div.append(name);
     const cuisine = document.createElement('p');

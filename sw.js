@@ -33,30 +33,32 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
-  console.log(event.request.url);
-  event.respondWith(
-	  caches.match(event.request).then(function(response) {
+  // console.log(event.request.url);
+  // Exclude map file from cache
+  if(event.request.url.indexOf("https://maps.gstatic.com/mapfiles/") > -1){
+    return null;
+  }
+  event.respondWith(caches.match(event.request).then(function(response) {
 		if (response !== undefined) {
 		  return response;
 		} else {
 		  return fetch(event.request).then(function (response) {
-			const responseClone = response.clone();
-			return response;
+			  const responseClone = response.clone();
+			  return response;
 		  }).catch(function () {
-			     return caches.match('');
+			  return caches.match('');
 		  });
 		}
-	  })
-  );
+	}));
 });
-
 self.addEventListener('message', function(event) {
   console.log(event.data.action);
   if (event.data.action === 'skipWaiting') {
     self.skipWaiting();
   }
 });
-
+/* TODO: Next step : use sync!
 self.addEventListener('sync', function(event) {
 	console.log("sync: "+event);
 });
+*/

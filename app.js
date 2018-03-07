@@ -19,11 +19,8 @@ window.addEventListener('load', () => {
 				trackInstalling(reg.installing);
 			});
 		}).catch(function(error) {
-	  	 console.log('Registration failed with ' + error);// registration failed
+	  	 console.log('Registration failed with ' + error);
 	  });
-
-	  // Ensure refresh is only called once.
-	  // This works around a bug in "force update on reload".
 	  var refreshing;
 	  navigator.serviceWorker.addEventListener('controllerchange', function() {
 			if (refreshing) return;
@@ -32,7 +29,6 @@ window.addEventListener('load', () => {
 			refreshing = true;
 	  });
 });
-
 function trackInstalling(worker) {
   var indexController = this;
 	worker.addEventListener('statechange', function() {
@@ -41,7 +37,6 @@ function trackInstalling(worker) {
 		}
 	});
 };
-
 function updateReady(worker) {
 	console.log("New version available");
 	if (confirm('New version available, press OK to reload the website')) {

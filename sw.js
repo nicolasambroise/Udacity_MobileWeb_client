@@ -26,7 +26,7 @@ self.addEventListener('install', function(event) {
         'js/main.js',
         'js/restaurant_info.js',
         'js/script.js',
-        'data/restaurants.json'
+        'data/restaurants.json',
         'logo/BSicon_REST.png',
         'logo/BSicon_REST.svg',
         'manifest.json'

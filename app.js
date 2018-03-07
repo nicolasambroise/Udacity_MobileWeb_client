@@ -40,7 +40,7 @@ function trackInstalling(worker) {
 function updateReady(worker) {
 	console.log("New version available");
 	if (confirm('New version available, press OK to reload the website')) {
-		console.log({action: 'skipWaiting'});
+		// TODO: use {action: 'skipWaiting'}
 	} else {
 		alert('Why did you press cancel? You should have confirmed');
 	}

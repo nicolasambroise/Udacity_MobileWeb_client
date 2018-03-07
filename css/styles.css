@@ -9,7 +9,6 @@
  */
 
 /* CSS Document */
-
 body,td,th,p{
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 10pt;
@@ -19,7 +18,7 @@ body,td,th,p{
 body {
 	background-color: #fdfdfd;
 	margin: 0;
-	position:relative;
+	position: relative;
 }
 ul, li {
 	font-family: Arial, Helvetica, sans-serif;
@@ -27,7 +26,7 @@ ul, li {
 	color: #333;
 }
 a {
-	color: orange;
+	color: #f58500;
 	text-decoration: none;
 }
 a:hover, a:focus {
@@ -62,7 +61,7 @@ nav {
   width: 100%;
   height: 80px;
   background-color: #444;
-  text-align:center;
+  text-align: center;
 }
 nav h1 {
   margin: auto;
@@ -76,6 +75,9 @@ nav h1 a {
   letter-spacing: 5px;
   text-transform: uppercase;
   font-family: "Dreams", Helvetica, Arial, sans-serif;
+}
+nav h1 a:hover {
+  color: #f58500;
 }
 /* ====================== Logo ====================== */
 .logo{
@@ -92,23 +94,24 @@ nav h1 a {
 .skip-link{
 	position: absolute;
 	top: -40px;
-	left:0;
-	background-color: orange;
+	left: 0;
+	background-color: #f58500;
 	color: #fff;
 	padding: 8px;
-	z-index:100;
+	z-index: 100;
 }
 .skip-link:focus{
-	top:0;
+	top: 0;
 }
 /* ====================== breadcrumb ====================== */
 #breadcrumb {
     padding: 0;
     list-style: none;
-    background-color: #eee;
+		background-color: #f3f3f3;
+    border-bottom: 1px solid #ccc;
     font-size: 17px;
     margin: 0;
-		width:100%;
+		width: 100%;
 }
 
 /* Display list items side by side */
@@ -240,10 +243,10 @@ nav h1 a {
   text-transform: uppercase;
 }
 #restaurants-list li .restaurant-address {
-	display:none;
+	display: none;
 }
 #restaurants-list li a {
-	background-color: orange;
+	background-color: #f58500;
   color: #fff;
   display: inline-block;
   font-size: 10pt;
@@ -264,7 +267,7 @@ nav h1 a {
 }
 @media screen and (min-width: 500px) {
 	#restaurants-list li .restaurant-address {
-    display:block;
+    display: block;
   }
 	#restaurants-list figure{
 		width: 200px;
@@ -278,30 +281,38 @@ nav h1 a {
 	}
 }
 @media screen and (min-width: 800px) {
-	#restaurants-list figure {
-	    width: 200px;
-	    margin: 10px auto 20px auto;
-	    display: block;
-	}
-	#restaurants-list li a{
-		margin: 15px auto 0 auto;
-    display: block;
-	}
 	#restaurants-list li{
 	  width: 275px;
     display: inline-block;
     margin: 5px;
   }
+	#restaurants-list li a{
+		margin: 15px auto 0 auto;
+    display: block;
+	}
+	#restaurants-list figure {
+	    width: 200px;
+	    margin: 10px auto 20px auto;
+	    display: block;
+	}
+}
+@media screen and (min-width: 1000px) {
+	#restaurants-list li{
+		width: 325px;
+	}
+	#restaurants-list figure {
+	    width: 300px;
+	}
 }
 /* ====================== Restaurant Details ====================== */
 .inside header {
-  width:100%;
+  width: 100%;
 }
 .inside #map-container {
   background: blue none repeat scroll 0 0;
   right: 0;
-	height:200px;
-	width:100%;
+	height: 200px;
+	width: 100%;
 }
 .inside #map {
   background-color: #ccc;
@@ -327,7 +338,7 @@ nav h1 a {
 }
 @media screen and (min-width: 800px) {
 	.inside #map-container {
-		height:370px;
+		height: 370px;
 	  width: 47%;
 		display: inline-block;
 	}
@@ -340,7 +351,7 @@ nav h1 a {
   font-size: 20pt;
   font-weight: 200;
   letter-spacing: 0;
-  margin: 15px 0 30px;
+  padding: 15px 0;
   text-transform: uppercase;
   line-height: 1.1;
 }
@@ -367,7 +378,7 @@ nav h1 a {
 	text-align: center;
 }
 #restaurant-container div:nth-child(3){
-	margin:0 10px;
+	margin: 0 10px;
 }
 #restaurant-hours{
 	width: 100%;
@@ -395,49 +406,64 @@ nav h1 a {
   width: 100%;
   margin: 5px 0 10px 0;
 }
-#reviews-list li > div{
-  display:flex;
-	-webkit-flex-wrap: wrap;
-  flex-wrap: wrap;
-}
 #reviews-list li p {
-  margin: 10px;
+	margin: 10px 10px 0 10px;
+  display: inline-block;
+}
+#reviews-list li p:first-child {
+	font-weight: bold;
+}
+#reviews-list li span{
+	margin: 0 10px;
 }
 #reviews-list li i{
-	margin-top: 10px;
   line-height: 1.5;
+	color: #f58500;
 }
-@media screen and (max-width: 799px) {
+@media screen and (max-width: 499px) {
 	#reviews-list .blur{
-		height:120px;
+		height: 120px;
 		overflow-y: hidden;
 	}
 	#reviews-list .blur:before {
-	  content: "";
-	  position: absolute;
-	  z-index: 1;
-	  bottom: 0;
-	  left: 0;
-	  pointer-events: none;
-	  background-image: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255, 1) 90%);
-	  width: 100%;
-	  height: 4em;
+		content: "";
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+    right: 0;
+    pointer-events: none;
+    width: 250px;
+    background-image: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255, 1) 80%);
+    height: 25px;
+	}
+	#reviews-list li.blur:after {
+		content: "...";
+		position: absolute;
+		z-index: 1;
+		bottom: 0;
+		right: 10px;
+		width: 100%;
+		font-size: 24pt;
+		color: black;
+		text-align: right;
 	}
 	#reviews-list li.blur:hover:after {
-	  content: "⏷";
-	  position: absolute;
-	  z-index: 1;
-	  bottom: 0;
-	  left: 0;
-	  width: 100%;
-		font-size: 24pt;
-	  height: 1.2em;
-	  color: black;
-	  text-align: center;
+    color: #f58500;
 	}
 }
 #restaurant-hours td {
   color: #666;
+}
+@media screen and (min-width: 500px) {
+	#reviews-list li > div{
+	  display: flex;
+	}
+	#reviews-list li span {
+    margin: 10px 10px 0 10px;
+  }
+	#reviews-list li i{
+		margin-top: 10px;
+	}
 }
 @media screen and (min-width: 800px) {
 	#restaurant-operatinghours{

@@ -68,6 +68,10 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   	  source_x2.media = "(min-width:500px)";
   	  source_x2.srcset = DBHelper.imageUrlForRestaurant(restaurant,400);
   	  picture.append(source_x2);
+      const source_x3 = document.createElement('source');
+  	  source_x3.media = "(min-width:400px)";
+  	  source_x3.srcset = DBHelper.imageUrlForRestaurant(restaurant,300);
+  	  picture.append(source_x3);
   	  const image = document.createElement('img');
   	  image.className = 'restaurant-img';
   	  image.src = DBHelper.imageUrlForRestaurant(restaurant,200);
@@ -144,22 +148,23 @@ createReviewHTML = (review) => {
   li.className = "blur";
   const div = document.createElement('div');
   li.appendChild(div);
-    const name = document.createElement('p');
-    name.innerHTML = review.name;
-    div.appendChild(name);
-    const date = document.createElement('p');
-    date.innerHTML = review.date;
-    div.appendChild(date);
-    const rating = document.createElement('div');
+    const info = document.createElement('div');
+    div.appendChild(info)
+      const name = document.createElement('p');
+      name.innerHTML = review.name;
+      info.appendChild(name);
+      const date = document.createElement('p');
+      date.innerHTML = review.date;
+      info.appendChild(date);
+    const rating = document.createElement('span');
     rating.innerHTML = `Rating: ${review.rating}`;
     div.appendChild(rating);
     for (let indexCount = 0; indexCount < 5; indexCount++) {
       let rating = parseInt(review.rating);
       let star = document.createElement('i');
       star.className = rating > indexCount ? "fa fa-star" : "fa fa-star-o";
-      rating.appendChild(star);
+      div.appendChild(star);
     };
-
   const comments = document.createElement('p');
   comments.innerHTML = review.comments;
   li.appendChild(comments);

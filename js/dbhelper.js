@@ -9,8 +9,7 @@ class DBHelper {
    */
   static get DATABASE_URL() {
     const port = 8000;
-	  const server = "http://localhost";
-    //return `http://localhost:${port}/data/restaurants.json`;
+	const server = "http://localhost";
     return `${server}:${port}/data/restaurants.json`;
   }
 
@@ -152,10 +151,9 @@ class DBHelper {
    * Restaurant image URL.
    */
   static imageUrlForRestaurant(restaurant,size,extension="jpg") {
-	  // Add suffix 100, 200, 400 or 800w
-	  // Rename extension : WebP for Chrome , Jpg for other
-	  console.log(extension);
-	  let filename = (restaurant.photograph).replace(".jpg",`_${size}w.jpg`).replace(".jpg",`.${extension}`);
+	// Add suffix 100, 200, 400 or 800w
+	// Rename extension : WebP for Chrome , Jpg for other
+	let filename = (restaurant.photograph).replace(".jpg",`_${size}w.jpg`).replace(".jpg",`.${extension}`);
     return (`/img/${filename}`);
   }
 

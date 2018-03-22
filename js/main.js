@@ -6,6 +6,7 @@ var markers = [];
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
+  console.log("DOMContentLoaded");
   fetchNeighborhoods();
   fetchCuisines();
 });
@@ -78,6 +79,7 @@ window.initMap = () => {
     center: loc,
     scrollwheel: false
   });
+  console.log("Initialize GMap");
   updateRestaurants();
 }
 
@@ -122,6 +124,8 @@ resetRestaurants = (restaurants) => {
 /**
  * Create all restaurants HTML and add them to the webpage.
  */
+ 
+ // TODO : Add a pagination to load only the first 12 result ( impove UX and reduce load time)
 fillRestaurantsHTML = (restaurants = self.restaurants) => {
   const ul = document.getElementById('restaurants-list');
   restaurants.forEach(restaurant => {
@@ -204,7 +208,16 @@ createRestaurantHTML = (restaurant) => {
  * Dynamically add title to the GoogleMap iframe.
  */
 window.addEventListener('load', () => {
-  document.querySelector('#map iframe').setAttribute('title', 'NewYork City Map of Restaurants');
+  if(navigator.onLine){
+	document.querySelector('#map iframe').setAttribute('title', 'NewYork City Map of Restaurants');
+	document.querySelector('#map iframe').setAttribute('onerror',"var p=document.createElement('p');this.parentNode.replaceChild(p,this);p.innerHTML='You need to be online to view this content.';");
+	document.querySelector('#map iframe').setAttribute('onload',"if(navigator.onLine===false) eval(this.getAttribute('onerror'));");  
+    document.getElementById('map-static').style.display = "none";
+    console.log('onLine'); 
+ }else{
+	document.getElementById('map-static').style.display = "block";
+    console.log('offLine');
+  }	  
 });
 
 

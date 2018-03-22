@@ -145,10 +145,24 @@ nav h1 a:hover {
     text-decoration: underline;
 }
 /* ====================== Map ====================== */
-#map {
+#map,
+#map-static {
   height: 400px;
   width: 100%;
-  background-color: #ccc;
+}
+
+#map > div{
+	background-color:transparent !important;
+}
+
+#map-static{
+  margin-top:-400px;
+  text-align:center;
+  display:none;	
+}
+
+#map-static img{
+   margin: 0 -100%;
 }
 /* ====================== Restaurant Filtering ====================== */
 .filter-options {
@@ -477,17 +491,19 @@ nav h1 a:hover {
 	#restaurant-operatinghours{
     width: 47%;
     display: inline-block;
-		vertical-align: top;
+	vertical-align: top;
     padding: 0 15px;
   }
 }
 /* ============================ footer ================== */
 footer a{
-	padding: 15px 0;
+  padding: 15px 0;
   color: #eee;
+  text-decoration:underline;
 }
-footer a:hover{
-	color: #8b0000;
+footer a:hover,
+footer a:focus{
+	color: orange;
 }
 
 /* ============================= FontAwesome =============== */

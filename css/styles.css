@@ -246,7 +246,7 @@ nav h1 a:hover {
 	display: none;
 }
 #restaurants-list li a {
-	background-color: #8b0000;
+  background-color: #8b0000;
   color: #fff;
   display: inline-block;
   font-size: 10pt;
@@ -260,7 +260,12 @@ nav h1 a:hover {
   position: absolute;
   right: 0px;
   bottom: 0px;
-	line-height: 12pt;
+  line-height: 12pt;
+}
+#restaurants-list li a:hover {
+    transition: 500ms;
+    color: #000;
+    background-color: orange;
 }
 #restaurants-list li > div p{
 	margin: 0;
@@ -459,10 +464,13 @@ nav h1 a:hover {
 	  display: flex;
 	}
 	#reviews-list li span {
-    margin: 10px 10px 0 10px;
-  }
+      margin: 10px 10px 0 10px;
+    }
 	#reviews-list li i{
 		margin-top: 10px;
+	}
+	#reviews-list li p {
+	  margin: 10px;
 	}
 }
 @media screen and (min-width: 800px) {

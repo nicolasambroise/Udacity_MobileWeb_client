@@ -1,8 +1,6 @@
-let restaurants,
-  neighborhoods,
-  cuisines
-var map
-var markers = []
+let restaurants, neighborhoods, cuisines;
+var map;
+var markers = [];
 
 /**
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
@@ -143,21 +141,35 @@ createRestaurantHTML = (restaurant) => {
   li.append(figure);
 	const picture = document.createElement('picture');
 	figure.append(picture);
-	  const source_x1 = document.createElement('source');
-	  source_x1.media = "(min-width:1000px)";
-	  source_x1.srcset = DBHelper.imageUrlForRestaurant(restaurant,300);
-	  picture.append(source_x1);
-	  const source_x2 = document.createElement('source');
-	  source_x2.media = "(min-width:500px)";
-	  source_x2.srcset = DBHelper.imageUrlForRestaurant(restaurant,200);
-	  picture.append(source_x2);
+	
+	  // Webp for Chrome
+	  const source_300webp = document.createElement('source');
+	  source_300webp.media = "(min-width:1000px)";
+	  source_300webp.srcset = DBHelper.imageUrlForRestaurant(restaurant,300,"webp");
+	  picture.append(source_300webp);
+	  const source_200webp = document.createElement('source');
+	  source_200webp.media = "(min-width:500px)";
+	  source_200webp.srcset = DBHelper.imageUrlForRestaurant(restaurant,200,"webp");
+	  picture.append(source_200webp);
+	  const source_100webp = document.createElement('source');
+	  source_100webp.srcset = DBHelper.imageUrlForRestaurant(restaurant,100,"webp");
+	  picture.append(source_100webp);
+	  // Jpg for other
+	  const source_300jpg = document.createElement('source');
+	  source_300jpg.media = "(min-width:1000px)";
+	  source_300jpg.srcset = DBHelper.imageUrlForRestaurant(restaurant,300,"jpg");
+	  picture.append(source_300jpg);
+	  const source_200jpg = document.createElement('source');
+	  source_200jpg.media = "(min-width:500px)";
+	  source_200jpg.srcset = DBHelper.imageUrlForRestaurant(restaurant,200,"jpg");
+	  picture.append(source_200jpg);
 	  const image = document.createElement('img');
 	  image.className = 'restaurant-img';
-	  image.src = DBHelper.imageUrlForRestaurant(restaurant,100);
-    image.alt = restaurant.name;
+	  image.src = DBHelper.imageUrlForRestaurant(restaurant,100,"jpg");
+      image.alt = restaurant.name;
 	  picture.append(image);
 	const figcaption = document.createElement('figcaption');
-  figcaption.innerHTML = restaurant.name;
+    figcaption.innerHTML = restaurant.name;
 	figure.append(figcaption);
 
   // div with textual content and button
@@ -185,8 +197,16 @@ createRestaurantHTML = (restaurant) => {
     more.href = DBHelper.urlForRestaurant(restaurant);
     div.append(more)
 
-  return li
+  return li;
 }
+
+/**
+ * Dynamically add title to the GoogleMap iframe.
+ */
+window.addEventListener('load', () => {
+  document.querySelector('#map iframe').setAttribute('title', 'NewYork City Map of Restaurants');
+});
+
 
 /**
  * Add markers for current restaurants to the map.

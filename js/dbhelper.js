@@ -151,9 +151,11 @@ class DBHelper {
   /**
    * Restaurant image URL.
    */
-  static imageUrlForRestaurant(restaurant,size) {
-	  //add suffix 100, 200, 400 or 800w
-	  let filename = (restaurant.photograph).replace(".jpg",`_${size}w.jpg`)
+  static imageUrlForRestaurant(restaurant,size,extension="jpg") {
+	  // Add suffix 100, 200, 400 or 800w
+	  // Rename extension : WebP for Chrome , Jpg for other
+	  console.log(extension);
+	  let filename = (restaurant.photograph).replace(".jpg",`_${size}w.jpg`).replace(".jpg",`.${extension}`);
     return (`/img/${filename}`);
   }
 

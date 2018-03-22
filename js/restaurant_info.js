@@ -60,21 +60,39 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   resto.append(figure);
   	const picture = document.createElement('picture');
   	figure.append(picture);
-  	  const source_x1 = document.createElement('source');
-  	  source_x1.media = "(min-width:800px)";
-  	  source_x1.srcset = DBHelper.imageUrlForRestaurant(restaurant,800);
-  	  picture.append(source_x1);
-  	  const source_x2 = document.createElement('source');
-  	  source_x2.media = "(min-width:500px)";
-  	  source_x2.srcset = DBHelper.imageUrlForRestaurant(restaurant,400);
-  	  picture.append(source_x2);
-      const source_x3 = document.createElement('source');
-  	  source_x3.media = "(min-width:400px)";
-  	  source_x3.srcset = DBHelper.imageUrlForRestaurant(restaurant,300);
-  	  picture.append(source_x3);
+	
+	   // Webp for Chrome
+	  const source_800webp = document.createElement('source');
+	  source_800webp.media = "(min-width:800px)";
+	  source_800webp.srcset = DBHelper.imageUrlForRestaurant(restaurant,800,"webp");
+	  picture.append(source_800webp);
+	  const source_400webp = document.createElement('source');
+	  source_400webp.media = "(min-width:500px)";
+	  source_400webp.srcset = DBHelper.imageUrlForRestaurant(restaurant,400,"webp");
+	  picture.append(source_400webp);
+	  const source_300webp = document.createElement('source');
+	  source_300webp.media = "(min-width:400px)";
+	  source_300webp.srcset = DBHelper.imageUrlForRestaurant(restaurant,300,"webp");
+	  picture.append(source_300webp);
+	  const source_200webp = document.createElement('source');
+	  source_200webp.srcset = DBHelper.imageUrlForRestaurant(restaurant,200,"webp");
+	  picture.append(source_200webp);
+	  // Jpg for other	
+  	  const source_800jpg = document.createElement('source');
+  	  source_800jpg.media = "(min-width:800px)";
+  	  source_800jpg.srcset = DBHelper.imageUrlForRestaurant(restaurant,800,"jpg");
+  	  picture.append(source_800jpg);
+  	  const source_400jpg = document.createElement('source');
+  	  source_400jpg.media = "(min-width:500px)";
+  	  source_400jpg.srcset = DBHelper.imageUrlForRestaurant(restaurant,400,"jpg");
+  	  picture.append(source_400jpg);
+      const source_300jpg = document.createElement('source');
+  	  source_300jpg.media = "(min-width:400px)";
+  	  source_300jpg.srcset = DBHelper.imageUrlForRestaurant(restaurant,300,"jpg");
+  	  picture.append(source_300jpg);
   	  const image = document.createElement('img');
   	  image.className = 'restaurant-img';
-  	  image.src = DBHelper.imageUrlForRestaurant(restaurant,200);
+  	  image.src = DBHelper.imageUrlForRestaurant(restaurant,200,"jpg");
       image.alt = restaurant.name;
   	  picture.append(image);
   	const figcaption = document.createElement('figcaption');
@@ -208,3 +226,10 @@ reviewUnblur = () => {
       });
   });
 }
+
+/**
+ * Dynamically add title to the GoogleMap iframe.
+ */
+window.addEventListener('load', () => {
+  document.querySelector('#map iframe').setAttribute('title', 'NewYork City Map of Restaurants');
+});

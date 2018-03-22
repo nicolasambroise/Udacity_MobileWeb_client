@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Restaurant Reviews</title>
   <meta name="description" content="NewYork Restaurant Reviews">
   <meta name="author" content="Nicolas AMBROISE">
@@ -25,24 +26,26 @@
 
   <main id="maincontent">
     <section id="map-container">
-      <div id="map"></div>
+      <div id="map" tabindex="0"></div>
     </section>
     <section>
       <div class="filter-options">
         <h2>Filter Results</h2>
         <div>
           <i class="fa fa-map-signs" aria-hidden="true"></i>
-          <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()">
+          <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-labelledby="neighborhoods-select">
             <option value="all" selected>All Neighborhoods</option>
           </select>
         </div>
         <div>
           <i class="fa fa-cutlery" aria-hidden="true"></i>
-          <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()">
+          <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" aria-labelledby="cuisines-select">
             <option value="all" selected>All Cuisines</option>
           </select>
         </div>
       </div>
+	</section>
+	<section>
       <ul id="restaurants-list"></ul>
     </section>
   </main>

@@ -17,6 +17,7 @@ window.initMap = () => {
 	  console.log("Initialize GMap");
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+	  loadStaticMap(self.restaurant);
     }
   });
 }
@@ -164,7 +165,8 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
  */
 createReviewHTML = (review) => {
   const li = document.createElement('li');
-  li.className = "blur";
+  // Add class blur only if review.comments > 100 character ( 2 lines)
+  if(review.comments.length > 100) li.className = "blur";
   const div = document.createElement('div');
   li.appendChild(div);
     const info = document.createElement('div');
@@ -229,11 +231,11 @@ reviewUnblur = () => {
 }
 
 /**
- * Dynamically add title to the GoogleMap iframe.
+ * Render alternative Static Map
  */
-window.addEventListener('load', () => {
-  const lat = 40.722216; //restaurant.latlng.lat;
-  const lng = -73.987501; //restaurant.latlng.lng;
+loadStaticMap = (restaurant) => { 
+  const lat = restaurant.latlng.lat;
+  const lng = restaurant.latlng.lng;
   const zoom = 16;
   const height = 400;
   const width = 640;
@@ -245,11 +247,18 @@ window.addEventListener('load', () => {
   document.getElementById('map-static').append(staticmap);
 	
   if(navigator.onLine){  
-	document.querySelector('#map iframe').setAttribute('title', 'New York City Map of Restaurants');
-	document.getElementById('map-static').style.display = "none";
+    document.getElementById('map-static').style.display = "none";
     console.log('onLine'); 
  }else{
 	document.getElementById('map-static').style.display = "block";
     console.log('offLine');
   }	  
+}
+
+/**
+ * Dynamically add title to the GoogleMap iframe.
+ */
+window.addEventListener('load', () => {
+    const iframeloaded = document.querySelector('#map iframe') !== null
+	if(iframeloaded) document.querySelector('#map iframe').setAttribute('title', 'New York City Map of Restaurants');	
 });

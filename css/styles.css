@@ -96,8 +96,8 @@ nav h1 a:focus {
 	position: absolute;
 	top: -40px;
 	left: 0;
-	background-color: #8b0000;
-	color: #fff;
+	background-color: orange;
+	color: #000;
 	padding: 8px;
 	z-index: 100;
 }
@@ -141,14 +141,21 @@ nav h1 a:focus {
 }
 
 /* Add a color on mouse-over */
-#breadcrumb li a:hover {
-    color: #01447e;
+#breadcrumb li a:hover,
+#breadcrumb li a:focus {
+    color: orange;
     text-decoration: underline;
 }
 /* ====================== Map ====================== */
+
+#map-container{
+  height: 200px;
+}
+
 #map,
 #map-static {
-  height: 400px;
+  max-height: 400px;
+  height: 100%;
   width: 100%;
 }
 
@@ -157,14 +164,33 @@ nav h1 a:focus {
 }
 
 #map-static{
-  margin-top:-400px;
+  margin-top:-200px;
   text-align:center;
   display:none;	
+  overflow: hidden;
 }
 
 #map-static img{
    margin: 0 -100%;
 }
+
+@media screen and (min-width: 500px) {
+  #map-container {
+    height: 300px;
+  }
+  #map-static{
+    margin-top:-300px;
+  }
+}
+@media screen and (min-width: 800px) {
+  #map-container {
+	height: 400px;
+  }
+  #map-static{
+    margin-top:-400px;
+  }
+}
+
 /* ====================== Restaurant Filtering ====================== */
 .filter-options {
   width: 100%;
@@ -192,6 +218,9 @@ nav h1 a:focus {
   margin: 10px;
   padding: 0 10px;
   width: 190px;
+}
+.filter-options select:focus{
+  background-color:orange;	
 }
 .filter-options i{
 	color: white;
@@ -277,7 +306,8 @@ nav h1 a:focus {
   bottom: 0px;
   line-height: 12pt;
 }
-#restaurants-list li a:hover {
+#restaurants-list li a:hover,
+#restaurants-list li a:focus {
     transition: 500ms;
     color: #000;
     background-color: orange;
@@ -329,19 +359,20 @@ nav h1 a:focus {
   width: 100%;
 }
 .inside #map-container {
-  background: blue none repeat scroll 0 0;
+  background: #f3f3f3 none repeat scroll 0 0;
   right: 0;
-	height: 200px;
-	width: 100%;
+  width: 100%;
 }
 .inside #map {
   background-color: #ccc;
-  height: 400px;
+  height: 100%;
+  max-height: 400px;
   width: 100%;
   max-width:640px;
+  margin: 0 auto;
 }
 .inside #footer {
-	width: 100%;
+  width: 100%;
   padding: 25px 0;
 }
 .inside h2 {
@@ -350,19 +381,14 @@ nav h1 a:focus {
   font-weight: 300;
   letter-spacing: -1px;
   padding-bottom: 1pt;
-	margin: 15px 10px 5px 10px;
+  margin: 15px 10px 5px 10px;
 }
-@media screen and (min-width: 500px) {
-	.inside #map-container {
-    height: 300px;
-  }
-}
+
 @media screen and (min-width: 800px) {
-	.inside #map-container {
-		height: 370px;
-	  width: 47%;
-		display: inline-block;
-	}
+  .inside #map-container {
+	width: 47%;
+	display: inline-block;
+  }
 }
 
 /* Restaurent */
@@ -428,7 +454,7 @@ nav h1 a:focus {
   margin: 5px 0 10px 0;
 }
 #reviews-list li p {
-	margin: 10px 10px 0 10px;
+	margin: 10px;
   display: inline-block;
 }
 #reviews-list li p:first-child {
@@ -443,8 +469,9 @@ nav h1 a:focus {
 }
 @media screen and (max-width: 499px) {
 	#reviews-list .blur{
-		height: 120px;
+		height: 130px;
 		overflow-y: hidden;
+		cursor: pointer;
 	}
 	#reviews-list .blur:before {
 		content: "";

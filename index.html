@@ -8,7 +8,7 @@
   <meta name="description" content="NewYork Restaurant Reviews">
   <meta name="author" content="Nicolas AMBROISE">
 
-  <link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css">
+  <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="icon" type="image/png" sizes="16x16" href="./logo/BSicon_REST.png">
   <link rel="manifest" href="manifest.json">
@@ -16,7 +16,7 @@
 </head>
 
 <body>
-  <a href="#restaurants-list" class="skip-link">Skip to main content</a>
+  <a href="#restaurants-list" class="skip-link" tabindex="0">Skip to main content</a>
   <header>
 	<div class="logo"><img src="./logo/BSicon_REST.svg"  alt="Time4Food Logo"></div>
     <nav>
@@ -26,10 +26,8 @@
 
   <main id="maincontent">
     <section id="map-container">
-	  <div id="map" tabindex="0"></div>
-	  <div id="map-static">
-	    <!--<img alt="NewYork City Map of Restaurants" src="https://maps.googleapis.com/maps/api/staticmap?center=40.722216,-73.987501&zoom=12&size=640x400&maptype=roadmap&key=AIzaSyC7PG4bxfY8ul6b8YLstueqFeI6eRnnVmk">-->	
-	  </div>
+	  <div id="map" tabindex="999"></div>
+	  <div id="map-static"></div>
     </section>
     <section>
       <div class="filter-options">

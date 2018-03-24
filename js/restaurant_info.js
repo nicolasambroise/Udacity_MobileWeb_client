@@ -14,6 +14,7 @@ window.initMap = () => {
         center: restaurant.latlng,
         scrollwheel: false
       });
+	  console.log("Initialize GMap");
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
     }
@@ -231,5 +232,24 @@ reviewUnblur = () => {
  * Dynamically add title to the GoogleMap iframe.
  */
 window.addEventListener('load', () => {
-  document.querySelector('#map iframe').setAttribute('title', 'NewYork City Map of Restaurants');
+  const lat = 40.722216; //restaurant.latlng.lat;
+  const lng = -73.987501; //restaurant.latlng.lng;
+  const zoom = 16;
+  const height = 400;
+  const width = 640;
+  const maptype = "roadmap";
+  const key = "AIzaSyC7PG4bxfY8ul6b8YLstueqFeI6eRnnVmk";
+  const staticmap = document.createElement('img');
+  staticmap.alt = 'NewYork City Map of Restaurants';
+  staticmap.src = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=${width}x${height}&maptype=${maptype}&key=${key}`;
+  document.getElementById('map-static').append(staticmap);
+	
+  if(navigator.onLine){  
+	document.querySelector('#map iframe').setAttribute('title', 'New York City Map of Restaurants');
+	document.getElementById('map-static').style.display = "none";
+    console.log('onLine'); 
+ }else{
+	document.getElementById('map-static').style.display = "block";
+    console.log('offLine');
+  }	  
 });

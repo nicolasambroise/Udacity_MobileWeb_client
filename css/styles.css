@@ -76,8 +76,9 @@ nav h1 a {
   text-transform: uppercase;
   font-family: "Dreams", Helvetica, Arial, sans-serif;
 }
-nav h1 a:hover {
-  color: #8b0000;
+nav h1 a:hover,
+nav h1 a:focus {
+  color: orange;
 }
 /* ====================== Logo ====================== */
 .logo{
@@ -335,8 +336,9 @@ nav h1 a:hover {
 }
 .inside #map {
   background-color: #ccc;
-  height: 100%;
+  height: 400px;
   width: 100%;
+  max-width:640px;
 }
 .inside #footer {
 	width: 100%;
@@ -446,14 +448,13 @@ nav h1 a:hover {
 	}
 	#reviews-list .blur:before {
 		content: "";
-    position: absolute;
-    z-index: 1;
-    bottom: 0;
-    right: 0;
-    pointer-events: none;
-    width: 250px;
-    background-image: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255, 1) 80%);
-    height: 25px;
+		position: absolute;
+		z-index: 1;
+		bottom: 0;
+		right: 0;
+		width: 250px;
+		background-image: linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255, 1) 80%);
+		height: 25px;
 	}
 	#reviews-list li.blur:after {
 		content: "...";
@@ -467,7 +468,7 @@ nav h1 a:hover {
 		text-align: right;
 	}
 	#reviews-list li.blur:hover:after {
-    color: #8b0000;
+		color: #8b0000;
 	}
 }
 #restaurant-hours td {
@@ -511,9 +512,6 @@ footer a:focus{
     display: inline-block;
     font: normal normal normal 14px/1 FontAwesome;
     font-size: inherit;
-    text-rendering: auto;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
 }
 .fa-cutlery:before {
     content: "\f0f5";

@@ -149,14 +149,17 @@ createRestaurantHTML = (restaurant) => {
 	  // Webp for Chrome
 	  const source_300webp = document.createElement('source');
 	  source_300webp.media = "(min-width:1000px)";
+	  source_300webp.type = "image/webp"; // debug test in prod
 	  source_300webp.srcset = DBHelper.imageUrlForRestaurant(restaurant,300,"webp");
 	  picture.append(source_300webp);
 	  const source_200webp = document.createElement('source');
 	  source_200webp.media = "(min-width:500px)";
+	  source_200webp.type = "image/webp"; // debug test in prod
 	  source_200webp.srcset = DBHelper.imageUrlForRestaurant(restaurant,200,"webp");
 	  picture.append(source_200webp);
 	  const source_100webp = document.createElement('source');
 	  source_100webp.srcset = DBHelper.imageUrlForRestaurant(restaurant,100,"webp");
+	  source_100webp.type = "image/webp"; // debug test in prod
 	  picture.append(source_100webp);
 	  // Jpg for other
 	  const source_300jpg = document.createElement('source');
@@ -208,11 +211,21 @@ createRestaurantHTML = (restaurant) => {
  * Dynamically add title to the GoogleMap iframe.
  */
 window.addEventListener('load', () => {
+  const lat = 40.722216;
+  const lng = -73.987501;
+  const zoom = 12;
+  const height = 400;
+  const width = 640;
+  const maptype = "roadmap";
+  const key = "AIzaSyC7PG4bxfY8ul6b8YLstueqFeI6eRnnVmk";
+  const staticmap = document.createElement('img');
+  staticmap.alt = 'NewYork City Map of Restaurants';
+  staticmap.src = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=${width}x${height}&maptype=${maptype}&key=${key}`;
+  document.getElementById('map-static').append(staticmap);
+	
   if(navigator.onLine){
-	document.querySelector('#map iframe').setAttribute('title', 'NewYork City Map of Restaurants');
-	document.querySelector('#map iframe').setAttribute('onerror',"var p=document.createElement('p');this.parentNode.replaceChild(p,this);p.innerHTML='You need to be online to view this content.';");
-	document.querySelector('#map iframe').setAttribute('onload',"if(navigator.onLine===false) eval(this.getAttribute('onerror'));");  
-    document.getElementById('map-static').style.display = "none";
+	document.querySelector('#map iframe').setAttribute('title', 'New York City Map of Restaurants');
+	document.getElementById('map-static').style.display = "none";
     console.log('onLine'); 
  }else{
 	document.getElementById('map-static').style.display = "block";

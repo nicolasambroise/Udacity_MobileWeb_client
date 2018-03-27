@@ -238,7 +238,7 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     container.appendChild(noReviews);
     return;
   }
-  // TODO: Display by default a max of 10 reviews, add a "more" button if > 10 reviews
+  // TODO: Pagination --> Display by default a max of 10 reviews, add a "more" button if > 10 reviews
   const ul = document.getElementById('reviews-list');
   reviews.forEach(review => {
     ul.appendChild(createReviewHTML(review));
@@ -287,6 +287,7 @@ createReviewHTML = (review) => {
 fillBreadcrumb = (restaurant=self.restaurant) => {
   const breadcrumb = document.getElementById('breadcrumb');
   const li = document.createElement('li');
+  li.setAttribute('aria-current', "page");
   li.innerHTML = restaurant.name;
   breadcrumb.appendChild(li);
 }
@@ -345,12 +346,11 @@ loadStaticMap = (restaurant) => {
 }
 
 /**
- * Dynamically add title and high tabindex to the GoogleMap iframe.
+ * Dynamically add title to the GoogleMap iframe.
  */
 window.addEventListener('load', () => {
     const iframeloaded = document.querySelector('#map iframe') !== null
 	if(iframeloaded){
 		document.querySelector('#map iframe').setAttribute('title', 'New York City Map of Restaurants');
-	    document.querySelector('#map iframe').setAttribute('tabindex','999');
 	}
 });

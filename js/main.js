@@ -203,6 +203,9 @@ createRestaurantHTML = (restaurant) => {
     const more = document.createElement('a');
     more.innerHTML = 'View Details';
     more.href = DBHelper.urlForRestaurant(restaurant);
+	more.setAttribute('title', 'View details : ' + restaurant.name);
+    more.setAttribute('aria-label', 'View details : ' + restaurant.name);
+	more.setAttribute('tabindex', '3');
     div.append(more)
 
   return li;
@@ -234,19 +237,12 @@ loadStaticMap = () => {
 }
 
 /**
- * Dynamically edit GoogleMap iframe : add title and high tabindex
+ * Dynamically add title to GoogleMap iframe
  */
 window.addEventListener('load', () => {
     const iframeloaded = document.querySelector('#map iframe') !== null
 	if(iframeloaded){
-		// Add title to the iFrame
 		document.querySelector('#map iframe').setAttribute('title', 'New York City Map of Restaurants');
-		
-		 // Put all Google Map link to the end of tab list
-		document.querySelector('#map iframe').setAttribute('tabindex','999');
-        const gmaplinks = document.getElementById('map').getElementsByTagName('a');
-		console.log(gmaplinks);
-		for (let i = 0; i < gmaplinks.length; i++) {gmaplinks[i].attr('tabindex', 999);}
 	}
 });
 

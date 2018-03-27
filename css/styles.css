@@ -402,11 +402,6 @@ nav h1 a:focus {
   text-transform: uppercase;
   line-height: 1.1;
 }
-#restaurant-address {
-  font-size: 12pt;
-	font-weight: bold;
-  margin: 10px 0 10px 10px;
-}
 #restaurant-cuisine {
   background-color: #333;
   color: #ddd;
@@ -428,16 +423,24 @@ nav h1 a:focus {
 	margin: 0 10px;
 }
 #restaurant-hours{
-	width: 100%;
+  width: 100%;
   max-width: 350px;
-	background-color: #fff;
-	border-left: solid 2px #ccc;
-	padding: 5px 10px;
-	margin: 0 auto;
+  background-color: #fff;
+  border-left: solid 2px #ccc;
+  padding: 5px 10px;
+  margin: 0 auto;
+}
+#restaurant-operatinghours p{
+  color: #666;	
+  margin: 5px 15px;
+  font-size: 12pt;
+}
+#restaurant-address {
+  font-weight: bold;
 }
 #reviews-container {
   padding: 15px;
-	text-align: left;
+  text-align: left;
 }
 #reviews-list {
   margin: 0;

@@ -12,16 +12,6 @@ self.addEventListener('install', function(event) {
         'css/font-awesome.min.css',
         'fonts/CaviarDreams.ttf',
         'fonts/fontawesome-webfont.ttf',
-        'img/1_100w.jpg',
-        'img/2_100w.jpg',
-        'img/3_100w.jpg',
-        'img/4_100w.jpg',
-        'img/5_100w.jpg',
-        'img/6_100w.jpg',
-        'img/7_100w.jpg',
-        'img/8_100w.jpg',
-        'img/9_100w.jpg',
-        'img/10_100w.jpg',
         'js/dbhelper.js',
         'js/main.js',
         'js/restaurant_info.js',
@@ -45,6 +35,7 @@ self.addEventListener('fetch', function(event) {
   if(event.request.url.indexOf("https://maps.gstatic.com/mapfiles/") > -1){
     return null;
   }
+  //console.log(event.request);
   event.respondWith(caches.match(event.request).then(function(response) {
 		if (response !== undefined) {
 		  return response;

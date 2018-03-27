@@ -116,14 +116,17 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
  * Create restaurant operating hours HTML table and add it to the webpage.
  */
 fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
-  // TODO: Display "Open until Xpm" or "Close"
-  // TODO: full operating Hours Table in a collapse div
+  
+  const d = new Date();
+  const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  
   const hours = document.getElementById('restaurant-hours');
   for (let key in operatingHours) {
     const row = document.createElement('tr');
 
     const day = document.createElement('td');
-    day.innerHTML = key;
+	// Put in Strong the current day
+    day.innerHTML = (key == days[d.getDay()]) ? "<strong>"+key+"</strong>" : key;
     row.appendChild(day);
 
     const time = document.createElement('td');
@@ -132,6 +135,92 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 
     hours.appendChild(row);
   }
+  
+  // TODO: Display Status : "Open until Xpm" or "Close"
+  const openStatus = document.createElement('p');
+  const closeTime = (operatingHours[days[d.getDay()]].lastIndexOf("-") > -1) ? operatingHours[days[d.getDay()]].substring(operatingHours[days[d.getDay()]].lastIndexOf("-") + 2) : operatingHours[days[d.getDay()]];
+  const openTime = (operatingHours[days[d.getDay()]].indexOf("-") > -1) ? operatingHours[days[d.getDay()]].substring(0, operatingHours[days[d.getDay()]].indexOf("-")) : operatingHours[days[d.getDay()]];
+  
+  let closeTimeAmPm = "", closeTimeHour12 = "", closeTimeHour24 = "", closeTimeMin = "";
+  let openTimeAmPm = "", openTimeHour12 = "", openTimeHour24 = "", openTimeMin = "";
+  
+  // closeTime  "- 11:00 pm" or "Closed" or "Sat" 
+  let openStatusMsg = "Current Status : "; 
+  if(openTime == "Open 24 hours"){
+	openStatusMsg += "<strong>Open</strong>";
+  }
+  else{
+	// Check Open Time
+    if(openTime.indexOf(" ") > -1){
+      openTimeAmPm = openTime.substring(openTime.lastIndexOf(" ") + 1);
+      openTimeHour12 = openTime.substring(0, openTime.lastIndexOf(":")); 
+	  openTimeHour24 = (openTimeAmPm == "pm") ? Number(openTimeHour12) + 12 : Number(openTimeHour12);
+      openTimeMin = openTime.substring(0, openTime.lastIndexOf(" ")).substring(openTime.substring(0, openTime.lastIndexOf(" ")).lastIndexOf(":") + 1);
+	  console.log("openTime : "+openTimeHour24+":"+openTimeMin);
+	}
+	else if(openTime == "Closed"){
+      openTimeHour24 = 24;
+      openTimeMin = 00;
+	}
+	else if(openTime.indexOf("Sat") > -1){
+	  openTimeHour24 = 00;
+      openTimeMin = 00;
+	}
+	else{
+     console.log(closeTime);
+	 openStatusMsg += "??? ("+closeTime+")";
+    }
+  // Check Close Time
+	if(closeTime.indexOf(" ") > -1){
+      closeTimeAmPm = closeTime.substring(closeTime.lastIndexOf(" ") + 1);
+      closeTimeHour12 = closeTime.substring(0, closeTime.lastIndexOf(":")); 
+	  closeTimeHour24 = (closeTimeAmPm == "pm") ? Number(closeTimeHour12) + 12 : Number(closeTimeHour12);
+      closeTimeMin = closeTime.substring(0, closeTime.lastIndexOf(" ")).substring(closeTime.substring(0, closeTime.lastIndexOf(" ")).lastIndexOf(":") + 1);
+	  console.log("closeTime : "+closeTimeHour24+":"+closeTimeMin);
+	}
+	else if(closeTime.indexOf("Sat") > -1){
+	  closeTimeHour24 = 24;
+      closeTimeMin = 00;
+	}
+	else{
+     console.log(closeTime);
+	 openStatusMsg += "??? ("+closeTime+")";
+    } 
+	
+    // Decision Tree 
+	// TODO : update take account lunch break
+	if(closeTimeHour24 < d.getHours()){
+	  openStatusMsg += "<strong>Closed</strong>";
+	}
+	else if(closeTimeHour24 == d.getHours() && closeTimeMin < d.getMinutes()){
+	  openStatusMsg += "<strong>Closed</strong>";
+	}
+	else if(openTimeHour24 > d.getHours()){
+	  openStatusMsg += "<strong>Closed</strong>";
+	}
+	else if(openTimeHour24 == d.getHours() && openTimeMin > d.getMinutes()){
+	  openStatusMsg += "<strong>Closed</strong>";
+	}
+	else if(openTimeHour24 < d.getHours() && closeTimeHour24 > d.getHours){
+	  openStatusMsg += "<strong>Open</strong>";
+	  openStatusMsg += (closeTime.indexOf("Sat")) ? "until "+closeTimeHour12+":"+closeTimeMin+" "+closeTimeAmPm : "until Sunday"
+	}
+	else if(openTimeHour24 < d.getHours() && closeTimeHour24 == d.getHours() && closeTimeMin >= d.getMinutes()){
+	  const timeBeforeClose = Number(closeTimeMin) - d.getMinutes();
+	  openStatusMsg += "<strong>Open</strong>";
+      openStatusMsg += (closeTime.indexOf("Sat")) ? "(close in "+timeBeforeClose+")" : "until Sunday";
+	}	
+	else if(openTimeHour24 == d.getHours() && openTimeMin <= d.getMinutes && closeTimeHour24 > d.getHours()){
+	  openStatusMsg += "<strong>Open</strong>";
+	  openStatusMsg += (closeTime.indexOf("Sat")) ? "until "+closeTimeHour12+":"+closeTimeMin+" "+closeTimeAmPm : "until Sunday"
+	}
+	else{
+	 	openStatusMsg += "Error";
+	}
+  }
+  
+  openStatus.innerHTML = openStatusMsg;
+  hours.parentElement.insertBefore(openStatus, hours.parentElement.childNodes[0]);
 }
 
 /**
@@ -256,9 +345,12 @@ loadStaticMap = (restaurant) => {
 }
 
 /**
- * Dynamically add title to the GoogleMap iframe.
+ * Dynamically add title and high tabindex to the GoogleMap iframe.
  */
 window.addEventListener('load', () => {
     const iframeloaded = document.querySelector('#map iframe') !== null
-	if(iframeloaded) document.querySelector('#map iframe').setAttribute('title', 'New York City Map of Restaurants');	
+	if(iframeloaded){
+		document.querySelector('#map iframe').setAttribute('title', 'New York City Map of Restaurants');
+	    document.querySelector('#map iframe').setAttribute('tabindex','999');
+	}
 });

@@ -234,7 +234,7 @@ loadStaticMap = () => {
 }
 
 /**
- * Dynamically edit GoogleMap iframe.
+ * Dynamically edit GoogleMap iframe : add title and high tabindex
  */
 window.addEventListener('load', () => {
     const iframeloaded = document.querySelector('#map iframe') !== null
@@ -243,6 +243,7 @@ window.addEventListener('load', () => {
 		document.querySelector('#map iframe').setAttribute('title', 'New York City Map of Restaurants');
 		
 		 // Put all Google Map link to the end of tab list
+		document.querySelector('#map iframe').setAttribute('tabindex','999');
         const gmaplinks = document.getElementById('map').getElementsByTagName('a');
 		console.log(gmaplinks);
 		for (let i = 0; i < gmaplinks.length; i++) {gmaplinks[i].attr('tabindex', 999);}

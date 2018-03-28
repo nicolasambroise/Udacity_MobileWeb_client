@@ -45,6 +45,7 @@ fetchRestaurantFromURL = (callback) => {
       callback(null, restaurant)
     });
   }
+  // TODO in Phase 2 : Add info to Indexed DB
 }
 
 /**
@@ -57,6 +58,8 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
 
+  // TODO in Phase 2 : Add fake Phone Number to each restaurant - Book table 
+  
   const resto = document.getElementById('restaurant-img');
   const figure = document.createElement('figure');
   resto.append(figure);
@@ -137,18 +140,17 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
   }
   
   // TODO: Display Status : "Open until Xpm" or "Close"
+  // Uncomment in Phase 2 - Finish with taking account of lunch break and use MomentJS for time comparaison
+  /*
   const openStatus = document.createElement('p');
   const closeTime = (operatingHours[days[d.getDay()]].lastIndexOf("-") > -1) ? operatingHours[days[d.getDay()]].substring(operatingHours[days[d.getDay()]].lastIndexOf("-") + 2) : operatingHours[days[d.getDay()]];
   const openTime = (operatingHours[days[d.getDay()]].indexOf("-") > -1) ? operatingHours[days[d.getDay()]].substring(0, operatingHours[days[d.getDay()]].indexOf("-")) : operatingHours[days[d.getDay()]];
-  
   let closeTimeAmPm = "", closeTimeHour12 = "", closeTimeHour24 = "", closeTimeMin = "";
   let openTimeAmPm = "", openTimeHour12 = "", openTimeHour24 = "", openTimeMin = "";
   
   // closeTime  "- 11:00 pm" or "Closed" or "Sat" 
   let openStatusMsg = "Current Status : "; 
-  if(openTime == "Open 24 hours"){
-	openStatusMsg += "<strong>Open</strong>";
-  }
+  if(openTime == "Open 24 hours"){openStatusMsg += "<strong>Open</strong>";}
   else{
 	// Check Open Time
     if(openTime.indexOf(" ") > -1){
@@ -218,9 +220,9 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 	 	openStatusMsg += "Error";
 	}
   }
-  
   openStatus.innerHTML = openStatusMsg;
   hours.parentElement.insertBefore(openStatus, hours.parentElement.childNodes[0]);
+  */
 }
 
 /**
@@ -238,7 +240,7 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
     container.appendChild(noReviews);
     return;
   }
-  // TODO: Pagination --> Display by default a max of 10 reviews, add a "more" button if > 10 reviews
+  // TODO in Phase 2 : Pagination --> Display by default a max of 10 reviews, add a "more" button if > 10 reviews
   const ul = document.getElementById('reviews-list');
   reviews.forEach(review => {
     ul.appendChild(createReviewHTML(review));

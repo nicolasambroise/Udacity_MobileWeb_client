@@ -29,6 +29,7 @@ window.addEventListener('load', () => {
 			refreshing = true;
 	  });
 });
+
 function trackInstalling(worker) {
   var indexController = this;
 	worker.addEventListener('statechange', function() {
@@ -37,10 +38,11 @@ function trackInstalling(worker) {
 		}
 	});
 };
+
 function updateReady(worker) {
 	console.log("New version available");
 	if (confirm('New version available, press OK to reload the website')) {
-		// TODO: use {action: 'skipWaiting'}
+		// TODO in Phase 2 : use {action: 'skipWaiting'}
 	} else {
 		alert('Why did you press cancel? You should have confirmed');
 	}

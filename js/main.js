@@ -126,7 +126,8 @@ resetRestaurants = (restaurants) => {
  * Create all restaurants HTML and add them to the webpage.
  */
  
- // TODO : Add a pagination to load only the first 12 result ( impove UX and reduce load time)
+ // TODO in Phase 2 : Add a pagination to load only the first 12 result ( impove UX and reduce load time)
+ // TODO in Phase 2 : Add restaurants to Indexed DB
 fillRestaurantsHTML = (restaurants = self.restaurants) => {
   const ul = document.getElementById('restaurants-list');
   restaurants.forEach(restaurant => {

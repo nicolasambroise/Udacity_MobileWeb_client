@@ -24,11 +24,7 @@ self.addEventListener('install', function(event) {
     })
   );
 });
-/* TODO: Next step : use activate!
-self.addEventListener('activate', function(event) {
-  console.log('Activation');
-});
-*/
+
 self.addEventListener('fetch', function(event) {
   // console.log(event.request.url);
   // Exclude map file from cache
@@ -49,14 +45,10 @@ self.addEventListener('fetch', function(event) {
 		}
 	}));
 });
+
 self.addEventListener('message', function(event) {
   console.log(event.data.action);
   if (event.data.action === 'skipWaiting') {
     self.skipWaiting();
   }
 });
-/* TODO: Next step : use sync!
-self.addEventListener('sync', function(event) {
-	console.log("sync: "+event);
-});
-*/

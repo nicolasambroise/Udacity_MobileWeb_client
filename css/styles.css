@@ -134,17 +134,17 @@ nav h1 a:focus {
 
 /* Add a color to all links inside the list */
 #breadcrumb li a {
-    color: #0275d8;
-    text-decoration: none;
-		padding: 10px 0;
-    display: inline-block;
+  color: #0275d8;
+  text-decoration: none;
+  padding: 10px 0;
+  display: inline-block;
 }
 
 /* Add a color on mouse-over */
 #breadcrumb li a:hover,
 #breadcrumb li a:focus {
-    color: orange;
-    text-decoration: underline;
+  color: orange;
+  text-decoration: underline;
 }
 /* ====================== Map ====================== */
 
@@ -160,13 +160,13 @@ nav h1 a:focus {
 }
 
 #map > div{
-	background-color:transparent !important;
+	background-color: transparent !important;
 }
 
 #map-static{
-  margin-top:-200px;
-  text-align:center;
-  display:none;	
+  margin-top: -200px;
+  text-align: center;
+  display: none;	
   overflow: hidden;
 }
 
@@ -179,7 +179,7 @@ nav h1 a:focus {
     height: 300px;
   }
   #map-static{
-    margin-top:-300px;
+    margin-top: -300px;
   }
 }
 @media screen and (min-width: 800px) {
@@ -187,7 +187,7 @@ nav h1 a:focus {
 	height: 400px;
   }
   #map-static{
-    margin-top:-400px;
+    margin-top: -400px;
   }
 }
 
@@ -220,26 +220,26 @@ nav h1 a:focus {
   width: 190px;
 }
 .filter-options select:focus{
-  background-color:orange;	
+  background-color: orange;	
 }
 .filter-options i{
-	color: white;
+  color: white;
   font-size: 16pt;
   vertical-align: middle;
 }
 @media screen and (min-width: 500px) {
   .filter-options > div{
-	  margin: 0 auto;
+	margin: 0 auto;
     display: inline-block;
   }
 }
 @media screen and (min-width: 800px) {
-	.filter-options h2 {
+  .filter-options h2 {
     display: inline-block;
-	}
-	.filter-options > div {
+  }
+  .filter-options > div {
     padding: 0 30px;
-	}
+  }
 }
 /* ====================== Restaurant Listing ====================== */
 #restaurants-list {
@@ -253,19 +253,19 @@ nav h1 a:focus {
   background-color: #fff;
   border: 2px solid #ccc;
   font-family: Arial,sans-serif;
-	text-align: left;
-	width:100%;
-	display: flex;
-	margin: 5px 0 10px 0;
-	position: relative;
+  text-align: left;
+  width:100%;
+  display: flex;
+  margin: 5px 0 10px 0;
+  position: relative;
 }
 #restaurants-list figure{
-	width: 100px;
-	display: inline-block;
-	margin: 10px;
+  width: 100px;
+  display: inline-block;
+  margin: 10px;
 }
 #restaurants-list figure figcaption{
-	display: none;
+  display: none;
 }
 #restaurants-list .restaurant-img {
   background-color: #ccc;
@@ -274,7 +274,7 @@ nav h1 a:focus {
   width: 100%;
 }
 #restaurants-list li > div{
-	margin: 10px;
+  margin: 10px;
 }
 #restaurants-list li h2 {
   color: #8b0000;
@@ -316,35 +316,35 @@ nav h1 a:focus {
 	margin: 0;
 }
 @media screen and (min-width: 500px) {
-	#restaurants-list li .restaurant-address {
+  #restaurants-list li .restaurant-address {
     display: block;
   }
-	#restaurants-list figure{
-		width: 200px;
-	}
-	#restaurants-list li a {
-		position: relative;
-		width: 120px;
-		height: auto;
-		line-height: 1em;
+  #restaurants-list figure{
+	width: 200px;
+  }
+  #restaurants-list li a {
+	position: relative;
+	width: 120px;
+	height: auto;
+	line-height: 1em;
     margin-top: 15px;
-	}
+  }
 }
 @media screen and (min-width: 800px) {
-	#restaurants-list li{
-	  width: 275px;
+  #restaurants-list li{
+	width: 275px;
     display: inline-block;
     margin: 5px;
   }
-	#restaurants-list li a{
-		margin: 15px auto 0 auto;
+  #restaurants-list li a{
+	margin: 15px auto 0 auto;
     display: block;
-	}
-	#restaurants-list figure {
-	    width: 200px;
-	    margin: 10px auto 20px auto;
-	    display: block;
-	}
+  }
+  #restaurants-list figure {
+	width: 200px;
+	margin: 10px auto 20px auto;
+	display: block;
+  }
 }
 @media screen and (min-width: 1000px) {
 	#restaurants-list li{
@@ -368,7 +368,7 @@ nav h1 a:focus {
   height: 100%;
   max-height: 400px;
   width: 100%;
-  max-width:640px;
+  max-width: 640px;
   margin: 0 auto;
 }
 .inside #footer {
@@ -447,7 +447,7 @@ nav h1 a:focus {
   padding: 0;
 }
 #reviews-list li {
-	background-color: #fff;
+  background-color: #fff;
   display: block;
   list-style-type: none;
   overflow: hidden;
@@ -457,7 +457,7 @@ nav h1 a:focus {
   margin: 5px 0 10px 0;
 }
 #reviews-list li p {
-	margin: 10px;
+  margin: 10px;
   display: inline-block;
 }
 #reviews-list li p:first-child {

@@ -58,14 +58,14 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
 
-  // TODO in Phase 2 : Add fake Phone Number to each restaurant - Book table 
-  
+  // TODO in Phase 2 : Add fake Phone Number to each restaurant - Book table
+
   const resto = document.getElementById('restaurant-img');
   const figure = document.createElement('figure');
   resto.append(figure);
   	const picture = document.createElement('picture');
   	figure.append(picture);
-	
+
 	   // Webp for Chrome
 	  const source_800webp = document.createElement('source');
 	  source_800webp.media = "(min-width:800px)";
@@ -82,7 +82,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 	  const source_200webp = document.createElement('source');
 	  source_200webp.srcset = DBHelper.imageUrlForRestaurant(restaurant,200,"webp");
 	  picture.append(source_200webp);
-	  // Jpg for other	
+	  // Jpg for other
   	  const source_800jpg = document.createElement('source');
   	  source_800jpg.media = "(min-width:800px)";
   	  source_800jpg.srcset = DBHelper.imageUrlForRestaurant(restaurant,800,"jpg");
@@ -98,10 +98,10 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
   	  const image = document.createElement('img');
   	  image.className = 'restaurant-img';
   	  image.src = DBHelper.imageUrlForRestaurant(restaurant,200,"jpg");
-      image.alt = restaurant.name;
+      image.alt = `${restaurant.name} restaurant's photo in ${restaurant.neighborhood}`;
   	  picture.append(image);
   	const figcaption = document.createElement('figcaption');
-    figcaption.innerHTML = restaurant.name;
+    figcaption.innerHTML =  `${restaurant.name} restaurant's photo in ${restaurant.neighborhood}`;
 	figure.append(figcaption);
 
   const cuisine = document.getElementById('restaurant-cuisine');
@@ -119,10 +119,10 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
  * Create restaurant operating hours HTML table and add it to the webpage.
  */
 fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => {
-  
+
   const d = new Date();
   const days = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
-  
+
   const hours = document.getElementById('restaurant-hours');
   for (let key in operatingHours) {
     const row = document.createElement('tr');
@@ -138,7 +138,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 
     hours.appendChild(row);
   }
-  
+
   // TODO: Display Status : "Open until Xpm" or "Close"
   // Uncomment in Phase 2 - Finish with taking account of lunch break and use MomentJS for time comparaison
   /*
@@ -147,15 +147,15 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
   const openTime = (operatingHours[days[d.getDay()]].indexOf("-") > -1) ? operatingHours[days[d.getDay()]].substring(0, operatingHours[days[d.getDay()]].indexOf("-")) : operatingHours[days[d.getDay()]];
   let closeTimeAmPm = "", closeTimeHour12 = "", closeTimeHour24 = "", closeTimeMin = "";
   let openTimeAmPm = "", openTimeHour12 = "", openTimeHour24 = "", openTimeMin = "";
-  
-  // closeTime  "- 11:00 pm" or "Closed" or "Sat" 
-  let openStatusMsg = "Current Status : "; 
+
+  // closeTime  "- 11:00 pm" or "Closed" or "Sat"
+  let openStatusMsg = "Current Status : ";
   if(openTime == "Open 24 hours"){openStatusMsg += "<strong>Open</strong>";}
   else{
 	// Check Open Time
     if(openTime.indexOf(" ") > -1){
       openTimeAmPm = openTime.substring(openTime.lastIndexOf(" ") + 1);
-      openTimeHour12 = openTime.substring(0, openTime.lastIndexOf(":")); 
+      openTimeHour12 = openTime.substring(0, openTime.lastIndexOf(":"));
 	  openTimeHour24 = (openTimeAmPm == "pm") ? Number(openTimeHour12) + 12 : Number(openTimeHour12);
       openTimeMin = openTime.substring(0, openTime.lastIndexOf(" ")).substring(openTime.substring(0, openTime.lastIndexOf(" ")).lastIndexOf(":") + 1);
 	  console.log("openTime : "+openTimeHour24+":"+openTimeMin);
@@ -175,7 +175,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
   // Check Close Time
 	if(closeTime.indexOf(" ") > -1){
       closeTimeAmPm = closeTime.substring(closeTime.lastIndexOf(" ") + 1);
-      closeTimeHour12 = closeTime.substring(0, closeTime.lastIndexOf(":")); 
+      closeTimeHour12 = closeTime.substring(0, closeTime.lastIndexOf(":"));
 	  closeTimeHour24 = (closeTimeAmPm == "pm") ? Number(closeTimeHour12) + 12 : Number(closeTimeHour12);
       closeTimeMin = closeTime.substring(0, closeTime.lastIndexOf(" ")).substring(closeTime.substring(0, closeTime.lastIndexOf(" ")).lastIndexOf(":") + 1);
 	  console.log("closeTime : "+closeTimeHour24+":"+closeTimeMin);
@@ -187,9 +187,9 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 	else{
      console.log(closeTime);
 	 openStatusMsg += "??? ("+closeTime+")";
-    } 
-	
-    // Decision Tree 
+    }
+
+    // Decision Tree
 	// TODO : update take account lunch break
 	if(closeTimeHour24 < d.getHours()){
 	  openStatusMsg += "<strong>Closed</strong>";
@@ -211,7 +211,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
 	  const timeBeforeClose = Number(closeTimeMin) - d.getMinutes();
 	  openStatusMsg += "<strong>Open</strong>";
       openStatusMsg += (closeTime.indexOf("Sat")) ? "(close in "+timeBeforeClose+")" : "until Sunday";
-	}	
+	}
 	else if(openTimeHour24 == d.getHours() && openTimeMin <= d.getMinutes && closeTimeHour24 > d.getHours()){
 	  openStatusMsg += "<strong>Open</strong>";
 	  openStatusMsg += (closeTime.indexOf("Sat")) ? "until "+closeTimeHour12+":"+closeTimeMin+" "+closeTimeAmPm : "until Sunday"
@@ -230,7 +230,7 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
  */
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
-  const title = document.createElement('h2');
+  const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
   container.appendChild(title);
 
@@ -257,29 +257,29 @@ fillReviewsHTML = (reviews = self.restaurant.reviews) => {
 createReviewHTML = (review) => {
   const li = document.createElement('li');
   // Add class blur only if review.comments > 100 character ( 2 lines)
-  if(review.comments.length > 100) li.className = "blur";
-  const div = document.createElement('div');
-  li.appendChild(div);
-    const info = document.createElement('div');
-    div.appendChild(info)
-      const name = document.createElement('p');
-      name.innerHTML = review.name;
-      info.appendChild(name);
-      const date = document.createElement('p');
-      date.innerHTML = review.date;
-      info.appendChild(date);
-    const rating = document.createElement('span');
-    rating.innerHTML = `Rating: ${review.rating}`;
-    div.appendChild(rating);
-    for (let indexCount = 0; indexCount < 5; indexCount++) {
-      let rating = parseInt(review.rating);
-      let star = document.createElement('i');
-      star.className = rating > indexCount ? "fa fa-star" : "fa fa-star-o";
-      div.appendChild(star);
-    };
-  const comments = document.createElement('p');
-  comments.innerHTML = review.comments;
-  li.appendChild(comments);
+    if(review.comments.length > 100) li.className = "blur";
+    const div = document.createElement('div');
+      const info = document.createElement('div');
+        const name = document.createElement('p');
+        name.innerHTML = review.name;
+        info.appendChild(name);
+        const date = document.createElement('p');
+        date.innerHTML = review.date;
+        info.appendChild(date);
+      div.appendChild(info)
+      const rating = document.createElement('span');
+      rating.innerHTML = `Rating: ${review.rating}`;
+      div.appendChild(rating);
+      for (let indexCount = 0; indexCount < 5; indexCount++) {
+        let rating = parseInt(review.rating);
+        let star = document.createElement('i');
+        star.className = rating > indexCount ? "fa fa-star" : "fa fa-star-o";
+        div.appendChild(star);
+      };
+    li.appendChild(div);
+    const comments = document.createElement('p');
+    comments.innerHTML = review.comments;
+    li.appendChild(comments);
   return li;
 }
 
@@ -287,10 +287,14 @@ createReviewHTML = (review) => {
  * Add restaurant name to the breadcrumb navigation menu
  */
 fillBreadcrumb = (restaurant=self.restaurant) => {
-  const breadcrumb = document.getElementById('breadcrumb');
-  const li = document.createElement('li');
-  li.setAttribute('aria-current', "page");
-  li.innerHTML = restaurant.name;
+  const breadcrumb = document.getElementById('breadcrumb').getElementsByTagName('ol')[0];
+    const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.setAttribute('href',`./restaurant.html?id=${restaurant.id}`)
+      a.setAttribute('aria-current', 'page');
+      a.setAttribute('tabindex', '1');
+      a.innerHTML = restaurant.name;
+    li.appendChild(a);
   breadcrumb.appendChild(li);
 }
 
@@ -325,7 +329,7 @@ reviewUnblur = () => {
 /**
  * Render alternative Static Map
  */
-loadStaticMap = (restaurant) => { 
+loadStaticMap = (restaurant) => {
   const lat = restaurant.latlng.lat;
   const lng = restaurant.latlng.lng;
   const zoom = 16;
@@ -337,14 +341,14 @@ loadStaticMap = (restaurant) => {
   staticmap.alt = 'NewYork City Map of Restaurants';
   staticmap.src = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=${width}x${height}&maptype=${maptype}&key=${key}`;
   document.getElementById('map-static').append(staticmap);
-	
-  if(navigator.onLine){  
+
+  if(navigator.onLine){
     document.getElementById('map-static').style.display = "none";
-    console.log('onLine'); 
+    console.log('onLine');
  }else{
 	document.getElementById('map-static').style.display = "block";
     console.log('offLine');
-  }	  
+  }
 }
 
 /**

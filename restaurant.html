@@ -22,35 +22,37 @@
     <nav>
       <h1><a href="/" aria-label="Restaurant Info" tabindex="1">Restaurant Info</a></h1>
     </nav>
-    <ul id="breadcrumb" >
-      <li><a href="/" tabindex="1">Home</a></li>
-    </ul>
+    <nav aria-label="Breadcrumb" id="breadcrumb">
+      <ol>
+        <li><a href="/" tabindex="1">Home</a></li>
+      </ol>
+    </nav>
   </header>
 
   <!-- Beginning main -->
-  <main id="maincontent">
+  <main id="maincontent" role="main">
     <!-- Beginning restaurant -->
     <section id="restaurant-container">
        <div>
-         <h1 id="restaurant-name"></h1>
+         <h2 id="restaurant-name"></h2>
          <div id="restaurant-img"></div>
          <p id="restaurant-cuisine"></p>
        </div>
        <!-- TODO: Add a Phone number for reservation -->
     </section>
     <section id="restaurant-operatinghours">
-       <h2>Operating Hours</h2>
+       <h3>Operating Hours</h3>
        <!-- TODO: Mention state Open/Close depending on current datetime-->
        <div>
          <table id="restaurant-hours"></table>
        </div>
-       <h2>Address</h2>
+       <h3>Address</h3>
        <p id="restaurant-address"></p>
     </section>
     <!-- end restaurant -->
     <!-- Beginning map -->
     <section id="map-container"aria-label="Map Container">
-      <div id="map"></div>
+      <div id="map" tabindex="999" role="application" aria-label="Map with restaurants"></div>
 	  <div id="map-static"></div>
     </section>
     <!-- End map -->

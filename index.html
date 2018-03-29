@@ -24,14 +24,14 @@
     </nav>
   </header>
 
-  <main id="maincontent">
+  <main id="maincontent" role="main">
     <section id="map-container" aria-label="Map container">
-	  <div id="map" tabindex="999"></div>
-	  <div id="map-static"></div>
+	    <div id="map" tabindex="999" role="application" aria-label="Map with restaurants"></div>
+	    <div id="map-static"></div>
     </section>
     <section aria-label="Restaurant filter">
       <div class="filter-options">
-        <h2>Filter Results</h2>
+        <h3>Filter Results</h3>
         <div>
           <i class="fa fa-map-signs" aria-hidden="true"></i>
           <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" tabindex="2" aria-labelledby="neighborhoods-select">

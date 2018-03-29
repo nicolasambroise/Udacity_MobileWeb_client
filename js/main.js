@@ -125,7 +125,7 @@ resetRestaurants = (restaurants) => {
 /**
  * Create all restaurants HTML and add them to the webpage.
  */
- 
+
  // TODO in Phase 2 : Add a pagination to load only the first 12 result ( impove UX and reduce load time)
  // TODO in Phase 2 : Add restaurants to Indexed DB
 fillRestaurantsHTML = (restaurants = self.restaurants) => {
@@ -147,7 +147,7 @@ createRestaurantHTML = (restaurant) => {
   li.append(figure);
 	const picture = document.createElement('picture');
 	figure.append(picture);
-	
+
 	  // Webp for Chrome
 	  const source_300webp = document.createElement('source');
 	  source_300webp.media = "(min-width:1000px)";
@@ -175,47 +175,46 @@ createRestaurantHTML = (restaurant) => {
 	  const image = document.createElement('img');
 	  image.className = 'restaurant-img';
 	  image.src = DBHelper.imageUrlForRestaurant(restaurant,100,"jpg");
-      image.alt = restaurant.name;
+    image.alt = `${restaurant.name} restaurant's photo in ${restaurant.neighborhood}`;
 	  picture.append(image);
 	const figcaption = document.createElement('figcaption');
-    figcaption.innerHTML = restaurant.name;
+    figcaption.innerHTML =  `${restaurant.name} restaurant's photo in ${restaurant.neighborhood}`;
 	figure.append(figcaption);
 
   // div with textual content and button
   const div = document.createElement('div');
-  li.append(div);
     const name = document.createElement('h2');
-    name.innerHTML = restaurant.name;
+      name.innerHTML = restaurant.name;
     div.append(name);
     const cuisine = document.createElement('p');
-    cuisine.className = 'restaurant-cuisine';
-    cuisine.innerHTML = restaurant.cuisine_type;
+      cuisine.className = 'restaurant-cuisine';
+      cuisine.innerHTML = restaurant.cuisine_type;
     div.append(cuisine);
     const neighborhood = document.createElement('p');
-    neighborhood.className = 'restaurant-neighborhood';
-    neighborhood.innerHTML = restaurant.neighborhood;
+      neighborhood.className = 'restaurant-neighborhood';
+      neighborhood.innerHTML = restaurant.neighborhood;
     div.append(neighborhood);
     const address = document.createElement('p');
-    address.className = 'restaurant-address';
-    address.innerHTML = restaurant.address;
+      address.className = 'restaurant-address';
+      address.innerHTML = restaurant.address;
     div.append(address);
 
     // TODO: improve the display of the button !
     const more = document.createElement('a');
-    more.innerHTML = 'View Details';
-    more.href = DBHelper.urlForRestaurant(restaurant);
-	more.setAttribute('title', 'View details : ' + restaurant.name);
-    more.setAttribute('aria-label', 'View details : ' + restaurant.name);
-	more.setAttribute('tabindex', '3');
+      more.innerHTML = 'View Details';
+      more.href = DBHelper.urlForRestaurant(restaurant);
+	    more.setAttribute('title', 'View details : ' + restaurant.name);
+      more.setAttribute('aria-label', 'View details : ' + restaurant.name);
+	    more.setAttribute('tabindex', '3');
     div.append(more)
-
+  li.append(div);
   return li;
 }
 
 /**
  * Render alternative Static Map
  */
-loadStaticMap = () => { 
+loadStaticMap = () => {
   const lat = 40.722216;
   const lng = -73.987501;
   const zoom = 12;
@@ -227,14 +226,14 @@ loadStaticMap = () => {
   staticmap.alt = 'NewYork City Map of Restaurants';
   staticmap.src = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=${width}x${height}&maptype=${maptype}&key=${key}`;
   document.getElementById('map-static').append(staticmap);
-	
+
   if(navigator.onLine){
 	document.getElementById('map-static').style.display = "none";
-    console.log('onLine'); 
+    console.log('onLine');
  }else{
 	document.getElementById('map-static').style.display = "block";
     console.log('offLine');
-  }	  
+  }
 }
 
 /**

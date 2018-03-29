@@ -41,9 +41,11 @@ function trackInstalling(worker) {
 
 function updateReady(worker) {
 	console.log("New version available");
+	/* TODO in Phase 2
 	if (confirm('New version available, press OK to reload the website')) {
-		// TODO in Phase 2 : use {action: 'skipWaiting'}
+		//  use {action: 'skipWaiting'}
 	} else {
 		alert('Why did you press cancel? You should have confirmed');
 	}
+	*/
 };

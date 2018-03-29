@@ -20,7 +20,7 @@ body {
 	margin: 0;
 	position: relative;
 }
-ul, li {
+ol, ul, li {
 	font-family: Arial, Helvetica, sans-serif;
 	font-size: 10pt;
 	color: #333;
@@ -105,7 +105,7 @@ nav h1 a:focus {
 	top: 0;
 }
 /* ====================== breadcrumb ====================== */
-#breadcrumb {
+#breadcrumb ol{
     padding: 0;
     list-style: none;
 		background-color: #f3f3f3;
@@ -113,27 +113,28 @@ nav h1 a:focus {
     font-size: 17px;
     margin: 0;
 		width: 100%;
+		text-align: left;
 }
 
 /* Display list items side by side */
-#breadcrumb li {
+#breadcrumb ol li {
     display: inline;
 }
 
 /* Marge for breadcrumb */
-#breadcrumb li:first-child {
+#breadcrumb ol li:first-child {
 		padding-left: 20px;
 }
 
 /* Add a slash symbol (/) before/behind each list item */
-#breadcrumb li+li:before {
+#breadcrumb ol li+li:before {
     padding: 8px;
     color: black;
     content: "/\00a0";
 }
 
 /* Add a color to all links inside the list */
-#breadcrumb li a {
+#breadcrumb ol li a {
   color: #0275d8;
   text-decoration: none;
   padding: 10px 0;
@@ -141,8 +142,8 @@ nav h1 a:focus {
 }
 
 /* Add a color on mouse-over */
-#breadcrumb li a:hover,
-#breadcrumb li a:focus {
+#breadcrumb ol li a:hover,
+#breadcrumb ol li a:focus {
   color: orange;
   text-decoration: underline;
 }
@@ -166,12 +167,20 @@ nav h1 a:focus {
 #map-static{
   margin-top: -200px;
   text-align: center;
-  display: none;	
+  display: none;
   overflow: hidden;
 }
 
 #map-static img{
    margin: 0 -100%;
+}
+
+#map a:focus,
+#map div:focus{
+	background-color: orange;
+	color: #000;
+	padding: 8px;
+	z-index: 100;
 }
 
 @media screen and (min-width: 500px) {
@@ -201,7 +210,7 @@ nav h1 a:focus {
   align-items: center;
   text-align: center;
 }
-.filter-options h2 {
+.filter-options h3 {
   color: white;
   font-size: 1rem;
   font-weight: normal;
@@ -220,7 +229,7 @@ nav h1 a:focus {
   width: 190px;
 }
 .filter-options select:focus{
-  background-color: orange;	
+  background-color: orange;
 }
 .filter-options i{
   color: white;
@@ -234,7 +243,7 @@ nav h1 a:focus {
   }
 }
 @media screen and (min-width: 800px) {
-  .filter-options h2 {
+  .filter-options h3 {
     display: inline-block;
   }
   .filter-options > div {
@@ -399,6 +408,7 @@ nav h1 a:focus {
   font-weight: 200;
   letter-spacing: 0;
   padding: 15px 0;
+	margin: 0;
   text-transform: uppercase;
   line-height: 1.1;
 }
@@ -430,13 +440,14 @@ nav h1 a:focus {
   padding: 5px 10px;
   margin: 0 auto;
 }
-#restaurant-operatinghours p{
-  color: #666;	
-  margin: 5px 15px;
-  font-size: 12pt;
+#restaurant-operatinghours h3{
+  margin-top: 10px;
 }
 #restaurant-address {
   font-weight: bold;
+	color: #666;
+  margin: 5px 15px;
+  font-size: 10pt;
 }
 #reviews-container {
   padding: 15px;

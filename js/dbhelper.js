@@ -5,13 +5,15 @@ class DBHelper {
 
   /**
    * Database URL.
-   * Change this to restaurants.json file location on your server.
    */
   static get DATABASE_URL() {
+  /*
 	// Auto swich environment Dev/Prod
 	const path = window.location.href;
 	const basepath = path.substring(0, path.lastIndexOf("/") + 1);
 	return `${basepath}/data/restaurants.json`;
+  */
+  return "http://localhost:1337/restaurants";
   }
 
   /**
@@ -22,8 +24,8 @@ class DBHelper {
     xhr.open('GET', DBHelper.DATABASE_URL);
     xhr.onload = () => {
       if (xhr.status === 200) { // Got a success response from server!
-        const json = JSON.parse(xhr.responseText);
-        const restaurants = json.restaurants;
+        const restaurants = JSON.parse(xhr.responseText);
+        console.log(restaurants);
         callback(null, restaurants);
       } else { // Oops!. Got an error from server.
         const error = (`Request failed. Returned status of ${xhr.status}`);
@@ -154,8 +156,9 @@ class DBHelper {
   static imageUrlForRestaurant(restaurant,size,extension="jpg") {
 	// Add suffix 100, 200, 400 or 800w
 	// Rename extension : WebP for Chrome , Jpg for other
-	let filename = (restaurant.photograph).replace(".jpg",`_${size}w.jpg`).replace(".jpg",`.${extension}`);
-    return (`/img/${filename}`);
+  // Use Svg if no picture found
+  //return (restaurant.photograph)? `/img/${restaurant.photograph}_${size}w.${extension}`:`/img/0_${size}w.${extension}`;
+  return (restaurant.photograph)? `/img/${restaurant.photograph}_${size}w.${extension}`:`/logo/BSicon_REST.svg`;
   }
 
   /**

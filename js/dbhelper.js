@@ -5,23 +5,29 @@ class DBHelper {
 
   /**
    * Database URL.
+   * TODO: Delete because obsolete in Phase II
    */
   static get DATABASE_URL() {
-  /*
 	// Auto swich environment Dev/Prod
 	const path = window.location.href;
 	const basepath = path.substring(0, path.lastIndexOf("/") + 1);
 	return `${basepath}/data/restaurants.json`;
-  */
-  return "http://localhost:1337/restaurants";
   }
 
   /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
+    function handleSuccess () {
+      console.log( this.responseText );
+    // the HTML of https://unsplash.com/}
+    function handleError () {
+      console.log( 'An error occurred \uD83D\uDE1E' );
+    }
+
+
     let xhr = new XMLHttpRequest();
-    xhr.open('GET', DBHelper.DATABASE_URL);
+    xhr.open('GET', 'http://localhost:1337/restaurants');
     xhr.onload = () => {
       if (xhr.status === 200) { // Got a success response from server!
         const restaurants = JSON.parse(xhr.responseText);
@@ -31,6 +37,9 @@ class DBHelper {
         const error = (`Request failed. Returned status of ${xhr.status}`);
         callback(error, null);
       }
+    };
+    xhr.onerror = () => {
+      console.log( 'An error occurred 😞' );
     };
     xhr.send();
   }

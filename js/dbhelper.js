@@ -4,63 +4,97 @@
 class DBHelper {
 
   /**
-   * Database URL.
-   * TODO: Delete because obsolete in Phase II
-   */
-  static get DATABASE_URL() {
-	// Auto swich environment Dev/Prod
-	const path = window.location.href;
-	const basepath = path.substring(0, path.lastIndexOf("/") + 1);
-	return `${basepath}/data/restaurants.json`;
-  }
-
-  /**
    * Fetch all restaurants.
    */
   static fetchRestaurants(callback) {
-    function handleSuccess () {
-      console.log( this.responseText );
-    // the HTML of https://unsplash.com/}
-    function handleError () {
-      console.log( 'An error occurred \uD83D\uDE1E' );
-    }
+    if(self.fetch) {
+      // FETCH
+      fetch('http://localhost:1337/restaurants', {})
+      .then(response => response.json())
+      .then(function(restaurantsJson) {addRestaurants(restaurantsJson);})
+      .catch(e => requestError(e, 'restaurants'));
 
-
-    let xhr = new XMLHttpRequest();
-    xhr.open('GET', 'http://localhost:1337/restaurants');
-    xhr.onload = () => {
-      if (xhr.status === 200) { // Got a success response from server!
-        const restaurants = JSON.parse(xhr.responseText);
-        console.log(restaurants);
-        callback(null, restaurants);
-      } else { // Oops!. Got an error from server.
-        const error = (`Request failed. Returned status of ${xhr.status}`);
+      function requestError(e, part) {
+        const error = (e);
         callback(error, null);
       }
-    };
-    xhr.onerror = () => {
-      console.log( 'An error occurred 😞' );
-    };
-    xhr.send();
-  }
+    } else {
+      // XHR
+      let xhr = new XMLHttpRequest();
+      xhr.open('GET', 'http://localhost:1337/restaurants');
+      xhr.onload = () => {
+        if (xhr.status === 200) { // Got a success response from server!
+          const restaurants = JSON.parse(xhr.responseText);
+          console.log(restaurants);
+          callback(null, restaurants);
+        } else { // Oops!. Got an error from server.
+          const error = (`Request failed. Returned status of ${xhr.status}`);
+          callback(error, null);
+        }
+      };
+      xhr.onerror = () => {console.log( 'An error occurred 😞' );};
+      xhr.send();
+    }
 
+    if (!('indexedDB' in window)) {
+      console.log('This browser doesn\'t support IndexedDB');
+      return;
+    }
+    const dbName = "Time4FoodDatabase";
+    var dbPromise = idb.open(dbName, 3, function(upgradeDb) {
+      switch (upgradeDb.oldVersion) {
+        case 0:
+          // a placeholder case so that the switch block will
+          // execute when the database is first created
+        case 1:
+          console.log('Creating the restaurants object store');
+          upgradeDb.createObjectStore('restaurants', {keyPath: 'id'});
+        case 2:
+          console.log('Creating neighborhood and cuisines indexes');
+          var store = upgradeDb.transaction.objectStore('restaurants');
+          store.createIndex('neighborhood', 'neighborhood');
+          store.createIndex('cuisine_type', 'cuisine_type');
+       case 3:
+          console.log('Creating neighborhood - cuisines indexes');
+          var store = upgradeDb.transaction.objectStore('restaurants');
+          store.createIndex('neighborhood, cuisine_type', ['neighborhood', 'cuisine_type']);
+      }
+    });
+    dbPromise.onerror = function(event) {alert("error opening IndexedDB.");};
+    dbPromise.onsuccess = function(event) {db = dbPromise.result;};
+
+    function addRestaurants(JsonRestaurants) {
+      console.log("addRestaurants");
+      console.log(JsonRestaurants);
+      dbPromise.then(function(db) {
+        var tx = db.transaction('restaurants', 'readwrite');
+        var store = tx.objectStore('restaurants');
+        var items = JsonRestaurants;
+        return Promise.all(items.map(function(item) {
+            //console.log('Adding item: ', item);
+            return store.add(item);
+          })
+        ).catch(function(e) {
+          tx.abort();
+          console.log(e);
+        }).then(function() {
+          console.log('All items added successfully!');
+        });
+      });
+      callback(null, restaurants)
+    }
+
+  }
   /**
    * Fetch a restaurant by its ID.
    */
   static fetchRestaurantById(id, callback) {
     // fetch all restaurants with proper error handling.
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        const restaurant = restaurants.find(r => r.id == id);
-        if (restaurant) { // Got the restaurant
-          callback(null, restaurant);
-        } else { // Restaurant does not exist in the database
-          callback('Restaurant does not exist', null);
-        }
-      }
-    });
+    db.transaction("restaurants").objectStore("restaurants").get(id).onsuccess = function(event) {
+        console.log("Restaurant is " + event.target.result);
+        callback(null, event.target.result);
+    };
+    //
   }
 
   /**
@@ -68,15 +102,10 @@ class DBHelper {
    */
   static fetchRestaurantByCuisine(cuisine, callback) {
     // Fetch all restaurants  with proper error handling
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        // Filter restaurants to have only given cuisine type
-        const results = restaurants.filter(r => r.cuisine_type == cuisine);
-        callback(null, results);
-      }
-    });
+    db.transaction("restaurants").objectStore("cuisine_type").get(cuisine).onsuccess = function(event) {
+        console.log("Cuisine is " + event.target.result);
+        callback(null, event.target.result);
+    };
   }
 
   /**
@@ -84,15 +113,10 @@ class DBHelper {
    */
   static fetchRestaurantByNeighborhood(neighborhood, callback) {
     // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        // Filter restaurants to have only given neighborhood
-        const results = restaurants.filter(r => r.neighborhood == neighborhood);
-        callback(null, results);
-      }
-    });
+    db.transaction("restaurants").objectStore("neighborhood").get(neighborhood).onsuccess = function(event) {
+        console.log("Neighborhood is " + event.target.result);
+        callback(null, event.target.result);
+    };
   }
 
   /**
@@ -100,20 +124,10 @@ class DBHelper {
    */
   static fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, callback) {
     // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        let results = restaurants
-        if (cuisine != 'all') { // filter by cuisine
-          results = results.filter(r => r.cuisine_type == cuisine);
-        }
-        if (neighborhood != 'all') { // filter by neighborhood
-          results = results.filter(r => r.neighborhood == neighborhood);
-        }
-        callback(null, results);
-      }
-    });
+    db.transaction("restaurants").objectStore("neighborhood,cuisine_type").get([neighborhood,cuisine]).onsuccess = function(event) {
+        console.log("Neighborhood-cuisine is " + event.target.result);
+        callback(null, event.target.result);
+    };
   }
 
   /**
@@ -121,17 +135,10 @@ class DBHelper {
    */
   static fetchNeighborhoods(callback) {
     // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        // Get all neighborhoods from all restaurants
-        const neighborhoods = restaurants.map((v, i) => restaurants[i].neighborhood)
-        // Remove duplicates from neighborhoods
-        const uniqueNeighborhoods = neighborhoods.filter((v, i) => neighborhoods.indexOf(v) == i)
-        callback(null, uniqueNeighborhoods);
-      }
-    });
+    db.transaction("restaurants").objectStore("neighborhood").getAll().onsuccess = function(event) {
+        console.log("Neighborhood is " + event.target.result);
+        callback(null, event.target.result);
+    };
   }
 
   /**
@@ -139,17 +146,12 @@ class DBHelper {
    */
   static fetchCuisines(callback) {
     // Fetch all restaurants
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) {
-        callback(error, null);
-      } else {
-        // Get all cuisines from all restaurants
-        const cuisines = restaurants.map((v, i) => restaurants[i].cuisine_type)
-        // Remove duplicates from cuisines
-        const uniqueCuisines = cuisines.filter((v, i) => cuisines.indexOf(v) == i)
-        callback(null, uniqueCuisines);
-      }
-    });
+      // Get all cuisines from all restaurants
+      // Remove duplicates from cuisines
+    idb.transaction("restaurants").objectStore("cuisine_type").getAll().onsuccess = function(event) {
+        console.log("Cuisine is " + event.target.result);
+        callback(null, event.target.result);
+    };
   }
 
   /**

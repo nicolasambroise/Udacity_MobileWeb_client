@@ -257,6 +257,7 @@ nav h1 a:focus {
   margin: 0;
   padding: 5px 15px;
   text-align: center;
+	min-height: 100px;
 }
 #restaurants-list li {
   background-color: #fff;

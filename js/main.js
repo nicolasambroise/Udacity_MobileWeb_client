@@ -7,8 +7,16 @@ var markers = [];
  */
 document.addEventListener('DOMContentLoaded', (event) => {
   console.log("DOMContentLoaded");
-  fetchNeighborhoods();
-  fetchCuisines();
+  DBHelper.InitializeIndexedDB((error,status) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log("Initialization Perfect");
+        fetchNeighborhoods();
+        fetchCuisines();
+      }
+    }
+  );
 });
 
 /**
@@ -97,14 +105,48 @@ updateRestaurants = () => {
   const cuisine = cSelect[cIndex].value;
   const neighborhood = nSelect[nIndex].value;
 
-  DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
-    if (error) { // Got an error!
-      console.error(error);
-    } else {
-      resetRestaurants(restaurants);
-      fillRestaurantsHTML();
-    }
-  })
+  if(cuisine == 'all' && neighborhood == 'all'){
+    DBHelper.fetchRestaurants((error, restaurants) => {
+      if (error) { // Got an error!
+        console.error(error);
+      } else {
+        resetRestaurants(restaurants);
+        fillRestaurantsHTML();
+      }
+    })
+  }
+  else if (cuisine == 'all') {
+    DBHelper.fetchRestaurantByNeighborhood(neighborhood, (error, restaurants) => {
+      if (error) { // Got an error!
+        console.error(error);
+      } else {
+        resetRestaurants(restaurants);
+        fillRestaurantsHTML();
+      }
+    })
+  }
+  else if (neighborhood == 'all') {
+    DBHelper.fetchRestaurantByCuisine(cuisine, (error, restaurants) => {
+      if (error) { // Got an error!
+        console.error(error);
+      } else {
+        resetRestaurants(restaurants);
+        fillRestaurantsHTML();
+      }
+    })
+  }
+  else {
+    DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
+      if (error) { // Got an error!
+        console.error(error);
+      } else {
+        resetRestaurants(restaurants);
+        fillRestaurantsHTML();
+      }
+    })
+  }
+
+
 }
 
 /**
@@ -126,14 +168,24 @@ resetRestaurants = (restaurants) => {
  * Create all restaurants HTML and add them to the webpage.
  */
 
- // TODO in Phase 2 : Add a pagination to load only the first 12 result ( impove UX and reduce load time)
- // TODO in Phase 2 : Add restaurants to Indexed DB
+ // TODO in Phase 3 : Add a pagination to load only the first 12 result ( impove UX and reduce load time)
 fillRestaurantsHTML = (restaurants = self.restaurants) => {
   const ul = document.getElementById('restaurants-list');
-  restaurants.forEach(restaurant => {
-    ul.append(createRestaurantHTML(restaurant));
-  });
+  if(restaurants.length > 0){
+    restaurants.forEach(restaurant => {
+      ul.append(createRestaurantHTML(restaurant));
+    });
   addMarkersToMap();
+  }
+  else{
+    // An error message is better than nothing !
+      const p = document.createElement('p');
+        const i = document.createElement('em');
+        i.innerHTML = "Sorry, no restaurants matched your selected filters !";
+      p.append(i);
+    ul.append(p);
+  }
+
 }
 
 /**

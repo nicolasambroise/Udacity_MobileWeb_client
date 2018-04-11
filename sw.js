@@ -13,6 +13,7 @@ self.addEventListener('install', function(event) {
         'fonts/CaviarDreams.ttf',
         'fonts/fontawesome-webfont.ttf',
         'js/dbhelper.js',
+        'js/idb.js',
         'js/main.js',
         'js/restaurant_info.js',
         'js/script.js',
@@ -48,6 +49,9 @@ self.addEventListener('install', function(event) {
         'img/10_100w.jpg','img/10_100w.webp','img/10_200w.jpg','img/10_200w.webp',
         'img/10_300w.jpg','img/10_300w.webp','img/10_400w.jpg','img/10_400w.webp',
         'img/10_800w.jpg','img/10_800w.webp',
+        'img/no-image_100w.jpg','img/no-image_100w.webp','img/no-image_200w.jpg','img/no-image_200w.webp',
+        'img/no-image_300w.jpg','img/no-image_300w.webp','img/no-image_400w.jpg','img/no-image_400w.webp',
+        'img/no-image_800w.jpg','img/no-image_800w.webp',
         'manifest.json'
 	    ]);
     })
@@ -60,13 +64,13 @@ self.addEventListener('fetch', function(event) {
   if(event.request.url.indexOf("https://maps.gstatic.com/mapfiles/") > -1){
     return null;
   }
-  //console.log(event.request);
-  event.respondWith(caches.match(event.request).then(function(response) {
+  // Exclude parameters from URL with ignoreSearch option for caching "restaurant.html?id=X"
+  event.respondWith(caches.match(event.request, {'ignoreSearch': true}).then(function(response) {
 		if (response !== undefined) {
+      console.log(response);
 		  return response;
 		} else {
 		  return fetch(event.request).then(function (response) {
-			  const responseClone = response.clone();
 			  return response;
 		  }).catch(function () {
 			  return caches.match('');

@@ -3,64 +3,75 @@
  */
 class DBHelper {
 
+
+  static get DATABASE_URL() {
+    const port = 1337;
+    const server = 'localhost';
+    return `http://${server}:${port}/restaurants`;
+  }
   /**
    * InitializeIndexedDB
    */
   static InitializeIndexedDB(callback){
     // Step 1 : Build IDB
+    console.log("InitializeIndexedDB");
     if (!('indexedDB' in window)) {
       console.log('This browser doesn\'t support IndexedDB');
       const error = ('This browser doesn\'t support IndexedDB');
       callback(error, null);
     }
     const dbName = "Time4FoodDatabase";
-    var dbPromise = idb.open(dbName, 3, function(upgradeDb) {
-      switch (upgradeDb.oldVersion) {
-        case 0:
-          // a placeholder case so that the switch block will
-          // execute when the database is first created
-        case 1:
+
+    var dbPromise = idb.open(dbName, 1,function(upgradeDb) {
           console.log('Creating the restaurants object store');
           upgradeDb.createObjectStore('restaurants', {keyPath: 'id'});
-        case 2:
           console.log('Creating neighborhood and cuisines indexes');
           var store = upgradeDb.transaction.objectStore('restaurants');
           store.createIndex('neighborhood', 'neighborhood');
           store.createIndex('cuisine_type', 'cuisine_type');
           store.createIndex('neighborhood,cuisine_type', ['neighborhood', 'cuisine_type']);
-      }
     });
+    dbPromise.onupgradeneeded = function(e) {console.log("dbPromise onupgradeneeded");};
     dbPromise.onerror = function(event) {alert("error opening IndexedDB.");};
-    dbPromise.onsuccess = function(event) {db = dbPromise.result;};
+    dbPromise.onsuccess = function(event) {console.log("dbPromise onSuccess");};
 
-    // Step 2 : Get data as JSON
-    if(self.fetch) {
-      // FETCH
-      fetch('http://localhost:1337/restaurants', {})
-      .then(response => response.json())
-      .then(function(restaurantsJson) {addRestaurants(restaurantsJson);})
-      .catch(e => requestError(e, 'restaurants'));
+    // Step 2 : Get data as JSON or wait for it
+    if (navigator.onLine) {
+      requestRestaurant();
+    }
+    else{
+      console.log('offline');
+      window.addEventListener('online', function(e) { requestRestaurant(); });
 
-      function requestError(e, part) {
-        const error = (e);
-        callback(error, null);
+      // TODO : Check if database already exist
+      callback(null,"offline");
+    }
+
+    function requestRestaurant(){
+      console.log('online : request Restaurant');
+      if(self.fetch) {
+        // FETCH
+        fetch(DBHelper.DATABASE_URL)
+        .then(response => response.json())
+        .then(function(restaurantsJson) {addRestaurants(restaurantsJson);})
+        .catch(error => callback(error, null));
+
+      } else {
+        // XHR
+        let xhr = new XMLHttpRequest();
+        xhr.open('GET', DBHelper.DATABASE_URL);
+        xhr.onload = () => {
+          if (xhr.status === 200) { // Got a success response from server!
+            const restaurants = JSON.parse(xhr.responseText);
+            addRestaurants(restaurantsJson);
+          } else { // Oops!. Got an error from server.
+            const error = (`Request failed. Returned status of ${xhr.status}`);
+            callback(error, null);
+          }
+        };
+        xhr.onerror = () => {console.log( 'An error occurred 😞' );};
+        xhr.send();
       }
-    } else {
-      // XHR
-      let xhr = new XMLHttpRequest();
-      xhr.open('GET', 'http://localhost:1337/restaurants');
-      xhr.onload = () => {
-        if (xhr.status === 200) { // Got a success response from server!
-          const restaurants = JSON.parse(xhr.responseText);
-          console.log(restaurants);
-          callback(null, restaurants);
-        } else { // Oops!. Got an error from server.
-          const error = (`Request failed. Returned status of ${xhr.status}`);
-          callback(error, null);
-        }
-      };
-      xhr.onerror = () => {console.log( 'An error occurred 😞' );};
-      xhr.send();
     }
 
     // Step 3 : Put data in IDB
@@ -68,8 +79,10 @@ class DBHelper {
       console.log("addRestaurants");
       console.log(JsonRestaurants);
 
+      // TODO : Add only if index not exist 
+
       dbPromise.then(function(db) {
-        var tx = db.transaction('restaurants', 'readwrite');
+        var tx = db.transaction('restaurants','readwrite');
         var store = tx.objectStore('restaurants');
         var items = JsonRestaurants;
         return Promise.all(items.map(function(item) {
@@ -92,7 +105,7 @@ class DBHelper {
   static fetchRestaurants(callback) {
     console.log("fetch all Restaurants");
     const dbName = "Time4FoodDatabase";
-    var dbPromise = idb.open(dbName, 3);
+    var dbPromise = idb.open(dbName);
     dbPromise.onerror = function(event) {alert("error opening IndexedDB.");};
     dbPromise.onsuccess = function(event) {db = dbPromise.result;};
     dbPromise.then(function(db) {
@@ -109,16 +122,19 @@ class DBHelper {
    * Fetch a restaurant by its ID.
    */
   static fetchRestaurantById(id, callback) {
-    // fetch all restaurants with proper error handling.
-      const dbName = "Time4FoodDatabase";
-      var dbPromise = idb.open(dbName, 3);
-      dbPromise.onerror = function(event) {alert("error opening IndexedDB.");};
-      dbPromise.onsuccess = function(event) {db = dbPromise.result;};
-      dbPromise.then(function(db) {
-        db.transaction("restaurants").objectStore("restaurants").get(id).onsuccess = function(event) {
-          console.log("Restaurant is " + event.target.result);
-          callback(null, event.target.result);
-      };
+    console.log("fetch the Restaurant with ID #"+id);
+    const dbName = "Time4FoodDatabase";
+    var dbPromise = idb.open(dbName);
+    dbPromise.onerror = function(event) {alert("error opening IndexedDB.");};
+    dbPromise.onsuccess = function(event) {db = dbPromise.result;};
+    dbPromise.then(function(db) {
+      var tx = db.transaction('restaurants');
+      tx.onerror = function(event) { callback("error starting transaction.",null);}
+      var store = tx.objectStore("restaurants");
+      //console.log(typeof id); id should by Integer !
+      return store.get(parseInt(id));
+    }).then(function(val){
+      callback(null, val);
     });
   }
 
@@ -128,7 +144,7 @@ class DBHelper {
   static fetchRestaurantByCuisine(cuisine, callback) {
     console.log("fetch all restaurant By Cuisine :"+cuisine);
     const dbName = "Time4FoodDatabase";
-    var dbPromise = idb.open(dbName, 3);
+    var dbPromise = idb.open(dbName);
     dbPromise.onerror = function(event) {alert("error opening IndexedDB.");};
     dbPromise.onsuccess = function(event) {db = dbPromise.result;};
     dbPromise.then(function(db) {
@@ -149,7 +165,7 @@ class DBHelper {
   static fetchRestaurantByNeighborhood(neighborhood, callback) {
     console.log("fetch all restaurant By Neighborhood :"+neighborhood);
     const dbName = "Time4FoodDatabase";
-    var dbPromise = idb.open(dbName, 3);
+    var dbPromise = idb.open(dbName);
     dbPromise.onerror = function(event) {alert("error opening IndexedDB.");};
     dbPromise.onsuccess = function(event) {db = dbPromise.result;};
     dbPromise.then(function(db) {
@@ -170,7 +186,7 @@ class DBHelper {
   static fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, callback) {
     console.log("fetch all restaurant By Cuisine and Neighborhood :"+cuisine+","+neighborhood);
     const dbName = "Time4FoodDatabase";
-    var dbPromise = idb.open(dbName, 3);
+    var dbPromise = idb.open(dbName);
     dbPromise.onerror = function(event) {alert("error opening IndexedDB.");};
     dbPromise.onsuccess = function(event) {db = dbPromise.result;};
     dbPromise.then(function(db) {
@@ -191,7 +207,7 @@ class DBHelper {
   static fetchNeighborhoods(callback) {
     console.log("fetchNeighborhoods for select list");
     const dbName = "Time4FoodDatabase";
-    var dbPromise = idb.open(dbName, 3);
+    var dbPromise = idb.open(dbName);
     dbPromise.onerror = function(event) {alert("error opening IndexedDB.");};
     dbPromise.onsuccess = function(event) {db = dbPromise.result;};
     dbPromise.then(function(db) {
@@ -218,7 +234,7 @@ class DBHelper {
   static fetchCuisines(callback) {
     console.log("fetchCuisines for select list");
     const dbName = "Time4FoodDatabase";
-    var dbPromise = idb.open(dbName, 3);
+    var dbPromise = idb.open(dbName);
     dbPromise.onerror = function(event) {alert("error opening IndexedDB.");};
     dbPromise.onsuccess = function(event) {db = dbPromise.result;};
     dbPromise.then(function(db) {

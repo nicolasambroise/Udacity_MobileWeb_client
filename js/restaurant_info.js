@@ -9,7 +9,7 @@ window.initMap = () => {
     if (error) { // Got an error!
       console.error(error);
     } else {
-      self.map = new google.maps.Map(document.getElementById('map'), {
+        self.map = new google.maps.Map(document.getElementById('map'), {
         zoom: 16,
         center: restaurant.latlng,
         scrollwheel: false
@@ -17,7 +17,7 @@ window.initMap = () => {
 	  console.log("Initialize GMap");
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
-	  loadStaticMap(self.restaurant);
+	    loadStaticMap(self.restaurant);
     }
   });
 }
@@ -35,17 +35,24 @@ fetchRestaurantFromURL = (callback) => {
     error = 'No restaurant id in URL'
     callback(error, null);
   } else {
-    DBHelper.fetchRestaurantById(id, (error, restaurant) => {
-      self.restaurant = restaurant;
-      if (!restaurant) {
-        console.error(error);
-        return;
+     DBHelper.InitializeIndexedDB((error,status) => {
+        if (error) {
+          console.error(error);
+        } else {
+          console.log("Initialization Perfect");
+          DBHelper.fetchRestaurantById(id, (error, restaurant) => {
+            self.restaurant = restaurant;
+            if (!restaurant) {
+              console.error(error);
+              return;
+            }
+            fillRestaurantHTML();
+            callback(null, restaurant)
+          });
+        }
       }
-      fillRestaurantHTML();
-      callback(null, restaurant)
-    });
+    );
   }
-  // TODO in Phase 2 : Add info to Indexed DB
 }
 
 /**

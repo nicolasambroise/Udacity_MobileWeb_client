@@ -6,14 +6,14 @@
 'use strict';
 
 // Variables de chemins
-var src = './src'; // dossier de travail
+var src = './'; // dossier de travail
 var dist = './dist'; // dossier à livrer
 
 /** ---------------------------------------------------------------------------
  * Load plugins.
  * ------------------------------------------------------------------------- */
 
-var gulp = require('gulp'),
+const gulp = require('gulp'),
     browser = require('browser-sync').create(),
     autoprefixer = require('gulp-autoprefixer'),
     sass = require('gulp-sass'),
@@ -28,7 +28,8 @@ var gulp = require('gulp'),
     htmlbeautify = require('gulp-html-beautify'),
     jimpresize = require("gulp-jimp-resize"),
     notify = require('gulp-notify'),
-    browserSync = require('browser-sync').create();
+    browserSync = require('browser-sync').create(),
+    autoprefixer = require('gulp-autoprefixer');
 
 
 // Include plugins automatiquement
@@ -38,20 +39,20 @@ var plugins = require('gulp-load-plugins')({pattern: ['gulp-*', 'gulp.*'],replac
 /* ************* JS FILE ************* */
 	// Concatenate JS ( Multiple JS file --> scripts.js --> scripts.min.js) -- OK
 	gulp.task('JSminify', function() {
-		return gulp.src([src + '/assets/js/*.js', '!' +src + '/assets/js/*.min.js'])
+		return gulp.src([src + '/js/*.js', '!' +src + '/js/*.min.js'])
 			.pipe(concatJS('scripts.js'))
-			.pipe(gulp.dest(dist + '/assets/js'))
+			.pipe(gulp.dest(dist + '/js'))
 			.pipe(plugins.notify({title: 'Gulp',message: 'JSconcat Done'}))
 			.pipe(plugins.uglify())
 			.pipe(rename('scripts.min.js'))
-			.pipe(gulp.dest(dist + '/assets/js'))
+			.pipe(gulp.dest(dist + '/js'))
 			.pipe(plugins.notify({title: 'Gulp',message: 'JSminify Done'}))
-		        .pipe(browserSync.stream());
+		  .pipe(browserSync.stream());
 	});
 
 	// Check JS code for errors. -- OK
 	gulp.task('JScheck', function() {
-		return gulp.src([src + '/assets/js/*.js', '!' +src + '/assets/js/*.min.js', '!' +src + '/assets/js/*analytics.js']) // Exception Google Analytics
+		return gulp.src([src + '/js/*.js', '!' +src + '/js/*.min.js', '!' +src + '/js/*analytics.js']) // Exception Google Analytics
 			.pipe(jshint())
 			.pipe(jshint.reporter('jshint-stylish'))
 			.pipe(jshint.reporter('fail')); // task fails on JSHint error
@@ -59,7 +60,8 @@ var plugins = require('gulp-load-plugins')({pattern: ['gulp-*', 'gulp.*'],replac
 
         // Copy SW to dist -- OK
 	gulp.task('JScopy', function() {
-		return gulp.src(src + '/*.min.js')
+		return gulp.src(src + '/*.js')
+    .pipe(plugins.uglify())
 		.pipe(gulp.dest(dist + '/'))
 		.pipe(plugins.notify({title: 'Gulp',message: 'JScopy Done'}));
 	});
@@ -67,28 +69,30 @@ var plugins = require('gulp-load-plugins')({pattern: ['gulp-*', 'gulp.*'],replac
 
 
 /* ************* CSS FILE ************* */
+  gulp.task('CSSsass', function(){
+    return gulp.src(src+'/sass/*.scss')
+    .pipe(plugins.sass())
+    .pipe(plugins.autoprefixer({
+      browsers:['last 2 versions']
+    }))
+    .pipe(gulp.dest(src + '/css'))
+    .pipe(plugins.notify({title: 'Gulp',message: 'CSSsass Done'}));
+    });
 
-	// Concatenate CSS ( style.css + bootstrap.css + ??? --> styles.css) -- OK
+	// Concatenate CSS
 	gulp.task('CSSconcat', function() {
-		return gulp.src([src + '/assets/css/*.css','!'+ src+'/assets/css/cover_top.css','!'+ src+'/assets/css/*.min.css']) // ATTENTION Exeption sur le cover_top.css
+		return gulp.src([src + '/css/*.css','!'+ src+'/css/*.min.css']) // ATTENTION Exeption sur les min.css
 		  .pipe(plugins.concat('styles.css'))
-		  .pipe(gulp.dest(dist + '/assets/css'))
+		  .pipe(gulp.dest(dist + '/css'))
 			.pipe(plugins.notify({title: 'Gulp',message: 'CSSconcat Done'}));
-	});
-
-	// Copy CSS ( xxx.css (src ) --> xxx.css (prod)) -- OK
-	gulp.task('CSScopy', function() {
-		return gulp.src(src+'/assets/css/cover_top.css')
-		.pipe(gulp.dest(dist + '/assets/css'))
-		.pipe(plugins.notify({title: 'Gulp',message: 'CSScopy Done'}));
 	});
 
 	// Minify CSS ( styles.css --> styles.min.css et ???.css --> ???.min.css) -- OK
 	gulp.task('CSSminify', function() {
-		return gulp.src([dist + '/assets/css/*.css', '!'+ dist + '/assets/css/*.min.css']) // ATTENTION Exeption sur les min.css
+		return gulp.src([dist + '/css/*.css', '!'+ dist + '/css/*.min.css']) // ATTENTION Exeption sur les min.css
 			.pipe(plugins.csso())
 			.pipe(plugins.rename({suffix: '.min'}))
-			.pipe(gulp.dest(dist + '/assets/css'))
+			.pipe(gulp.dest(dist + '/css'))
 			.pipe(plugins.notify({title: 'Gulp',message: 'CSSminify Done'}));
 	});
 
@@ -107,19 +111,63 @@ var plugins = require('gulp-load-plugins')({pattern: ['gulp-*', 'gulp.*'],replac
 
 	// Optimize .jpg picture
 	gulp.task('IMGoptimize', function() {
-	  return gulp.src(src + '/img/*.{jpg}')
+	  return gulp.src([src + '/img/*.{jpg}', src + '/img/*.{webp}'])
 		.pipe(plugins.cache(plugins.imagemin({ optimizationLevel: 5, progressive: true, interlaced: true, verbose: true })))
-		.pipe(gulp.dest(dist + '/img/'));
+		.pipe(gulp.dest(dist + '/logo/'));
 	});
+
+  // Optimize logo
+  gulp.task('LOGOoptimize', function() {
+    return gulp.src([src + '/logo/*.{png}',src + '/logo/*.{svg}'])
+    .pipe(plugins.cache(plugins.imagemin({ optimizationLevel: 5, progressive: true, interlaced: true, verbose: true })))
+    .pipe(gulp.dest(dist + '/logo/'));
+  });
+/* *************** MOVE & COPY ************* */
+
+gulp.task('FONTScopy', function() {
+  return gulp.src(src + '/fonts/*')
+  .pipe(gulp.dest(dist + '/fonts/'))
+  .pipe(plugins.notify({title: 'Gulp',message: 'FONTScopy Done'}));
+});
+
+
+gulp.task('JSONcopy', function() {
+  return gulp.src(src + '/*.{json}')
+  .pipe(gulp.dest(dist + '/'))
+  .pipe(plugins.notify({title: 'Gulp',message: 'JSONcopy Done'}));
+});
+
 
 /* ************* TASKS MANAGER ************* */
 
-//  "build" Task
-gulp.task('build', function(cb) {
-    sequence(['style', 'script', 'images','pages'],['moveOther', 'moveFonts', 'moveFavicon'], cb);
+//  "Run_style" Task
+gulp.task('Run_style', function(cb) {
+    sequence(['CSSsass', 'CSSconcat', 'CSSminify'], cb);
 });
+
+//  "Run_script" Task
+gulp.task('Run_script', function(cb) {
+    sequence(['JScheck', 'JSminify'], cb);
+});
+
+
+//  "Run_images" Task
+gulp.task('Run_images', function(cb) {
+    sequence(['IMGoptimize', 'LOGOoptimize'], cb);
+});
+
+//  "Run_pages" Task
+gulp.task('Run_pages', function(cb) {
+    sequence('HTMLpages', cb);
+});
+
+//  "Run_move" Task
+gulp.task('Run_copy', function(cb) {
+    sequence(['JScopy', 'FONTScopy', 'JSONcopy'], cb);
+});
+
 
 // Default Task
 gulp.task('default', function(cb) {
-    sequence('build', 'server', cb);
+    sequence(['Run_style', 'Run_script', 'Run_images','Run_pages','Run_copy'], cb);
 });

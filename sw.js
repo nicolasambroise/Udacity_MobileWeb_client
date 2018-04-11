@@ -59,7 +59,6 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('fetch', function(event) {
-  // console.log(event.request.url);
   // Exclude map file from cache
   if(event.request.url.indexOf("https://maps.gstatic.com/mapfiles/") > -1){
     return null;
@@ -67,7 +66,6 @@ self.addEventListener('fetch', function(event) {
   // Exclude parameters from URL with ignoreSearch option for caching "restaurant.html?id=X"
   event.respondWith(caches.match(event.request, {'ignoreSearch': true}).then(function(response) {
 		if (response !== undefined) {
-      console.log(response);
 		  return response;
 		} else {
 		  return fetch(event.request).then(function (response) {

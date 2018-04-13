@@ -3,11 +3,16 @@
   "version": "1.0.0",
   "description": "MWS Restaurant - stage1 .",
   "main": "gulpfile.js",
-  "scripts": {"test": "echo \"Error: no test specified\" && exit 1"},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "author": "Nicolas AMBROISE",
   "license": "ISC",
-  "dependencies": {"bootstrap": "^4.0.0-beta.2"},
+  "dependencies": {
+    "bootstrap": "^4.0.0-beta.2"
+  },
   "devDependencies": {
+    "browser-sync": "^2.23.6",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^4.0.0",
     "gulp-cache": "latest",
@@ -16,10 +21,9 @@
     "gulp-cssbeautify": "latest",
     "gulp-csscomb": "latest",
     "gulp-csso": "latest",
+    "gulp-html-beautify": "latest",
     "gulp-htmlclean": "latest",
-    "gulp-html-beautify": "latest",
     "gulp-htmlmin": "latest",
-    "gulp-html-beautify": "latest",
     "gulp-imagemin": "^3.3.0",
     "gulp-jimp": "latest",
     "gulp-jimp-resize": "latest",
@@ -30,7 +34,6 @@
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.1.0",
     "gulp-uglify": "^3.0.0",
-    "browser-sync": "^2.18.13",
     "jshint": "^2.9.5",
     "jshint-stylish": "^2.2.1",
     "run-sequence": "^2.1.0"

@@ -188,7 +188,9 @@ limitations under the License.
         resolve();
       };
       idbTransaction.onerror = function() {
-        reject(idbTransaction.error);
+        //reject(idbTransaction.error);
+        if(idbTransaction.error != null)
+        console.log(idbTransaction.error);
       };
     });
   }

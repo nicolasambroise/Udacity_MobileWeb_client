@@ -69,7 +69,20 @@ gulp.task("JSminify", function() {
 // Error : No ESLint configuration found.
 gulp.task("JSlint", function() {
   return gulp.src([src + "/js/*.js","!node_modules/**"])
-    .pipe(eslint())
+    .pipe(eslint({configFile: 'eslintrc.json'}))
+    .pipe(eslint.format())
+    .pipe(eslint.result(result => {
+	    // Called for each ESLint result.
+	    console.log(`ESLint result: ${result.filePath}`);
+	    console.log(`# Messages: ${result.messages.length}`);
+	    console.log(`# Warnings: ${result.warningCount}`);
+	    console.log(`# Errors: ${result.errorCount}`);
+   }));
+});
+
+gulp.task("JSlintFail", function() {
+  return gulp.src([src + "/js/*.js","!node_modules/**"])
+    .pipe(eslint({configFile: 'eslintrc.json'}))
     .pipe(eslint.format())
     .pipe(eslint.failAfterError());
 });
@@ -186,12 +199,12 @@ gulp.task("JSONcopy", function() {
 
 //  "Run_style" Task
 gulp.task("Run_style", function(cb) {
-    sequence(["CSSsass", "CSSconcat", "CSSminify"], cb);
+    sequence("CSSsass", "CSSconcat", "CSSminify", cb);
 });
 
 //  "Run_script" Task
 gulp.task("Run_script", function(cb) {
-    sequence(["JScheck", "JSminify"], cb);
+    sequence(["JScopy", "JSminify"], cb);
 });
 
 
@@ -202,16 +215,12 @@ gulp.task("Run_images", function(cb) {
 
 //  "Run_pages" Task
 gulp.task("Run_pages", function(cb) {
-    sequence("HTMLpages", cb);
+    sequence("HTMLpages","FONTScopy","JSONcopy", cb);
 });
 
-//  "Run_move" Task
-gulp.task("Run_copy", function(cb) {
-    sequence(["JScopy", "FONTScopy", "JSONcopy"], cb);
-});
 
 
 // Default Task
 gulp.task("default", ["JSlint"] ,function(cb) {
-    sequence(["Run_style", "Run_script", "Run_images","Run_pages","Run_copy","serve"], cb);
+    sequence(["Run_style", "Run_script", "Run_images","Run_pages","serve"], cb);
 });

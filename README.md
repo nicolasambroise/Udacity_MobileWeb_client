@@ -16,6 +16,10 @@ For the **Restaurant Reviews** projects, you will incrementally convert a static
 ### How to use it
 
 #### 1) Download this repository (or fork it !)
+
+_Note about ES6 :_
+Most of the code in this project has been written to the ES6 JavaScript specification for compatibility with modern web browsers and future proofing JavaScript code. As much as possible, try to maintain use of ES6 in any additional JavaScript you write.
+
 #### 2) Use Python or IIS to set up a local server
 
 ##### 2.1 With Python
@@ -27,8 +31,6 @@ In a terminal, check the version of Python you have: `python -V`. If you have Py
 3. Click Add Web Site and give it a name, and add the path to the folder where your website is located.
 4. In IP address use * and pick the port 8000.
 
-_Note about port :_ This website works with whatever port is picked
-
 _Enable WebP on IIS :_ [help] (https://www.itnota.com/serving-webp-image-iis/)
 1. Launch IIS Manager.
 2. Click on your main server on the left pane to make sure we're making the change on a server level (as opposed to a site level). Then click on the MIME Types.
@@ -37,8 +39,28 @@ _Enable WebP on IIS :_ [help] (https://www.itnota.com/serving-webp-image-iis/)
 In Add MIME Type box, enter **.webp** as the file name extension and **image/webp** as the MIME type and click OK.
 5. Now if you reload your Chrome browser, you should be able to see both image files rendered correctly.
 
-##### 3) With your server running, visit the site: `http://localhost:8000`
+##### 3) Install & Run the Backend Server as specify in the MWS2
+`https://github.com/nicolasambroise/mws-restaurant-stage-2`
 
-### Note about ES6
+_Note about version :_ Backend Server depends on node.js LTS Version: v6.11.2 , npm, and sails.js Please make sure you have these installed before proceeding forward.
 
-Most of the code in this project has been written to the ES6 JavaScript specification for compatibility with modern web browsers and future proofing JavaScript code. As much as possible, try to maintain use of ES6 in any additional JavaScript you write.
+
+##### 4) With your server running, visit the site: `http://localhost:8000`
+
+### LightHouse Score (22/04/2018)
+
+| Tool\Pages | [Localhost] main.html | [Localhost] restorant.html | [Prod] main.html | [Prod] restorant.html |
+| --- | --- | --- | --- | --- |
+| Performance | 72 | 59 | --- | --- |
+| PWA | 82 | 82 | --- | --- |
+| Best Practice | 75 | 75 | --- | --- |
+| accessibility | 100 | 91 | --- | --- |
+| SEO | 100 | 100 | --- | --- |
+
+### TODO List
+
+- Install on a production server with HTTPS and htaccess
+- Reduce render-blocking stylesheets (Delete normalize ? Use a small CSS for startup ?)
+- Make running Gulp task + Clean Gulp package.json
+- Minify JS & CSS ( => Use Gulp uglify + injector ? + Run on /dist/ folder)
+- Check to replace GoogleMap iframe by something else. + check title in restorant page

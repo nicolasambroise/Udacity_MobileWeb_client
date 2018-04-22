@@ -34,6 +34,7 @@
     "gulp-csso": "^3.0.1",
     "gulp-htmlclean": "^2.7.22",
     "gulp-htmlmin": "^4.0.0",
+    "gulp-inject": "^4.3.2",
     "gulp-jasmine-phantom": "^3.0.0",
     "gulp-jimp": "latest",
     "gulp-jshint": "^2.1.0",

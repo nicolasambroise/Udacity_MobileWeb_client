@@ -298,7 +298,7 @@ fillBreadcrumb = (restaurant=self.restaurant) => {
   const a = document.createElement('a');
   a.setAttribute('href',`./restaurant.html?id=${restaurant.id}`);
   a.setAttribute('aria-current', 'page');
-  a.setAttribute('tabindex', '1');
+  a.setAttribute('tabindex', '0');
   a.innerHTML = restaurant.name;
   li.appendChild(a);
   breadcrumb.appendChild(li);
@@ -359,6 +359,7 @@ loadStaticMap = (restaurant) => {
  */
 window.addEventListener('load', () => {
   const iframeloaded = document.querySelector('#map iframe') !== null;
+  console.log("add title to iframe")
   if(iframeloaded){
     document.querySelector('#map iframe').setAttribute('title', 'New York City Map of Restaurants');
   }

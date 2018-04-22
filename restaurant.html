@@ -7,24 +7,25 @@
   <title>Restaurant Info</title>
   <meta name="description" content="NewYork Restaurant Info">
   <meta name="author" content="Nicolas AMBROISE">
-
+  <!-- inject:css -->
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/styles.css">
+  <!-- endinject -->
   <link rel="icon" type="image/png" sizes="16x16" href="./logo/BSicon_REST.png">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#444">
 </head>
 
 <body class="inside">
-  <a href="#restaurants-list" class="skip-link" tabindex="1" aria-label="Skip to main content">Skip to main content</a>
+  <a href="#restaurants-list" class="skip-link" tabindex="0" aria-label="Skip to main content" rel="noopener">Skip to main content</a>
   <header>
 	<div class="logo"><img src="./logo/BSicon_REST.svg"  alt="Time4Food Logo"></div>
     <nav>
-      <h1><a href="/" aria-label="Restaurant Info" tabindex="1">Restaurant Info</a></h1>
+      <h1><a href="/" aria-label="Restaurant Info" tabindex="0" rel="noopener">Restaurant Info</a></h1>
     </nav>
     <nav aria-label="Breadcrumb" id="breadcrumb">
       <ol>
-        <li><a href="/" tabindex="1">Home</a></li>
+        <li><a href="/" tabindex="0" rel="noopener">Home</a></li>
       </ol>
     </nav>
   </header>
@@ -51,7 +52,7 @@
     <!-- end restaurant -->
     <!-- Beginning map -->
     <section id="map-container"aria-label="Map Container">
-      <div id="map" tabindex="999" role="application" aria-label="Map with restaurants"></div>
+      <div id="map" tabindex="0" role="application" aria-label="Map with restaurants"></div>
 	  <div id="map-static"></div>
     </section>
     <!-- End map -->
@@ -65,15 +66,17 @@
 
   <footer id="footer">
     Copyright (c) 2017 - All Rights Reserved.<br>
-	<a href="/" aria-label="Home page - Restaurant Reviews" tabindex="4"><strong>Restaurant Reviews</strong></a> -
-	<a href="javascript:;" id="toTop" aria-label="Back to top" tabindex="4"><strong>Back to top</strong></a>
+	<a href="/" aria-label="Home page - Restaurant Reviews" tabindex="0" rel="noopener"><strong>Restaurant Reviews</strong></a> -
+	<a href="javascript:;" id="toTop" aria-label="Back to top" tabindex="0" rel="noopener"><strong>Back to top</strong></a>
   </footer>
+  <!-- inject:js -->
   <script src="js/idb.js"></script>
   <script src="js/dbhelper.js"></script>
   <script src="js/restaurant_info.js"></script>
   <script src="js/script.js"></script>
+  <script src="app.js"></script>
+  <!-- endinject -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=
   AIzaSyC7PG4bxfY8ul6b8YLstueqFeI6eRnnVmk&libraries=places&callback=initMap"></script>
-  <script src="app.js"></script>
 </body>
 </html>

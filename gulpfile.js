@@ -33,9 +33,10 @@ var browserSync = require("browser-sync").create();
 var jasmine = require('gulp-jasmine-phantom');
 var htmlclean = require('gulp-htmlclean');
 var htmlmin = require('gulp-htmlmin');
-//$ npm install --save-dev gulp-jasmine-phantom
+var inject = require('gulp-inject');
 var jshint = require("gulp-jshint");
 //$  npm install jshint gulp-jshint --save-dev
+
 
 // Include plugins automatiquement
 var plugins = require("gulp-load-plugins")({pattern: ["gulp-*", "gulp.*"], replaceString: /\bgulp[\-.]/}); // tous les plugins de package.json
@@ -153,6 +154,14 @@ gulp.task("HTMLpages", function() {
   return gulp.src(src + "/*.html")
     .pipe(plugins.htmlclean())
     .pipe(plugins.htmlmin({collapseWhitespace: true}))
+    .pipe(gulp.dest(dist + "/"));
+});
+
+// Test --> Replace js by .min.js
+gulp.task('HTMLinject', function () {
+  var sources = gulp.src([dist + '/js/*.min.js', dist + '/css/*.min.css'], {read: false});
+  return gulp.src(src + "/*.html")
+    .pipe(inject(sources))
     .pipe(gulp.dest(dist + "/"));
 });
 

@@ -7,26 +7,27 @@
   <title>Restaurant Reviews</title>
   <meta name="description" content="NewYork Restaurant Reviews">
   <meta name="author" content="Nicolas AMBROISE">
-
+  <!-- inject:css -->
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/styles.css">
+  <!-- endinject -->
   <link rel="icon" type="image/png" sizes="16x16" href="./logo/BSicon_REST.png">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#444">
 </head>
 
 <body>
-  <a href="#restaurants-list" class="skip-link" tabindex="1" aria-label="Skip to main content">Skip to main content</a>
+  <a href="#restaurants-list" class="skip-link" tabindex="0" aria-label="Skip to main content" rel="noopener">Skip to main content</a>
   <header>
 	<div class="logo"><img src="./logo/BSicon_REST.svg"  alt="Time4Food Logo"></div>
     <nav>
-      <h1><a href="/" aria-label="Home page - Restaurant Reviews" tabindex="1">Restaurant Reviews</a></h1>
+      <h1><a href="/" aria-label="Home page - Restaurant Reviews" tabindex="0" rel="noopener">Restaurant Reviews</a></h1>
     </nav>
   </header>
 
   <main id="maincontent" role="main">
     <section id="map-container" aria-label="Map container">
-	    <div id="map" tabindex="999" role="application" aria-label="Map with restaurants"></div>
+	    <div id="map" tabindex="0" role="application" aria-label="Map with restaurants"></div>
 	    <div id="map-static"></div>
     </section>
     <section aria-label="Restaurant filter">
@@ -34,13 +35,13 @@
         <h3>Filter Results</h3>
         <div>
           <i class="fa fa-map-signs" aria-hidden="true"></i>
-          <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" tabindex="2" aria-labelledby="neighborhoods-select">
+          <select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" tabindex="0" aria-labelledby="neighborhoods-select">
             <option value="all" selected>All Neighborhoods</option>
           </select>
         </div>
         <div>
           <i class="fa fa-cutlery" aria-hidden="true"></i>
-          <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" tabindex="2" aria-labelledby="cuisines-select">
+          <select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" tabindex="0" aria-labelledby="cuisines-select">
             <option value="all" selected>All Cuisines</option>
           </select>
         </div>
@@ -54,15 +55,17 @@
 
   <footer id="footer">
     Copyright (c) 2017 - All Rights Reserved.<br>
-	<a href="/" aria-label="Home page - Restaurant Reviews" tabindex="4"><strong>Restaurant Reviews</strong></a> -
-	<a href="javascript:;" id="toTop" aria-label="Back to top" tabindex="4"><strong>Back to top</strong></a>
+	<a href="/" aria-label="Home page - Restaurant Reviews" tabindex="0" rel="noopener"><strong>Restaurant Reviews</strong></a> -
+	<a href="javascript:;" id="toTop" aria-label="Back to top" tabindex="0" rel="noopener"><strong>Back to top</strong></a>
   </footer>
+  <!-- inject:js -->
   <script src="js/idb.js"></script>
   <script src="js/dbhelper.js"></script>
   <script src="js/main.js"></script>
   <script src="js/script.js"></script>
+  <script src="app.js"></script>
+  <!-- endinject -->
   <script async defer src="https://maps.googleapis.com/maps/api/js?key=
 AIzaSyC7PG4bxfY8ul6b8YLstueqFeI6eRnnVmk&libraries=places&callback=initMap"></script>
-  <script src="app.js"></script>
 </body>
 </html>

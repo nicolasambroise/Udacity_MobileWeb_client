@@ -1,3 +1,4 @@
+/* Font-Face */
 @font-face {
   font-family: "Dreams";
   src: url("../fonts/CaviarDreams.ttf"); }
@@ -9,34 +10,33 @@
   font-weight: normal;
   font-style: normal; }
 
-/** BreakPoint
- * @media screen and (min-width: 500px) {}
- * @media screen and (min-width: 800px) {}
- * @media screen and (min-width: 1200px) {}
- */
+/* Color */
+/* font size */
+/** BreakPoint */
+/* **************************************************** */
 /* CSS Document */
 body, td, th, p {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 10pt;
-  color: #333;
+  font-size: 16px;
+  color: #444;
   line-height: 1.5; }
 
 body {
-  background-color: #fdfdfd;
+  background-color: #eee;
   margin: 0;
   position: relative; }
 
 ol, ul, li {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 10pt;
-  color: #333; }
+  font-size: 16px;
+  color: #444; }
 
 a {
   color: #8b0000;
   text-decoration: none; }
 
 a:hover, a:focus {
-  color: #3397db;
+  color: #ff9800;
   text-decoration: none; }
 
 a img {
@@ -50,13 +50,13 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
   display: block; }
 
 #maincontent {
-  background-color: #f3f3f3;
+  background-color: #eee;
   min-height: 100%; }
 
 #footer {
   background-color: #444;
   color: #eee;
-  font-size: 8pt;
+  font-size: 12px;
   letter-spacing: 1px;
   padding: 25px;
   text-align: center;
@@ -76,7 +76,7 @@ nav h1 {
 
 nav h1 a {
   color: #fff;
-  font-size: 14pt;
+  font-size: 20px;
   font-weight: 200;
   letter-spacing: 5px;
   text-transform: uppercase;
@@ -84,7 +84,7 @@ nav h1 a {
 
 nav h1 a:hover,
 nav h1 a:focus {
-  color: orange; }
+  color: #ff9800; }
 
 /* ====================== Logo ====================== */
 .logo {
@@ -102,7 +102,7 @@ nav h1 a:focus {
   position: absolute;
   top: -40px;
   left: 0;
-  background-color: orange;
+  background-color: #ff9800;
   color: #000;
   padding: 8px;
   z-index: 100; }
@@ -114,9 +114,9 @@ nav h1 a:focus {
 #breadcrumb ol {
   padding: 0;
   list-style: none;
-  background-color: #f3f3f3;
+  background-color: #eee;
   border-bottom: 1px solid #ccc;
-  font-size: 17px;
+  font-size: 16px;
   margin: 0;
   width: 100%;
   text-align: left; }
@@ -132,12 +132,12 @@ nav h1 a:focus {
 /* Add a slash symbol (/) before/behind each list item */
 #breadcrumb ol li + li:before {
   padding: 8px;
-  color: black;
+  color: #000;
   content: "/\00a0"; }
 
 /* Add a color to all links inside the list */
 #breadcrumb ol li a {
-  color: #0275d8;
+  color: #8b0000;
   text-decoration: none;
   padding: 10px 0;
   display: inline-block; }
@@ -145,7 +145,7 @@ nav h1 a:focus {
 /* Add a color on mouse-over */
 #breadcrumb ol li a:hover,
 #breadcrumb ol li a:focus {
-  color: orange;
+  color: #ff9800;
   text-decoration: underline; }
 
 /* ====================== Map ====================== */
@@ -172,7 +172,7 @@ nav h1 a:focus {
 
 #map a:focus,
 #map div:focus {
-  background-color: orange;
+  background-color: #ff9800;
   color: #000;
   padding: 8px;
   z-index: 100; }
@@ -203,16 +203,16 @@ nav h1 a:focus {
 
 .filter-options h3 {
   color: white;
-  font-size: 1rem;
+  font-size: 16px;
   font-weight: normal;
   line-height: 1;
   margin: 0 20px; }
 
 .filter-options select {
-  background-color: white;
-  border: 1px solid #fff;
+  background-color: #fff;
+  border: 1px solid #ccc;
   font-family: Arial,sans-serif;
-  font-size: 11pt;
+  font-size: 16px;
   height: 35px;
   letter-spacing: 0;
   margin: 10px;
@@ -220,11 +220,11 @@ nav h1 a:focus {
   width: 190px; }
 
 .filter-options select:focus {
-  background-color: orange; }
+  background-color: #ff9800; }
 
 .filter-options i {
   color: white;
-  font-size: 16pt;
+  font-size: 16px;
   vertical-align: middle; }
 
 @media screen and (min-width: 500px) {
@@ -240,7 +240,7 @@ nav h1 a:focus {
 
 /* ====================== Restaurant Listing ====================== */
 #restaurants-list {
-  background-color: #f3f3f3;
+  background-color: #eee;
   list-style: outside none none;
   margin: 0;
   padding: 5px 15px;
@@ -268,7 +268,7 @@ nav h1 a:focus {
   display: none; }
 
 #restaurants-list .restaurant-img {
-  background-color: #ccc;
+  background-color: #eee;
   display: block;
   margin: 0;
   width: 100%; }
@@ -279,7 +279,7 @@ nav h1 a:focus {
 #restaurants-list li h2 {
   color: #8b0000;
   font-family: Arial,sans-serif;
-  font-size: 12pt;
+  font-size: 20px;
   font-weight: 200;
   letter-spacing: 0;
   line-height: 1;
@@ -293,7 +293,7 @@ nav h1 a:focus {
   background-color: #8b0000;
   color: #fff;
   display: inline-block;
-  font-size: 10pt;
+  font-size: 16px;
   margin: 0;
   padding: 10px;
   text-align: center;
@@ -311,10 +311,14 @@ nav h1 a:focus {
   -webkit-transition: 500ms;
   transition: 500ms;
   color: #000;
-  background-color: orange; }
+  background-color: #ff9800; }
 
 #restaurants-list li > div p {
   margin: 0; }
+
+#restaurants-list li > div p.restaurant-cuisine,
+#restaurants-list li > div p.restaurant-neighborhood {
+  font-size: 16px; }
 
 @media screen and (min-width: 500px) {
   #restaurants-list li .restaurant-address {
@@ -352,12 +356,12 @@ nav h1 a:focus {
   width: 100%; }
 
 .inside #map-container {
-  background: #f3f3f3 none repeat scroll 0 0;
+  background: #eee none repeat scroll 0 0;
   right: 0;
   width: 100%; }
 
 .inside #map {
-  background-color: #ccc;
+  background-color: #eee;
   height: 100%;
   max-height: 400px;
   width: 100%;
@@ -370,7 +374,7 @@ nav h1 a:focus {
 
 .inside h2 {
   color: #8b0000;
-  font-size: 20pt;
+  font-size: 20px;
   font-weight: 300;
   letter-spacing: -1px;
   padding-bottom: 1pt;
@@ -385,7 +389,7 @@ nav h1 a:focus {
 #restaurant-name {
   color: #8b0000;
   font-family: Arial,sans-serif;
-  font-size: 20pt;
+  font-size: 20px;
   font-weight: 200;
   letter-spacing: 0;
   padding: 15px 0;
@@ -394,9 +398,9 @@ nav h1 a:focus {
   line-height: 1.1; }
 
 #restaurant-cuisine {
-  background-color: #333;
-  color: #ddd;
-  font-size: 12pt;
+  background-color: #444;
+  color: #eee;
+  font-size: 20px;
   font-weight: 300;
   letter-spacing: 10px;
   margin: 0 0 20px;
@@ -428,7 +432,7 @@ nav h1 a:focus {
   font-weight: bold;
   color: #666;
   margin: 5px 15px;
-  font-size: 10pt; }
+  font-size: 16px; }
 
 #reviews-container {
   padding: 15px;
@@ -484,7 +488,7 @@ nav h1 a:focus {
     bottom: 0;
     right: 10px;
     width: 100%;
-    font-size: 24pt;
+    font-size: 24px;
     color: black;
     text-align: right; }
   #reviews-list li.blur:hover:after {
@@ -520,7 +524,7 @@ footer a {
 
 footer a:hover,
 footer a:focus {
-  color: orange; }
+  color: #ff9800; }
 
 /* ============================= FontAwesome =============== */
 .fa {

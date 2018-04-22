@@ -1,40 +1,63 @@
 @charset "utf-8";
+
+/* Font-Face */
 @font-face{font-family:"Dreams";src: url('../fonts/CaviarDreams.ttf');}
 @font-face{font-family:"FontAwesome";src:url('../fonts/fontawesome-webfont.eot?v=4.7.0');src:url('../fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'),url('../fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'),url('../fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'),url('../fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'),url('../fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');font-weight:normal;font-style:normal}
+$font-title : "Dreams", Helvetica, Arial, sans-serif;
 
-/** BreakPoint
- * @media screen and (min-width: 500px) {}
- * @media screen and (min-width: 800px) {}
- * @media screen and (min-width: 1200px) {}
- */
+/* Color */
+$bg-light-color : #eee;
+$bg-dark-color : #444;
+$main-color : #8b0000; // rouge foncé
+$hover-color : #ff9800; // orange
+$black-color : #000;
+$text-dark-color : #444; // dark gray
+$text-medium-color : #666;
+$text-light-color : #eee;
+$white-color : #fff;
+$border-color : #ccc;
 
+/* font size */
+$font-small : 12px;
+$font-medium : 16px;
+$font-large : 20px;
+$font-xlarge : 24px;
+
+
+/** BreakPoint */
+$break-small : 500px;
+$break-medium : 800px;
+$break-large : 1000px;
+
+
+/* **************************************************** */
 /* CSS Document */
 body,td,th,p{
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 10pt;
-	color: #333;
+	font-size: $font-medium;
+	color: $text-dark-color;
 	line-height: 1.5;
 }
 body {
-	background-color: #fdfdfd;
+	background-color: $bg-light-color;
 	margin: 0;
 	position: relative;
 }
 ol, ul, li {
 	font-family: Arial, Helvetica, sans-serif;
-	font-size: 10pt;
-	color: #333;
+	font-size: $font-medium;
+	color: $text-dark-color;
 }
 a {
-	color: #8b0000;
+	color: $main-color;
 	text-decoration: none;
 }
 a:hover, a:focus {
-	color: #3397db;
+	color: $hover-color;
 	text-decoration: none;
 }
 a img{
-	border: none 0px #fff;
+	border: none 0px $white-color;
 }
 h1, h2, h3, h4, h5, h6 {
   font-family: Arial, Helvetica, sans-serif;
@@ -44,13 +67,13 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 	display: block;
 }
 #maincontent {
-  background-color: #f3f3f3;
+  background-color: $bg-light-color;
   min-height: 100%;
 }
 #footer {
-  background-color: #444;
-  color: #eee;
-  font-size: 8pt;
+  background-color: $bg-dark-color;
+  color: $text-light-color;
+  font-size: $font-small;
   letter-spacing: 1px;
   padding: 25px;
   text-align: center;
@@ -60,7 +83,7 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
 nav {
   width: 100%;
   height: 80px;
-  background-color: #444;
+  background-color: $bg-dark-color;
   text-align: center;
 }
 nav h1 {
@@ -69,16 +92,16 @@ nav h1 {
   position: relative;
 }
 nav h1 a {
-  color: #fff;
-  font-size: 14pt;
+  color: $white-color;
+  font-size: $font-large;
   font-weight: 200;
   letter-spacing: 5px;
   text-transform: uppercase;
-  font-family: "Dreams", Helvetica, Arial, sans-serif;
+  font-family: $font-title;
 }
 nav h1 a:hover,
 nav h1 a:focus {
-  color: orange;
+  color: $hover-color;
 }
 /* ====================== Logo ====================== */
 .logo{
@@ -96,8 +119,8 @@ nav h1 a:focus {
 	position: absolute;
 	top: -40px;
 	left: 0;
-	background-color: orange;
-	color: #000;
+	background-color: $hover-color;
+	color: $black-color;
 	padding: 8px;
 	z-index: 100;
 }
@@ -108,9 +131,9 @@ nav h1 a:focus {
 #breadcrumb ol{
     padding: 0;
     list-style: none;
-		background-color: #f3f3f3;
-    border-bottom: 1px solid #ccc;
-    font-size: 17px;
+		background-color: $bg-light-color;
+    border-bottom: 1px solid $border-color;
+    font-size: $font-medium;
     margin: 0;
 		width: 100%;
 		text-align: left;
@@ -129,13 +152,13 @@ nav h1 a:focus {
 /* Add a slash symbol (/) before/behind each list item */
 #breadcrumb ol li+li:before {
     padding: 8px;
-    color: black;
+    color: $black-color;
     content: "/\00a0";
 }
 
 /* Add a color to all links inside the list */
 #breadcrumb ol li a {
-  color: #0275d8;
+  color: $main-color;
   text-decoration: none;
   padding: 10px 0;
   display: inline-block;
@@ -144,7 +167,7 @@ nav h1 a:focus {
 /* Add a color on mouse-over */
 #breadcrumb ol li a:hover,
 #breadcrumb ol li a:focus {
-  color: orange;
+  color: $hover-color;
   text-decoration: underline;
 }
 /* ====================== Map ====================== */
@@ -177,13 +200,13 @@ nav h1 a:focus {
 
 #map a:focus,
 #map div:focus{
-	background-color: orange;
-	color: #000;
+	background-color: $hover-color;
+	color: $black-color;
 	padding: 8px;
 	z-index: 100;
 }
 
-@media screen and (min-width: 500px) {
+@media screen and (min-width: $break-small) {
   #map-container {
     height: 300px;
   }
@@ -191,7 +214,7 @@ nav h1 a:focus {
     margin-top: -300px;
   }
 }
-@media screen and (min-width: 800px) {
+@media screen and (min-width: $break-medium) {
   #map-container {
 	height: 400px;
   }
@@ -206,22 +229,22 @@ nav h1 a:focus {
   height: auto;
   min-height: 50px;
   padding: 15px 0;
-  background-color: #444;
+  background-color: $bg-dark-color;
   align-items: center;
   text-align: center;
 }
 .filter-options h3 {
   color: white;
-  font-size: 1rem;
+  font-size: $font-medium;
   font-weight: normal;
   line-height: 1;
   margin: 0 20px;
 }
 .filter-options select {
-  background-color: white;
-  border: 1px solid #fff;
+  background-color: $white-color;
+  border: 1px solid $border-color;
   font-family: Arial,sans-serif;
-  font-size: 11pt;
+  font-size: $font-medium;
   height: 35px;
   letter-spacing: 0;
   margin: 10px;
@@ -229,20 +252,20 @@ nav h1 a:focus {
   width: 190px;
 }
 .filter-options select:focus{
-  background-color: orange;
+  background-color: $hover-color;
 }
 .filter-options i{
   color: white;
-  font-size: 16pt;
+  font-size: $font-medium;
   vertical-align: middle;
 }
-@media screen and (min-width: 500px) {
+@media screen and (min-width: $break-small) {
   .filter-options > div{
 	margin: 0 auto;
     display: inline-block;
   }
 }
-@media screen and (min-width: 800px) {
+@media screen and (min-width: $break-medium) {
   .filter-options h3 {
     display: inline-block;
   }
@@ -252,7 +275,7 @@ nav h1 a:focus {
 }
 /* ====================== Restaurant Listing ====================== */
 #restaurants-list {
-  background-color: #f3f3f3;
+  background-color: $bg-light-color;
   list-style: outside none none;
   margin: 0;
   padding: 5px 15px;
@@ -260,8 +283,8 @@ nav h1 a:focus {
 	min-height: 100px;
 }
 #restaurants-list li {
-  background-color: #fff;
-  border: 2px solid #ccc;
+  background-color: $white-color;
+  border: 2px solid $border-color;
   font-family: Arial,sans-serif;
   text-align: left;
   width:100%;
@@ -278,7 +301,7 @@ nav h1 a:focus {
   display: none;
 }
 #restaurants-list .restaurant-img {
-  background-color: #ccc;
+  background-color: $bg-light-color;
   display: block;
   margin: 0;
   width: 100%;
@@ -287,9 +310,9 @@ nav h1 a:focus {
   margin: 10px;
 }
 #restaurants-list li h2 {
-  color: #8b0000;
+  color: $main-color;
   font-family: Arial,sans-serif;
-  font-size: 12pt;
+  font-size: $font-large;
   font-weight: 200;
   letter-spacing: 0;
   line-height: 1;
@@ -300,10 +323,10 @@ nav h1 a:focus {
 	display: none;
 }
 #restaurants-list li a {
-  background-color: #8b0000;
-  color: #fff;
+  background-color: $main-color;
+  color: $white-color;
   display: inline-block;
-  font-size: 10pt;
+  font-size: $font-medium;
   margin: 0;
   padding: 10px;
   text-align: center;
@@ -319,13 +342,17 @@ nav h1 a:focus {
 #restaurants-list li a:hover,
 #restaurants-list li a:focus {
     transition: 500ms;
-    color: #000;
-    background-color: orange;
+    color: $black-color;
+    background-color: $hover-color;
 }
 #restaurants-list li > div p{
 	margin: 0;
 }
-@media screen and (min-width: 500px) {
+#restaurants-list li > div p.restaurant-cuisine,
+#restaurants-list li > div p.restaurant-neighborhood{
+	font-size: $font-medium;
+}
+@media screen and (min-width: $break-small) {
   #restaurants-list li .restaurant-address {
     display: block;
   }
@@ -340,7 +367,7 @@ nav h1 a:focus {
     margin-top: 15px;
   }
 }
-@media screen and (min-width: 800px) {
+@media screen and (min-width: $break-medium) {
   #restaurants-list li{
 	width: 275px;
     display: inline-block;
@@ -356,7 +383,7 @@ nav h1 a:focus {
 	display: block;
   }
 }
-@media screen and (min-width: 1000px) {
+@media screen and (min-width: $break-large) {
 	#restaurants-list li{
 		width: 325px;
 	}
@@ -369,12 +396,12 @@ nav h1 a:focus {
   width: 100%;
 }
 .inside #map-container {
-  background: #f3f3f3 none repeat scroll 0 0;
+  background: $bg-light-color none repeat scroll 0 0;
   right: 0;
   width: 100%;
 }
 .inside #map {
-  background-color: #ccc;
+  background-color: $bg-light-color;
   height: 100%;
   max-height: 400px;
   width: 100%;
@@ -386,15 +413,15 @@ nav h1 a:focus {
   padding: 25px 0;
 }
 .inside h2 {
-  color: #8b0000;
-  font-size: 20pt;
+  color: $main-color;
+  font-size: $font-large;
   font-weight: 300;
   letter-spacing: -1px;
   padding-bottom: 1pt;
   margin: 15px 10px 5px 10px;
 }
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: $break-medium) {
   .inside #map-container {
 	width: 47%;
 	display: inline-block;
@@ -403,9 +430,9 @@ nav h1 a:focus {
 
 /* Restaurent */
 #restaurant-name {
-  color: #8b0000;
+  color: $main-color;
   font-family: Arial,sans-serif;
-  font-size: 20pt;
+  font-size: $font-large;
   font-weight: 200;
   letter-spacing: 0;
   padding: 15px 0;
@@ -414,9 +441,9 @@ nav h1 a:focus {
   line-height: 1.1;
 }
 #restaurant-cuisine {
-  background-color: #333;
-  color: #ddd;
-  font-size: 12pt;
+  background-color: $bg-dark-color;
+  color: $text-light-color;
+  font-size: $font-large;
   font-weight: 300;
   letter-spacing: 10px;
   margin: 0 0 20px;
@@ -436,8 +463,8 @@ nav h1 a:focus {
 #restaurant-hours{
   width: 100%;
   max-width: 350px;
-  background-color: #fff;
-  border-left: solid 2px #ccc;
+  background-color: $white-color;
+  border-left: solid 2px $border-color;
   padding: 5px 10px;
   margin: 0 auto;
 }
@@ -446,9 +473,9 @@ nav h1 a:focus {
 }
 #restaurant-address {
   font-weight: bold;
-	color: #666;
+	color: $text-medium-color;
   margin: 5px 15px;
-  font-size: 10pt;
+  font-size: $font-medium;
 }
 #reviews-container {
   padding: 15px;
@@ -459,12 +486,12 @@ nav h1 a:focus {
   padding: 0;
 }
 #reviews-list li {
-  background-color: #fff;
+  background-color: $white-color;
   display: block;
   list-style-type: none;
   overflow: hidden;
   position: relative;
-  border: 2px solid #ccc;
+  border: 2px solid $border-color;
   width: 100%;
   margin: 5px 0 10px 0;
 }
@@ -480,7 +507,7 @@ nav h1 a:focus {
 }
 #reviews-list li i{
   line-height: 1.5;
-	color: #8b0000;
+	color: $main-color;
 }
 @media screen and (max-width: 499px) {
 	#reviews-list .blur{
@@ -505,18 +532,18 @@ nav h1 a:focus {
 		bottom: 0;
 		right: 10px;
 		width: 100%;
-		font-size: 24pt;
+		font-size: $font-xlarge;
 		color: black;
 		text-align: right;
 	}
 	#reviews-list li.blur:hover:after {
-		color: #8b0000;
+		color: $main-color;
 	}
 }
 #restaurant-hours td {
-  color: #666;
+  color: $text-medium-color;
 }
-@media screen and (min-width: 500px) {
+@media screen and (min-width: $break-small) {
 	#reviews-list li > div{
 	  display: flex;
 	}
@@ -530,7 +557,7 @@ nav h1 a:focus {
 	  margin: 10px;
 	}
 }
-@media screen and (min-width: 800px) {
+@media screen and (min-width: $break-medium) {
 	#restaurant-operatinghours{
     width: 47%;
     display: inline-block;
@@ -541,12 +568,12 @@ nav h1 a:focus {
 /* ============================ footer ================== */
 footer a{
   padding: 15px 0;
-  color: #eee;
+  color: $text-light-color;
   text-decoration:underline;
 }
 footer a:hover,
 footer a:focus{
-	color: orange;
+	color: $hover-color;
 }
 
 /* ============================= FontAwesome =============== */

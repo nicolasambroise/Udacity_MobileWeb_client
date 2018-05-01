@@ -8,6 +8,7 @@ self.addEventListener('install', function(event) {
         '/',
         'index.html',
         'restaurant.html',
+        'css/small.css',
         'css/styles.css',
         'css/normalize.css',
         'fonts/CaviarDreams.ttf',

@@ -1,0 +1,138 @@
+/* Color */
+/* font size */
+/** BreakPoint */
+/* **************************************************** */
+/* CSS Document */
+body, td, th, p {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: #444;
+  line-height: 1.5; }
+
+body {
+  background-color: #eee;
+  margin: 0;
+  position: relative; }
+
+ol, ul, li {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: #444; }
+
+a {
+  color: #8b0000;
+  text-decoration: none; }
+
+a img {
+  border: none 0px #fff; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0 0 20px; }
+
+article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+  display: block; }
+
+#maincontent {
+  background-color: #eee;
+  min-height: 100%; }
+
+#footer {
+  background-color: #444;
+  color: #eee;
+  font-size: 12px;
+  letter-spacing: 1px;
+  padding: 25px;
+  text-align: center;
+  text-transform: uppercase; }
+
+/* ====================== Navigation ====================== */
+nav {
+  width: 100%;
+  height: 80px;
+  background-color: #444;
+  text-align: center; }
+
+nav h1 {
+  margin: auto;
+  line-height: 80px;
+  position: relative; }
+
+nav h1 a {
+  color: #fff;
+  font-size: 20px;
+  font-weight: 200;
+  letter-spacing: 5px;
+  text-transform: uppercase; }
+
+/* ====================== Logo ====================== */
+.logo {
+  width: 80px;
+  height: 80px;
+  position: absolute;
+  margin: 0 auto;
+  left: 0;
+  right: 0; }
+
+.logo img {
+  max-width: 100%; }
+
+/* ====================== breadcrumb ====================== */
+#breadcrumb ol {
+  padding: 0;
+  list-style: none;
+  background-color: #eee;
+  border-bottom: 1px solid #ccc;
+  font-size: 16px;
+  margin: 0;
+  width: 100%;
+  text-align: left; }
+
+/* Display list items side by side */
+#breadcrumb ol li {
+  display: inline; }
+
+/* Marge for breadcrumb */
+#breadcrumb ol li:first-child {
+  padding-left: 20px; }
+
+/* Add a slash symbol (/) before/behind each list item */
+#breadcrumb ol li + li:before {
+  padding: 8px;
+  color: #000;
+  content: "/\00a0"; }
+
+/* Add a color to all links inside the list */
+#breadcrumb ol li a {
+  color: #8b0000;
+  text-decoration: none;
+  padding: 10px 0;
+  display: inline-block; }
+
+/* ====================== Map ====================== */
+#map-container {
+  height: 200px; }
+
+#map,
+#map-static {
+  max-height: 400px;
+  height: 100%;
+  width: 100%; }
+
+#map > div {
+  background-color: transparent !important; }
+
+#map-static {
+  margin-top: -200px;
+  text-align: center;
+  display: none;
+  overflow: hidden; }
+
+#map-static img {
+  margin: 0 -100%; }
+
+/* ============================ footer ================== */
+footer a {
+  padding: 15px 0;
+  color: #eee;
+  text-decoration: underline; }

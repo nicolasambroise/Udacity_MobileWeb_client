@@ -1,0 +1,176 @@
+@charset "utf-8";
+
+
+/* Color */
+$bg-light-color : #eee;
+$bg-dark-color : #444;
+$main-color : #8b0000; // rouge foncé
+$hover-color : #ff9800; // orange
+$black-color : #000;
+$text-dark-color : #444; // dark gray
+$text-medium-color : #666;
+$text-light-color : #eee;
+$white-color : #fff;
+$border-color : #ccc;
+
+/* font size */
+$font-small : 12px;
+$font-medium : 16px;
+$font-large : 20px;
+$font-xlarge : 24px;
+
+
+/** BreakPoint */
+$break-small : 500px;
+$break-medium : 800px;
+$break-large : 1000px;
+
+
+/* **************************************************** */
+/* CSS Document */
+body,td,th,p{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: $font-medium;
+	color: $text-dark-color;
+	line-height: 1.5;
+}
+body {
+	background-color: $bg-light-color;
+	margin: 0;
+	position: relative;
+}
+ol, ul, li {
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: $font-medium;
+	color: $text-dark-color;
+}
+a {
+	color: $main-color;
+	text-decoration: none;
+}
+a img{
+	border: none 0px $white-color;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0 0 20px;
+}
+article, aside, canvas, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+#maincontent {
+  background-color: $bg-light-color;
+  min-height: 100%;
+}
+#footer {
+  background-color: $bg-dark-color;
+  color: $text-light-color;
+  font-size: $font-small;
+  letter-spacing: 1px;
+  padding: 25px;
+  text-align: center;
+  text-transform: uppercase;
+}
+/* ====================== Navigation ====================== */
+nav {
+  width: 100%;
+  height: 80px;
+  background-color: $bg-dark-color;
+  text-align: center;
+}
+nav h1 {
+  margin: auto;
+  line-height: 80px;
+  position: relative;
+}
+nav h1 a {
+  color: $white-color;
+  font-size: $font-large;
+  font-weight: 200;
+  letter-spacing: 5px;
+  text-transform: uppercase;
+}
+
+/* ====================== Logo ====================== */
+.logo{
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+}
+.logo img{
+	max-width: 100%;
+}
+/* ====================== breadcrumb ====================== */
+#breadcrumb ol{
+    padding: 0;
+    list-style: none;
+		background-color: $bg-light-color;
+    border-bottom: 1px solid $border-color;
+    font-size: $font-medium;
+    margin: 0;
+		width: 100%;
+		text-align: left;
+}
+
+/* Display list items side by side */
+#breadcrumb ol li {
+    display: inline;
+}
+
+/* Marge for breadcrumb */
+#breadcrumb ol li:first-child {
+		padding-left: 20px;
+}
+
+/* Add a slash symbol (/) before/behind each list item */
+#breadcrumb ol li+li:before {
+    padding: 8px;
+    color: $black-color;
+    content: "/\00a0";
+}
+
+/* Add a color to all links inside the list */
+#breadcrumb ol li a {
+  color: $main-color;
+  text-decoration: none;
+  padding: 10px 0;
+  display: inline-block;
+}
+
+/* ====================== Map ====================== */
+
+#map-container{
+  height: 200px;
+}
+
+#map,
+#map-static {
+  max-height: 400px;
+  height: 100%;
+  width: 100%;
+}
+
+#map > div{
+	background-color: transparent !important;
+}
+
+#map-static{
+  margin-top: -200px;
+  text-align: center;
+  display: none;
+  overflow: hidden;
+}
+
+#map-static img{
+   margin: 0 -100%;
+}
+
+/* ============================ footer ================== */
+footer a{
+  padding: 15px 0;
+  color: $text-light-color;
+  text-decoration:underline;
+}

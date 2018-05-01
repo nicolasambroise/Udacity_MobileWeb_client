@@ -49,18 +49,19 @@ _Note about version :_ Backend Server depends on node.js LTS Version: v6.11.2 , 
 
 ### LightHouse Score (22/04/2018)
 
-| Tool\Pages | [Localhost] main.html | [Localhost] restorant.html | [Prod] main.html | [Prod] restorant.html |
+| Tool\Pages | [Localhost] main.html | [Localhost] restaurant.html | [Prod] main.html | [Prod] restaurant.html |
 | --- | --- | --- | --- | --- |
-| Performance | 72 | 59 | --- | --- |
-| PWA | 82 | 82 | --- | --- |
-| Best Practice | 75 | 75 | --- | --- |
-| accessibility | 100 | 91 | --- | --- |
-| SEO | 100 | 100 | --- | --- |
+| Performance | 72 | 59 | 69 | 58 |
+| PWA | 82 | 82 | 91 | 91 |
+| Best Practice | 75 | 75 | 75 | 75 |
+| accessibility | 100 | 91 | 100 | 91 |
+| SEO | 100 | 100 | 100 | 100 |
 
 ### TODO List
 
-- Install on a production server with HTTPS and htaccess
+- Install on a production server with HTTPS and htaccess (Heroku ?)
 - Reduce render-blocking stylesheets (Delete normalize ? Use a small CSS for startup ?)
 - Make running Gulp task + Clean Gulp package.json
 - Minify JS & CSS ( => Use Gulp uglify + injector ? + Run on /dist/ folder)
-- Check to replace GoogleMap iframe by something else. + check title in restorant page
+- Use HTTP/2 on Server side (Maybe in htaccess ?)
+- Check to replace GoogleMap iframe by something else. + check title in restaurant page

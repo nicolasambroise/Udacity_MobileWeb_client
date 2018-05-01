@@ -15,7 +15,7 @@
   <meta itemprop="description" content="Time4Food - NewYork Restaurant Reviews">
   <meta itemprop="image" content="./logo/BSicon_REST.png">
   <!-- Twitter -->
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Time4Food">
   <meta name="twitter:description" content="Time4Food - NewYork Restaurant Reviews">
   <meta name="twitter:site" content="@nicolasambroise">
@@ -27,18 +27,28 @@
   <meta name="og:site_name" content="Time4Food">
   <meta name="fb:admins" content="725947413">
   <meta name="og:type" content="website">
+  <!-- Apple -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="./logo/BSicon_REST.svg">
 
-  <!-- inject:css -->
-  <link rel="stylesheet" href="css/normalize.css">
-  <link rel="stylesheet" href="css/styles.css">
+  <!-- inject:head:css -->
+  <link rel="stylesheet" href="css/small.css">
+  <link rel="stylesheet" href="css/normalize.css" rel="preload">
+  <link rel="stylesheet" href="css/styles.css" rel="preload">
   <!-- endinject -->
   <link rel="icon" type="image/png" sizes="16x16" href="./logo/BSicon_REST.png">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#444">
-
 </head>
 
 <body>
+  <noscript id="deferred-styles">
+    <!-- inject:css -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- endinject -->
+  </noscript>
+
   <a href="#restaurants-list" class="skip-link" tabindex="0" aria-label="Skip to main content" rel="noopener">Skip to main content</a>
   <header>
 	<div class="logo"><img src="./logo/BSicon_REST.svg"  alt="Time4Food Logo"></div>
@@ -87,7 +97,7 @@
   <script src="js/script.js"></script>
   <script src="app.js"></script>
   <!-- endinject -->
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=
-AIzaSyC7PG4bxfY8ul6b8YLstueqFeI6eRnnVmk&libraries=places&callback=initMap"></script>
+  <!--<script async defer src="https://maps.googleapis.com/maps/api/js?key=
+AIzaSyC7PG4bxfY8ul6b8YLstueqFeI6eRnnVmk&libraries=places&callback=initMap&force=pwa"></script>-->
 </body>
 </html>

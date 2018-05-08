@@ -9,14 +9,14 @@ class DBHelper {
     const server = 'localhost';
     const path = window.location.href;
 
-    if(path.indexOf("localhost") > -1){
+    if(path.indexOf('localhost') > -1){
       return `http://${server}:${port}/restaurants`;
     }
-    else if (path.indexOf("nicolasambroise") > -1) {
-      return "/mws/sailor.php?qa=restaurants";
+    else if (path.indexOf('nicolasambroise') > -1) {
+      return '/mws/sailor.php?qa=restaurants';
     }
     else{
-      console.log("Error"+path);
+      console.log('Error'+path);
     }
 
 
@@ -45,19 +45,7 @@ class DBHelper {
     });
     dbPromise.onupgradeneeded = function(e) {console.log('dbPromise onupgradeneeded');};
     dbPromise.onerror = function(event) {alert('error opening IndexedDB.');};
-    dbPromise.onsuccess = function(event) {
-      console.log('dbPromise onSuccess');
-      console.log(event);
-      var cursor = event.target.target;
-      if (cursor) { // key already exist
-         console.log("*** do update");
-         //cursor.update(obj);
-      } else { // key not exist
-         console.log("*** do insert");
-         //objectStore.add(obj)
-      }
-
-    };
+    dbPromise.onsuccess = function(event) {console.log('dbPromise onSuccess');};
 
     // Step 2 : Get data as JSON or wait for it
     if (navigator.onLine) {
@@ -80,10 +68,9 @@ class DBHelper {
               'Content-Type': 'application/json',
               'Accept': 'application/json'
             }})
-          .then(response => response.json())
-          .then(function(restaurantsJson) {addRestaurants(restaurantsJson);})
-          .catch(error => callback(error, null));
-
+        .then(response => response.json())
+        .then(function(restaurantsJson) {addRestaurants(restaurantsJson);})
+        .catch(error => callback(error, null));
       } else {
         // XHR
         let xhr = new XMLHttpRequest();
@@ -298,6 +285,9 @@ class DBHelper {
 	  // Add suffix 100, 200, 400 or 800w
 	  // Rename extension : WebP for Chrome , Jpg for other
     // Use Svg if no picture found
+    if (window.location.href.indexOf("nicolasambroise") > -1) {
+      return (restaurant.photograph)? `/mws/img/${restaurant.photograph}_${size}w.${extension}`:`/mws/img/no-image_${size}w.${extension}`;
+    }
     return (restaurant.photograph)? `/img/${restaurant.photograph}_${size}w.${extension}`:`/img/no-image_${size}w.${extension}`;
   }
 

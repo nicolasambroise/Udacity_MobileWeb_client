@@ -16,12 +16,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
       var PromiseNeighborhoods = fetchNeighborhoods();
       var PromiseCuisines = fetchCuisines();
       // next
-      Promise.resolve(["Hello","World","!"]).then(([a,b,c]) => {
-  console.log(a,b+c);
-});
-      updateRestaurants();
-      loadStaticMap();
-
+      Promise.resolve(PromiseNeighborhoods,PromiseCuisines).then(() => {
+        updateRestaurants();
+        loadStaticMap();
+      });
     }
   });
 });
@@ -96,7 +94,7 @@ updateRestaurants = () => {
   const cuisine = cSelect[cIndex].value;
   const neighborhood = nSelect[nIndex].value;
 
-  console.log("updateRestaurants :"+cuisine+" / "+neighborhood);
+  console.log('updateRestaurants :'+cuisine+' / '+neighborhood);
 
   if(cuisine === 'all' && neighborhood === 'all'){
     DBHelper.fetchRestaurants((error, restaurants) => {
@@ -272,10 +270,29 @@ initMap = () => {
   }
   console.log('Initialize GMap');
   const iframeloaded = document.querySelector('#map iframe') !== null;
-  console.log("add title to iframe");
+  console.log('add title to iframe');
   if(iframeloaded){
     document.querySelector('#map iframe').setAttribute('title', 'New York City Map of Restaurants');
   }
+};
+
+/**
+ * Add markers for current restaurants to the map.
+ */
+addMarkersToMap = (restaurants = self.restaurants) => {
+  console.log('addMarkersToMap');
+  console.log(restaurants);
+  if (typeof google === 'object' && typeof google.maps === 'object' && restaurants !== null && restaurants !== undefined && restaurants.length > 0) {
+    restaurants.forEach(restaurant => {
+      // Add marker to the map
+      const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.map);
+      google.maps.event.addListener(marker, 'click', () => {
+        window.location.href = marker.url;
+      });
+      self.markers.push(marker);
+    });
+  }
+  else{console.log('Google map not loaded !');}
 };
 
 /**
@@ -302,47 +319,31 @@ loadStaticMap = () => {
     console.log('offLine');
   }
   document.getElementById('map-static').style.display = 'block';
+
   // load now the google one
-    includeAPI();
-};
+  document.getElementById("map-static").addEventListener("click", function(){
+    alert("Hello World!");
+});
+  //includeAPI());
 
 
-
-/**
- * Add markers for current restaurants to the map.
- */
-addMarkersToMap = (restaurants = self.restaurants) => {
-  console.log("addMarkersToMap");
-  console.log(restaurants);
-  if (typeof google === 'object' && typeof google.maps === 'object' && restaurants != null && restaurants.length > 0) {
-    restaurants.forEach(restaurant => {
-      // Add marker to the map
-        const marker = DBHelper.mapMarkerForRestaurant(restaurant, self.map);
-        google.maps.event.addListener(marker, 'click', () => {
-          window.location.href = marker.url;
-        });
-        self.markers.push(marker);
-    });
-  }
-  else{console.log("Google map not loaded !")}
 };
 
 /*
  * Defer rending Include Google Maps API
 * https://codepen.io/svinkle/pen/vJmlt
  */
- includeAPI = () => {
-   console.log("include Google API");
-   const gkey = "AIzaSyC7PG4bxfY8ul6b8YLstueqFeI6eRnnVmk";
-   let js;
-   let fjs = document.getElementsByTagName('script')[0];
-     if (!document.getElementById('gmap-api')) {
-       js = document.createElement('script');
-       js.id = 'gmap-api';
-       js.setAttribute('async', '');
-       js.setAttribute('defer', '');
-       js.src = "https://maps.googleapis.com/maps/api/js?key="+gkey+"&sensor=false&libraries=places&force=pwa&callback=initMap";
-
-       fjs.parentNode.insertBefore(js, fjs);
-     }
-   };
+includeAPI = () => {
+  console.log("include Google API");
+  const gkey = "AIzaSyC7PG4bxfY8ul6b8YLstueqFeI6eRnnVmk";
+  let js;
+  let fjs = document.getElementsByTagName('script')[0];
+  if (!document.getElementById('gmap-api')) {
+    js = document.createElement('script');
+    js.id = 'gmap-api';
+    js.setAttribute('async', '');
+    js.setAttribute('defer', '');
+    js.src = 'https://maps.googleapis.com/maps/api/js?key='+gkey+'&sensor=false&libraries=places&force=pwa&callback=initMap';
+    fjs.parentNode.insertBefore(js, fjs);
+  }
+};

@@ -1,14 +1,18 @@
 /* Font-Face */
 @font-face {
   font-family: "Dreams";
-  src: url("../fonts/CaviarDreams.ttf"); }
+  src: url("../fonts/CaviarDreams.ttf");
+  unicode-range: U+0041-005A;
+ }
 
 @font-face {
   font-family: "FontAwesome";
   src: url("../fonts/fontawesome-webfont.eot?v=4.7.0");
   src: url("../fonts/fontawesome-webfont.eot?#iefix&v=4.7.0") format("embedded-opentype"), url("../fonts/fontawesome-webfont.woff2?v=4.7.0") format("woff2"), url("../fonts/fontawesome-webfont.woff?v=4.7.0") format("woff"), url("../fonts/fontawesome-webfont.ttf?v=4.7.0") format("truetype"), url("../fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular") format("svg");
   font-weight: normal;
-  font-style: normal; }
+  font-style: normal;
+  unicode-range: U+F0F5,U+F277,U+F005S;
+}
 
 /* Color */
 /* font size */
@@ -80,11 +84,17 @@ nav h1 a {
   font-weight: 200;
   letter-spacing: 5px;
   text-transform: uppercase;
-  font-family: "Dreams", Helvetica, Arial, sans-serif; }
+  font-family: Helvetica, Arial, sans-serif; }
 
 nav h1 a:hover,
 nav h1 a:focus {
   color: #ff9800; }
+
+@media screen and (min-width: 800px) {
+  nav h1 a {
+    font-family: "Dreams", Helvetica, Arial, sans-serif; }
+  }
+}
 
 /* ====================== Logo ====================== */
 .logo {

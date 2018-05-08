@@ -7,7 +7,19 @@ class DBHelper {
   static get DATABASE_URL() {
     const port = 1337;
     const server = 'localhost';
-    return `http://${server}:${port}/restaurants`;
+    const path = window.location.href;
+
+    if(path.indexOf("localhost") > -1){
+      return `http://${server}:${port}/restaurants`;
+    }
+    else if (path.indexOf("nicolasambroise") > -1) {
+      return "/mws/sailor.php?qa=restaurants";
+    }
+    else{
+      console.log("Error"+path);
+    }
+
+
   }
   /**
    * InitializeIndexedDB
@@ -33,7 +45,19 @@ class DBHelper {
     });
     dbPromise.onupgradeneeded = function(e) {console.log('dbPromise onupgradeneeded');};
     dbPromise.onerror = function(event) {alert('error opening IndexedDB.');};
-    dbPromise.onsuccess = function(event) {console.log('dbPromise onSuccess');};
+    dbPromise.onsuccess = function(event) {
+      console.log('dbPromise onSuccess');
+      console.log(event);
+      var cursor = event.target.target;
+      if (cursor) { // key already exist
+         console.log("*** do update");
+         //cursor.update(obj);
+      } else { // key not exist
+         console.log("*** do insert");
+         //objectStore.add(obj)
+      }
+
+    };
 
     // Step 2 : Get data as JSON or wait for it
     if (navigator.onLine) {
@@ -51,7 +75,11 @@ class DBHelper {
       console.log('online : request Restaurant');
       if(self.fetch) {
         // FETCH
-        fetch(DBHelper.DATABASE_URL)
+        fetch(DBHelper.DATABASE_URL, {
+            headers : {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            }})
           .then(response => response.json())
           .then(function(restaurantsJson) {addRestaurants(restaurantsJson);})
           .catch(error => callback(error, null));
@@ -85,8 +113,9 @@ class DBHelper {
         var tx = db.transaction('restaurants','readwrite');
         var store = tx.objectStore('restaurants');
         var items = JsonRestaurants;
+
         return Promise.all(items.map(function(item) {
-          return store.add(item);
+          return store.put(item);
         })
         ).catch(function(e) {
           tx.abort();

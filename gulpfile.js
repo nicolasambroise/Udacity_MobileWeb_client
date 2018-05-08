@@ -6,8 +6,8 @@
 "use strict";
 
 // Variables de chemins
-var src = "./"; // dossier de travail
-var dist = "../mws-restaurant-stage-1-dist"; // dossier à livrer
+var src = "./src"; // dossier de travail
+var dist = "./dist"; // dossier à livrer
 
 /** ---------------------------------------------------------------------------
  * Load plugins.
@@ -35,7 +35,7 @@ var browserSync = require("browser-sync").create();
 var jasmine = require('gulp-jasmine-phantom');
 var htmlclean = require('gulp-htmlclean');
 var htmlmin = require('gulp-htmlmin');
-var sourcemaps = require('gulp-sourcemaps');
+//var sourcemaps = require('gulp-sourcemaps');
 var replace = require('gulp-replace');
 var inject = require('gulp-inject');
 
@@ -43,30 +43,16 @@ var inject = require('gulp-inject');
 // Include plugins automatiquement
 var plugins = require("gulp-load-plugins")({pattern: ["gulp-*", "gulp.*"], replaceString: /\bgulp[\-.]/}); // tous les plugins de package.json
 
-
-// Server live editing
-gulp.task("serve", ["sass"], function() {
-    browserSync.init({
-        server: "./dist"
-    });
-    gulp.watch("scss/*.scss", ["Run_style"]);
-    gulp.watch("css/*.css", ["Run_style"]);
-    gulp.watch("js/*.js", ["Run_script"]);
-    gulp.watch("*.html", ["Run_pages"]);
-    gulp.watch("*.html").on("change", browserSync.reload);
-});
-
-
 /* ************* JS FILE ************* */
 // minify JS
 /* ==> OK */
 gulp.task("JSminify", function() {
   return gulp.src([src + "/js/*.js", "!" +src + "/js/*.min.js"])
-    .pipe(sourcemaps.init())
+    //.pipe(sourcemaps.init())
     .pipe(plugins.rename({suffix: ".min"}))
     .pipe(babel())
     .pipe(uglify())
-    .pipe(sourcemaps.write())
+    //.pipe(sourcemaps.write())
     .pipe(gulp.dest(dist + "/js"))
     .pipe(plugins.notify({title: "Gulp",message: "JSminify Done"}));
   });
@@ -137,7 +123,7 @@ gulp.task("CSSconcat", function() {
 // Minify CSS ( styles.css --> styles.min.css et ???.css --> ???.min.css) -- OK
 /* ==> OK */
 gulp.task("CSSminify", function() {
-  return gulp.src([dist + "/css/*.css", "!"+ dist + "/css/*.min.css", src+"/css/*.min.css", src+"/css/small.css"])
+  return gulp.src([dist + "/css/*.css", "!"+ dist + "/css/*.min.css", src+"/css/small.css"])
     .pipe(plugins.csso())
     .pipe(plugins.rename({suffix: ".min"}))
     .pipe(gulp.dest(dist + "/css"))
@@ -148,7 +134,7 @@ gulp.task("CSSminify", function() {
   gulp.task('CSSlint', function() {
     return gulp.src(dist + '/css/*.css')
     .pipe(csslint('.csslintrc'))
-    .pipe(csslint.formatter()));
+    .pipe(csslint.formatter());
   });
 
 /* ************* HTML FILE ************* */
@@ -156,7 +142,7 @@ gulp.task("CSSminify", function() {
 // Minify HTMLpages
 /* ==> OK */
 gulp.task("HTMLpages", function() {
-  return gulp.src(src + "/*.html")
+  return gulp.src(dist + "/*.html")
     .pipe(plugins.htmlclean())
     .pipe(plugins.htmlmin({collapseWhitespace: true}))
     .pipe(gulp.dest(dist + "/"));
@@ -165,8 +151,11 @@ gulp.task("HTMLpages", function() {
 // Test --> Replace js by .min.js
 gulp.task('HTMLinject', function () {
   return gulp.src(src + "/*.html")
-    .pipe(inject(gulp.src(dist + '/css/small.min.css', {read: false}), {starttag: '<!-- inject:head:css -->'}))
-    .pipe(inject(gulp.src([dist + '/js/*.min.js', dist + '/*.min.js', '!' + dist + '/sw.min.js', dist + '/css/*.min.css', '!' + dist + '/css/small.min.css'], {read: false})))
+    .pipe(inject(gulp.src(dist + '/css/small.min.css', {read: false}), {relative: true, starttag: '<!-- inject:head:css -->'}))
+    .pipe(inject(gulp.src(dist + '/js/main.min.js', {read: false}), {relative: true, starttag: '<!-- inject:specificMain:js -->'}))
+    .pipe(inject(gulp.src(dist + '/js/restaurant_info.min.js', {read: false}), {relative: true, starttag: '<!-- inject:specificResto:js -->'}))
+    .pipe(inject(gulp.src([dist + '/js/*.min.js', dist + '/*.min.js', '!' + dist + '/sw.min.js', '!' + dist + '/js/main.min.js', '!' + dist + '/js/restaurant_info.min.js', dist + '/css/*.min.css', '!' + dist + '/css/small.min.css'], {read: false}), {relative: true}))
+    .pipe(replace('../dist/', './'))
     .pipe(gulp.dest(dist + "/"));
 });
 
@@ -187,8 +176,9 @@ gulp.task("IMGoptimize", function() {
 gulp.task("LOGOoptimize", function() {
   return gulp.src([src + "/logo/*.png",src + "/logo/*.svg"])
   .pipe(imagemin([
+    /*
     progressive: true,
-    use: [pngquant()]
+    use: [pngquant()]*/
     imagemin.optipng({optimizationLevel: 5}),
     imagemin.svgo({plugins:[{removeViewBox: true},{cleanupIDs: false}]})
   ]))
@@ -238,12 +228,22 @@ gulp.task("Run_images", function(cb) {
 
 //  "Run_pages" Task
 gulp.task("Run_pages", function(cb) {
-    sequence("HTMLpages","FONTScopy","JSONcopy", cb);
+    sequence("HTMLinject",["FONTScopy","JSONcopy", "HTACCESScopy"],"HTMLpages", cb);
 });
 
-
+// Server live editing
+gulp.task("serve", function() {
+    browserSync.init({
+        server: "./dist"
+    });
+    gulp.watch("scss/*.scss", ["Run_style"]);
+    gulp.watch("css/*.css", ["Run_style"]);
+    gulp.watch("js/*.js", ["Run_script"]);
+    gulp.watch("*.html", ["Run_pages"]);
+    gulp.watch("*.html").on("change", browserSync.reload);
+});
 
 // Default Task
-gulp.task("default", ["JSlint"] ,function(cb) {
-    sequence(["Run_style", "Run_script", "Run_images","Run_pages","serve"], cb);
+gulp.task("default", ["JSlintFail"] ,function(cb) {
+    sequence(["Run_style", "Run_script", "Run_images","Run_pages"],"serve", cb);
 });

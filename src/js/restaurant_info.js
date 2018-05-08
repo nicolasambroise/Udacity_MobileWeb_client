@@ -359,7 +359,7 @@ loadStaticMap = (restaurant) => {
  */
 window.addEventListener('load', () => {
   const iframeloaded = document.querySelector('#map iframe') !== null;
-  console.log("add title to iframe")
+  console.log("add title to iframe");
   if(iframeloaded){
     document.querySelector('#map iframe').setAttribute('title', 'New York City Map of Restaurants');
   }

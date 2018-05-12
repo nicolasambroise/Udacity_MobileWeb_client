@@ -41,7 +41,7 @@ In Add MIME Type box, enter **.webp** as the file name extension and **image/web
 
 ##### 2.3 With NodeJS-gulp
 1. Install Node and npm
-2. In the Node Console : (See below in annexe for Details)
+2. In the Node Console : 
 ** npm install -g **
 ** gulp **
 3. The browser open automatically in the dist folder
@@ -55,32 +55,20 @@ _Note about version :_ Backend Server depends on node.js LTS Version: v6.11.2 , 
 
 ##### 4) With your server running, visit the site: `http://localhost:8000`
 
-### LightHouse Score (09/05/2018)
+### LightHouse Score (12/05/2018)
 
-| Tool\Pages | [Localhost] index.html | [Localhost] restaurant.html | [Prod] index.html | [Prod] restaurant.html |
+| Tool\Pages | [Prod] index.html | [Prod] restaurant.html |
 | --- | --- | --- | --- | --- |
-| Performance | 72 | 59 | 69 | 58 |
-| PWA | 82 | 82 | 91 | 91 |
-| Best Practice | 75 | 75 | 75 | 75 |
-| accessibility | 100 | 91 | 100 | 91 |
-| SEO | 100 | 100 | 100 | 100 |
+| Performance | 93 | 87 |
+| PWA | 100 | 100 |
+| Best Practice | 88 | 88 |
+| accessibility | 100 | 100 |
+| SEO | 100 | 100 |
 
 Explanation
-- PWA in production use HTTPS !
+- PWA in production use HTTPS (9 points more than with localhost) !
 - Performance, fetch are slower in production
-- [Localhost] index.html without GoogleMap : 82 - 91 - 100 - 94 - 100
-- [Prod] index.html without GoogleMap : 82 - 91 - 100 - 94 - 100
+
 
 ### TODO List
 - Use HTTP/2 on Server side (Maybe in htaccess ?)
-- Check to replace GoogleMap iframe by something else. + check title in restaurant page
-- Improve Best Practice with GoogleMap
-- Serve GoogleMap image in Next Gen format
-- Improve Restaurant page
-
-### Gulp feature
-gulp Run_script
-gulp Run_pages
-gulp Run_style
-gulp Run_images
-... To Finish

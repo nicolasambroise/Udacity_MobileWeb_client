@@ -4,11 +4,10 @@ self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(staticCacheName).then(function(cache) {
       return cache.addAll([
+        '.',
         'index.html',
         'restaurant.html',
-        'css/small.css',
         'css/styles.css',
-        'css/normalize.css',
         'fonts/CaviarDreams.ttf',
         'fonts/fontawesome-webfont.ttf',
         'js/dbhelper.js',
@@ -75,14 +74,14 @@ self.addEventListener('fetch', function(event) {
 		}
 	}));
 });
-
+/*
 self.addEventListener('message', function(event) {
   console.log(event.data.action);
   if (event.data.action === 'skipWaiting') {
     self.skipWaiting();
   }
 });
-
+*/
 self.addEventListener('activate', function(event) {
   console.log('Activating new service worker...');
   var cacheWhitelist = [staticCacheName];

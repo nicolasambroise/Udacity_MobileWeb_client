@@ -64,13 +64,13 @@ class DBHelper {
       if(self.fetch) {
         // FETCH
         fetch(DBHelper.DATABASE_URL, {
-            headers : {
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-            }})
-        .then(response => response.json())
-        .then(function(restaurantsJson) {addRestaurants(restaurantsJson);})
-        .catch(error => callback(error, null));
+          headers : {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }})
+          .then(response => response.json())
+          .then(function(restaurantsJson) {addRestaurants(restaurantsJson);})
+          .catch(error => callback(error, null));
       } else {
         // XHR
         let xhr = new XMLHttpRequest();
@@ -285,7 +285,7 @@ class DBHelper {
 	  // Add suffix 100, 200, 400 or 800w
 	  // Rename extension : WebP for Chrome , Jpg for other
     // Use Svg if no picture found
-    if (window.location.href.indexOf("nicolasambroise") > -1) {
+    if (window.location.href.indexOf('nicolasambroise') > -1) {
       return (restaurant.photograph)? `/mws/img/${restaurant.photograph}_${size}w.${extension}`:`/mws/img/no-image_${size}w.${extension}`;
     }
     return (restaurant.photograph)? `/img/${restaurant.photograph}_${size}w.${extension}`:`/img/no-image_${size}w.${extension}`;

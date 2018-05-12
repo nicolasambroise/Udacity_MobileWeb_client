@@ -1,26 +1,21 @@
 let restaurant;
 var map;
 
-/**
- * Initialize Google map, called from HTML.
+/*
+ * Initialisation
  */
-window.initMap = () => {
+document.addEventListener('DOMContentLoaded', (event) => {
+  console.log('1. DOMContentLoaded');
   fetchRestaurantFromURL((error, restaurant) => {
     if (error) { // Got an error!
       console.error(error);
     } else {
-      self.map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 16,
-        center: restaurant.latlng,
-        scrollwheel: false
-      });
-	  console.log('Initialize GMap');
+      console.log('2. Initialization Perfect');
       fillBreadcrumb();
-      DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
-	    loadStaticMap(self.restaurant);
+      loadStaticMap(self.restaurant);
     }
   });
-};
+});
 
 /**
  * Get current restaurant from page URL.
@@ -63,8 +58,6 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
-
-  // TODO in Phase 2 : Add fake Phone Number to each restaurant - Book table
 
   const resto = document.getElementById('restaurant-img');
   const figure = document.createElement('figure');
@@ -141,94 +134,8 @@ fillRestaurantHoursHTML = (operatingHours = self.restaurant.operating_hours) => 
     const time = document.createElement('td');
     time.innerHTML = operatingHours[key];
     row.appendChild(time);
-
     hours.appendChild(row);
   }
-
-  // TODO: Display Status : 'Open until Xpm' or 'Close'
-  // Uncomment in Phase 2 - Finish with taking account of lunch break and use MomentJS for time comparaison
-  /*
-  const openStatus = document.createElement('p');
-  const closeTime = (operatingHours[days[d.getDay()]].lastIndexOf('-') > -1) ? operatingHours[days[d.getDay()]].substring(operatingHours[days[d.getDay()]].lastIndexOf('-') + 2) : operatingHours[days[d.getDay()]];
-  const openTime = (operatingHours[days[d.getDay()]].indexOf('-') > -1) ? operatingHours[days[d.getDay()]].substring(0, operatingHours[days[d.getDay()]].indexOf('-')) : operatingHours[days[d.getDay()]];
-  let closeTimeAmPm = '', closeTimeHour12 = '', closeTimeHour24 = '', closeTimeMin = '';
-  let openTimeAmPm = '', openTimeHour12 = '', openTimeHour24 = '', openTimeMin = '';
-
-  // closeTime  '- 11:00 pm' or 'Closed' or 'Sat'
-  let openStatusMsg = 'Current Status : ';
-  if(openTime == 'Open 24 hours'){openStatusMsg += '<strong>Open</strong>';}
-  else{
-	// Check Open Time
-    if(openTime.indexOf(' ') > -1){
-      openTimeAmPm = openTime.substring(openTime.lastIndexOf(' ') + 1);
-      openTimeHour12 = openTime.substring(0, openTime.lastIndexOf(':'));
-	  openTimeHour24 = (openTimeAmPm == 'pm') ? Number(openTimeHour12) + 12 : Number(openTimeHour12);
-      openTimeMin = openTime.substring(0, openTime.lastIndexOf(' ')).substring(openTime.substring(0, openTime.lastIndexOf(' ')).lastIndexOf(':') + 1);
-	  console.log('openTime : '+openTimeHour24+':'+openTimeMin);
-	}
-	else if(openTime == 'Closed'){
-      openTimeHour24 = 24;
-      openTimeMin = 00;
-	}
-	else if(openTime.indexOf('Sat') > -1){
-	  openTimeHour24 = 00;
-      openTimeMin = 00;
-	}
-	else{
-     console.log(closeTime);
-	 openStatusMsg += '??? ('+closeTime+')';
-    }
-  // Check Close Time
-	if(closeTime.indexOf(' ') > -1){
-      closeTimeAmPm = closeTime.substring(closeTime.lastIndexOf(' ') + 1);
-      closeTimeHour12 = closeTime.substring(0, closeTime.lastIndexOf(':'));
-	  closeTimeHour24 = (closeTimeAmPm == 'pm') ? Number(closeTimeHour12) + 12 : Number(closeTimeHour12);
-      closeTimeMin = closeTime.substring(0, closeTime.lastIndexOf(' ')).substring(closeTime.substring(0, closeTime.lastIndexOf(' ')).lastIndexOf(':') + 1);
-	  console.log('closeTime : '+closeTimeHour24+':'+closeTimeMin);
-	}
-	else if(closeTime.indexOf('Sat') > -1){
-	  closeTimeHour24 = 24;
-      closeTimeMin = 00;
-	}
-	else{
-     console.log(closeTime);
-	 openStatusMsg += '??? ('+closeTime+')';
-    }
-
-    // Decision Tree
-	// TODO : update take account lunch break
-	if(closeTimeHour24 < d.getHours()){
-	  openStatusMsg += '<strong>Closed</strong>';
-	}
-	else if(closeTimeHour24 == d.getHours() && closeTimeMin < d.getMinutes()){
-	  openStatusMsg += '<strong>Closed</strong>';
-	}
-	else if(openTimeHour24 > d.getHours()){
-	  openStatusMsg += '<strong>Closed</strong>';
-	}
-	else if(openTimeHour24 == d.getHours() && openTimeMin > d.getMinutes()){
-	  openStatusMsg += '<strong>Closed</strong>';
-	}
-	else if(openTimeHour24 < d.getHours() && closeTimeHour24 > d.getHours){
-	  openStatusMsg += '<strong>Open</strong>';
-	  openStatusMsg += (closeTime.indexOf('Sat')) ? 'until '+closeTimeHour12+':'+closeTimeMin+' '+closeTimeAmPm : 'until Sunday'
-	}
-	else if(openTimeHour24 < d.getHours() && closeTimeHour24 == d.getHours() && closeTimeMin >= d.getMinutes()){
-	  const timeBeforeClose = Number(closeTimeMin) - d.getMinutes();
-	  openStatusMsg += '<strong>Open</strong>';
-      openStatusMsg += (closeTime.indexOf('Sat')) ? '(close in '+timeBeforeClose+')' : 'until Sunday';
-	}
-	else if(openTimeHour24 == d.getHours() && openTimeMin <= d.getMinutes && closeTimeHour24 > d.getHours()){
-	  openStatusMsg += '<strong>Open</strong>';
-	  openStatusMsg += (closeTime.indexOf('Sat')) ? 'until '+closeTimeHour12+':'+closeTimeMin+' '+closeTimeAmPm : 'until Sunday'
-	}
-	else{
-	 	openStatusMsg += 'Error';
-	}
-  }
-  openStatus.innerHTML = openStatusMsg;
-  hours.parentElement.insertBefore(openStatus, hours.parentElement.childNodes[0]);
-  */
 };
 
 /**
@@ -341,26 +248,63 @@ loadStaticMap = (restaurant) => {
   const maptype = 'roadmap';
   const key = 'AIzaSyC7PG4bxfY8ul6b8YLstueqFeI6eRnnVmk';
   const staticmap = document.createElement('img');
-  staticmap.alt = 'NewYork City Map of Restaurants';
-  staticmap.src = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=${width}x${height}&maptype=${maptype}&key=${key}`;
-  document.getElementById('map-static').append(staticmap);
+  let flag_scroll = 0;
+  let markers = `&markers=color:0xff0000%7Clabel:${restaurant.name}%7C${lat},${lng}`;
 
-  if(navigator.onLine){
-    document.getElementById('map-static').style.display = 'none';
-    console.log('onLine');
-  } else{
-    document.getElementById('map-static').style.display = 'block';
-    console.log('offLine');
+  staticmap.alt = `NewYork City Map of Restaurants -${restaurant.name}`;
+  staticmap.src = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=${width}x${height}&maptype=${maptype}&key=${key}&format=png&visual_refresh=true${markers}`;
+  document.getElementById('map-static').append(staticmap);
+  document.getElementById('map-static').style.display = 'block';
+
+  // load now the google one
+  document.getElementById('map-static').addEventListener('click', function(){
+    includeAPI();
+  });
+  document.addEventListener('scroll', function(){
+    if(flag_scroll === 0){
+      flag_scroll++;
+      includeAPI();
+    }
+  });
+
+};
+
+/*
+ * Defer rending Include Google Maps API
+* https://codepen.io/svinkle/pen/vJmlt
+ */
+includeAPI = () => {
+  console.log('include Google API');
+  const gkey = 'AIzaSyC7PG4bxfY8ul6b8YLstueqFeI6eRnnVmk';
+  let js;
+  let fjs = document.getElementsByTagName('script')[0];
+  if (!document.getElementById('gmap-api')) {
+    js = document.createElement('script');
+    js.id = 'gmap-api';
+    js.setAttribute('async', '');
+    js.setAttribute('defer', '');
+    js.src = 'https://maps.googleapis.com/maps/api/js?key='+gkey+'&sensor=false&libraries=places&force=pwa&callback=initMap';
+    fjs.parentNode.insertBefore(js, fjs);
   }
 };
 
 /**
- * Dynamically add title to the GoogleMap iframe.
+ * Initialize Google map, called from HTML.
  */
-window.addEventListener('load', () => {
-  const iframeloaded = document.querySelector('#map iframe') !== null;
-  console.log("add title to iframe");
-  if(iframeloaded){
-    document.querySelector('#map iframe').setAttribute('title', 'New York City Map of Restaurants');
+initMap = () => {
+  if (navigator.onLine) {
+    self.map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 16,
+      center: restaurant.latlng,
+      scrollwheel: false
+    });
+    DBHelper.mapMarkerForRestaurant(self.restaurant, self.map);
+
+    console.log('Initialize GMap');
+    const iframeloaded = document.querySelector('#map iframe') !== null;
+    console.log('add title to iframe');
+    if(iframeloaded){
+      document.querySelector('#map iframe').setAttribute('title', 'New York City Map of Restaurants');
+    }
   }
-});
+};

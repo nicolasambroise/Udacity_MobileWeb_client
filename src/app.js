@@ -2,7 +2,10 @@
 window.addEventListener('load', () => {
 	// Initialisation
 	if (!navigator.serviceWorker) {return;}
-  navigator.serviceWorker.register('/sw.js', { scope: '/' }).then(
+	let prod_path="";
+	const path = window.location.href;
+	if (path.indexOf('nicolasambroise') > -1) { prod_path="/mws";}
+  navigator.serviceWorker.register(prod_path+'/sw.js', { scope: prod_path+'/' }).then(
 		function(reg) {
 			if (!navigator.serviceWorker.controller) {return;}
 			if(reg.installing) {

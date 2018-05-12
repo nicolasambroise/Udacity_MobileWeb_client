@@ -96,6 +96,11 @@ updateRestaurants = () => {
 
   console.log('updateRestaurants :'+cuisine+' / '+neighborhood);
 
+  if(navigator.onLine && !document.getElementById('gmap-api') && (cuisine !== 'all' || neighborhood !== 'all')){
+    console.log('includeAPI');
+    includeAPI();
+  }
+
   if(cuisine === 'all' && neighborhood === 'all'){
     DBHelper.fetchRestaurants((error, restaurants) => {
       if (error) { // Got an error!
@@ -251,6 +256,73 @@ createRestaurantHTML = (restaurant) => {
   return li;
 };
 
+
+
+
+/**
+ * Render alternative Static Map
+ */
+loadStaticMap = () => {
+  const lat = 40.722216;
+  const lng = -73.987501;
+  const zoom = 12;
+  const height = 400;
+  const width = 640;
+  const maptype = 'roadmap';
+  const key = 'AIzaSyC7PG4bxfY8ul6b8YLstueqFeI6eRnnVmk';
+  const staticmap = document.createElement('img');
+  let flag_scroll = 0;
+
+  // TODO replace with a fetch
+  let markers = '&markers=color:0xff0000%7Clabel:%7C40.713829,-73.989667';
+  markers += '&markers=color:0xff0000%7Clabel:%7C40.683555,-73.966393';
+  markers += '&markers=color:0xff0000%7Clabel:%7C40.747143,-73.985414';
+  markers += '&markers=color:0xff0000%7Clabel:%7C40.722216,-73.987501';
+  markers += '&markers=color:0xff0000%7Clabel:%7C40.705089,-73.933585';
+
+  markers += '&markers=color:0xff0000%7Clabel:%7C40.674925,-74.016162';
+  markers += '&markers=color:0xff0000%7Clabel:%7C40.727397,-73.983645';
+  markers += '&markers=color:0xff0000%7Clabel:%7C40.726584,-74.002082';
+  markers += '&markers=color:0xff0000%7Clabel:%7C40.743797,-73.950652';
+  markers += '&markers=color:0xff0000%7Clabel:%7C40.743394,-73.954235';
+
+  staticmap.alt = 'NewYork City Map of Restaurants';
+  staticmap.src = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=${width}x${height}&maptype=${maptype}&key=${key}&format=png&visual_refresh=true${markers}`;
+
+  document.getElementById('map-static').append(staticmap);
+  document.getElementById('map-static').style.display = 'block';
+
+  // load now the google one
+  document.getElementById('map-static').addEventListener('click', function(){
+    includeAPI();
+  });
+  document.addEventListener('scroll', function(){
+    if(flag_scroll === 0){
+      flag_scroll++;
+      includeAPI();
+    }
+  });
+};
+
+/*
+ * Defer rending Include Google Maps API
+* https://codepen.io/svinkle/pen/vJmlt
+ */
+includeAPI = () => {
+  console.log('include Google API');
+  const gkey = 'AIzaSyC7PG4bxfY8ul6b8YLstueqFeI6eRnnVmk';
+  let js;
+  let fjs = document.getElementsByTagName('script')[0];
+  if (!document.getElementById('gmap-api')) {
+    js = document.createElement('script');
+    js.id = 'gmap-api';
+    js.setAttribute('async', '');
+    js.setAttribute('defer', '');
+    js.src = 'https://maps.googleapis.com/maps/api/js?key='+gkey+'&sensor=false&libraries=places&force=pwa&callback=initMap';
+    fjs.parentNode.insertBefore(js, fjs);
+  }
+};
+
 /**
  * Initialize Google map, called from HTML.
  */
@@ -267,14 +339,16 @@ initMap = () => {
       scrollwheel: false
     });
     addMarkersToMap();
-  }
-  console.log('Initialize GMap');
-  const iframeloaded = document.querySelector('#map iframe') !== null;
-  console.log('add title to iframe');
-  if(iframeloaded){
-    document.querySelector('#map iframe').setAttribute('title', 'New York City Map of Restaurants');
+
+    console.log('Initialize GMap');
+    const iframeloaded = document.querySelector('#map iframe') !== null;
+    console.log('add title to iframe');
+    if(iframeloaded){
+      document.querySelector('#map iframe').setAttribute('title', 'New York City Map of Restaurants');
+    }
   }
 };
+
 
 /**
  * Add markers for current restaurants to the map.
@@ -293,57 +367,4 @@ addMarkersToMap = (restaurants = self.restaurants) => {
     });
   }
   else{console.log('Google map not loaded !');}
-};
-
-/**
- * Render alternative Static Map
- */
-loadStaticMap = () => {
-  const lat = 40.722216;
-  const lng = -73.987501;
-  const zoom = 12;
-  const height = 400;
-  const width = 640;
-  const maptype = 'roadmap';
-  const key = 'AIzaSyC7PG4bxfY8ul6b8YLstueqFeI6eRnnVmk';
-  const staticmap = document.createElement('img');
-  staticmap.alt = 'NewYork City Map of Restaurants';
-  staticmap.src = `https://maps.googleapis.com/maps/api/staticmap?center=${lat},${lng}&zoom=${zoom}&size=${width}x${height}&maptype=${maptype}&key=${key}`;
-  document.getElementById('map-static').append(staticmap);
-
-  if(navigator.onLine){
-    //document.getElementById('map-static').style.display = 'none';
-    console.log('onLine');
-  } else{
-	  //document.getElementById('map-static').style.display = 'block';
-    console.log('offLine');
-  }
-  document.getElementById('map-static').style.display = 'block';
-
-  // load now the google one
-  document.getElementById("map-static").addEventListener("click", function(){
-    alert("Hello World!");
-});
-  //includeAPI());
-
-
-};
-
-/*
- * Defer rending Include Google Maps API
-* https://codepen.io/svinkle/pen/vJmlt
- */
-includeAPI = () => {
-  console.log("include Google API");
-  const gkey = "AIzaSyC7PG4bxfY8ul6b8YLstueqFeI6eRnnVmk";
-  let js;
-  let fjs = document.getElementsByTagName('script')[0];
-  if (!document.getElementById('gmap-api')) {
-    js = document.createElement('script');
-    js.id = 'gmap-api';
-    js.setAttribute('async', '');
-    js.setAttribute('defer', '');
-    js.src = 'https://maps.googleapis.com/maps/api/js?key='+gkey+'&sensor=false&libraries=places&force=pwa&callback=initMap';
-    fjs.parentNode.insertBefore(js, fjs);
-  }
 };

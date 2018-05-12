@@ -5,14 +5,13 @@ self.addEventListener('install', function(event) {
     caches.open(staticCacheName).then(function(cache) {
       return cache.addAll([
         '.',
-        '/',
         'index.html',
         'restaurant.html',
         'css/small.css',
         'css/styles.css',
         'css/normalize.css',
-        'fonts/CaviarDreams.ttf',
-        'fonts/fontawesome-webfont.ttf',
+        'fonts/subset-CaviarDreams.ttf',
+        'fonts/subset-fontawesome.ttf',
         'js/dbhelper.js',
         'js/idb.js',
         'js/main.js',

@@ -229,5 +229,5 @@ gulp.task("serve", function() {
 
 // Default Task
 gulp.task("default", ["JSlintFail"] ,function(cb) {
-    sequence(["Run_style", "Run_script", "Run_images","Run_pages"],"serve", cb);
+    sequence(["Run_style", "Run_script", "Run_images","Run_pages"], cb);
 });

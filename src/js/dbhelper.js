@@ -3,24 +3,24 @@
  */
 class DBHelper {
 
-
   static get DATABASE_URL() {
-    const port = 1337;
-    const server = 'localhost';
-    const path = window.location.href;
+     /* 3 servers :
+      - Localhost : localhost:8000/ --> prod_path = ""
+      - Heroku : https://nia-mws.herokuapp.com/ --> prod_path = ""
+      - OVH : https://nicolasambroise.com/mws/ --> prod_path = "/mws"
+     */
+      const port = 1337;
+      const path = window.location.href;
 
-    if(path.indexOf('localhost') > -1){
-      return `http://${server}:${port}/restaurants`;
-    }
-    else if (path.indexOf('nicolasambroise') > -1) {
-      return '/mws/sailor.php?qa=restaurants';
-    }
-    else{
-      console.log('Error'+path);
+      if(path.indexOf('localhost') > -1){
+        return `http://localhost:${port}/`;
+      }
+      else if (path.indexOf('herokuapp') || path.indexOf('nicolasambroise') > -1) {
+        return `https://nia-mws-3.herokuapp.com/`;
+      }
+      else{console.log('Error Path :'+path);return;}
     }
 
-
-  }
   /**
    * InitializeIndexedDB
    */
@@ -32,7 +32,7 @@ class DBHelper {
       const error = ('This browser doesn\'t support IndexedDB');
       callback(error, null);
     }
-    const dbName = 'Time4FoodDatabase';
+    const dbName = 'Time4FoodRestaurantsDatabase';
 
     var dbPromise = idb.open(dbName, 1,function(upgradeDb) {
       console.log('Creating the restaurants object store');
@@ -63,7 +63,7 @@ class DBHelper {
       console.log('online : request Restaurant');
       if(self.fetch) {
         // FETCH
-        fetch(DBHelper.DATABASE_URL, {
+        fetch(`${DBHelper.DATABASE_URL}restaurants`, {
           headers : {
             'Content-Type': 'application/json',
             'Accept': 'application/json'
@@ -74,7 +74,7 @@ class DBHelper {
       } else {
         // XHR
         let xhr = new XMLHttpRequest();
-        xhr.open('GET', DBHelper.DATABASE_URL);
+        xhr.open('GET', `${DBHelper.DATABASE_URL}restaurants`);
         xhr.onload = () => {
           if (xhr.status === 200) { // Got a success response from server!
             const restaurants = JSON.parse(xhr.responseText);
@@ -84,7 +84,7 @@ class DBHelper {
             callback(error, null);
           }
         };
-        xhr.onerror = () => {console.log( 'An error occurred 😞' );};
+        xhr.onerror = () => {console.log('An error occurred');};
         xhr.send();
       }
     }
@@ -120,7 +120,7 @@ class DBHelper {
    */
   static fetchRestaurants(callback) {
     console.log('fetch all Restaurants');
-    const dbName = 'Time4FoodDatabase';
+    const dbName = 'Time4FoodRestaurantsDatabase';
     var dbPromise = idb.open(dbName);
     dbPromise.onerror = function(event) {alert('error opening IndexedDB.');};
     dbPromise.onsuccess = function(event) {db = dbPromise.result;};
@@ -139,7 +139,7 @@ class DBHelper {
    */
   static fetchRestaurantById(id, callback) {
     console.log('fetch the Restaurant with ID #'+id);
-    const dbName = 'Time4FoodDatabase';
+    const dbName = 'Time4FoodRestaurantsDatabase';
     var dbPromise = idb.open(dbName);
     dbPromise.onerror = function(event) {alert('error opening IndexedDB.');};
     dbPromise.onsuccess = function(event) {db = dbPromise.result;};
@@ -159,7 +159,7 @@ class DBHelper {
    */
   static fetchRestaurantByCuisine(cuisine, callback) {
     console.log('fetch all restaurant By Cuisine :'+cuisine);
-    const dbName = 'Time4FoodDatabase';
+    const dbName = 'Time4FoodRestaurantsDatabase';
     var dbPromise = idb.open(dbName);
     dbPromise.onerror = function(event) {alert('error opening IndexedDB.');};
     dbPromise.onsuccess = function(event) {db = dbPromise.result;};
@@ -180,7 +180,7 @@ class DBHelper {
    */
   static fetchRestaurantByNeighborhood(neighborhood, callback) {
     console.log('fetch all restaurant By Neighborhood :'+neighborhood);
-    const dbName = 'Time4FoodDatabase';
+    const dbName = 'Time4FoodRestaurantsDatabase';
     var dbPromise = idb.open(dbName);
     dbPromise.onerror = function(event) {alert('error opening IndexedDB.');};
     dbPromise.onsuccess = function(event) {db = dbPromise.result;};
@@ -201,7 +201,7 @@ class DBHelper {
    */
   static fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, callback) {
     console.log('fetch all restaurant By Cuisine and Neighborhood :'+cuisine+','+neighborhood);
-    const dbName = 'Time4FoodDatabase';
+    const dbName = 'Time4FoodRestaurantsDatabase';
     var dbPromise = idb.open(dbName);
     dbPromise.onerror = function(event) {alert('error opening IndexedDB.');};
     dbPromise.onsuccess = function(event) {db = dbPromise.result;};
@@ -222,7 +222,7 @@ class DBHelper {
    */
   static fetchNeighborhoods(callback) {
     console.log('fetchNeighborhoods for select list');
-    const dbName = 'Time4FoodDatabase';
+    const dbName = 'Time4FoodRestaurantsDatabase';
     var dbPromise = idb.open(dbName);
     dbPromise.onerror = function(event) {alert('error opening IndexedDB.');};
     dbPromise.onsuccess = function(event) {db = dbPromise.result;};
@@ -249,7 +249,7 @@ class DBHelper {
    */
   static fetchCuisines(callback) {
     console.log('fetchCuisines for select list');
-    const dbName = 'Time4FoodDatabase';
+    const dbName = 'Time4FoodRestaurantsDatabase';
     var dbPromise = idb.open(dbName);
     dbPromise.onerror = function(event) {alert('error opening IndexedDB.');};
     dbPromise.onsuccess = function(event) {db = dbPromise.result;};
@@ -303,6 +303,30 @@ class DBHelper {
       animation: google.maps.Animation.DROP}
     );
     return marker;
+  }
+
+  /**
+   * Review database
+   */
+
+   static openReviewDatabase() {
+     if (!navigator.serviceWorker) {return Promise.resolve();}
+     return indexDB.open('Time4FoodReviewsDatabase', 1, function (upgradeDb) {
+       let store = upgradeDb.createObjectStore('Time4FoodReviewsDatabase', {
+         keyPath: 'id'
+       });
+       store.createIndex('by-id', 'id');
+     });
+   }
+
+    static openLocalReviewDatabase() {
+      if (!navigator.serviceWorker) {return Promise.resolve();}
+      return indexDB.open('Time4FoodReviewsLocalDatabase', 1, function (upgradeDb) {
+        let store = upgradeDb.createObjectStore('Time4FoodReviewsLocalDatabase', {
+          keyPath: 'restaurant_id'
+        });
+    store.createIndex('by-id', 'restaurant_id');
+    });
   }
 
 }

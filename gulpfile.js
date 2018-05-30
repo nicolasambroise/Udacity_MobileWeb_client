@@ -44,19 +44,17 @@ var plugins = require("gulp-load-plugins")({pattern: ["gulp-*", "gulp.*"], repla
 // minify JS
 /* ==> OK */
 gulp.task("JSminify", function() {
-  return gulp.src([src + "/js/*.js", "!" +src + "/js/*.min.js"])
-    //.pipe(sourcemaps.init())
-    .pipe(plugins.rename({suffix: ".min"}))
+  return gulp.src(src + "/js/all.js")
     .pipe(babel())
     .pipe(uglify())
-    //.pipe(sourcemaps.write())
+    .pipe(plugins.rename({suffix: ".min"}))
     .pipe(gulp.dest(dist + "/js"))
     .pipe(plugins.notify({title: "Gulp",message: "JSminify Done"}));
   });
 
 // Check JS code for error with ES lint
 gulp.task("JSlint", function() {
-  return gulp.src([src + "/js/*.js","!node_modules/**"])
+  return gulp.src([src + "/js/*.js","!node_modules/**", "!"+src + "/js/all.js"])
     .pipe(eslint({configFile: 'eslintrc.json'}))
     .pipe(eslint.format())
     .pipe(eslint.result(result => {
@@ -69,7 +67,7 @@ gulp.task("JSlint", function() {
 });
 // Idem as previous but with a fail if error
 gulp.task("JSlintFail", function() {
-  return gulp.src([src + "/js/*.js","!node_modules/**"])
+  return gulp.src([src + "/js/*.js","!node_modules/**", "!"+src + "/js/all.js"])
     .pipe(eslint({configFile: 'eslintrc.json'}))
     .pipe(eslint.format())
     .pipe(eslint.failAfterError());
@@ -88,6 +86,11 @@ gulp.task('JScopy', function (cb) {
     .pipe(plugins.notify({title: "Gulp",message: "JScopy Done"}));
 });
 
+gulp.task('JSconcat', () => {
+    return gulp.src(src + "/js/*.js")
+      .pipe(concat('all.js'))
+      .pipe(gulp.dest(src + "/js"));
+});
 
 /* ************* CSS FILE ************* */
 /* ==> OK */
@@ -201,7 +204,7 @@ gulp.task("Run_style", function(cb) {
 
 //  "Run_script" Task
 gulp.task("Run_script", function(cb) {
-    sequence(["JScopy", "JSminify"], cb);
+    sequence(["JScopy", "JSconcat"], "JSminify", cb);
 });
 
 

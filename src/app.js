@@ -4,6 +4,11 @@ window.addEventListener('load', () => {
 	if (!navigator.serviceWorker) {return;}
 	let prod_path="";
 	const path = window.location.href;
+  /* 3 servers :
+	 - Localhost : localhost:8000/ --> prod_path = ""
+	 - Heroku : https://nia-mws.herokuapp.com/ --> prod_path = ""
+   - OVH : https://nicolasambroise.com/mws/ --> prod_path = "/mws"
+	*/
 	if (path.indexOf('nicolasambroise') > -1) { prod_path="/mws";}
   navigator.serviceWorker.register(prod_path+'/sw.js', { scope: prod_path+'/' }).then(
 		function(reg) {
@@ -17,10 +22,6 @@ window.addEventListener('load', () => {
 			} else if(reg.active) {
 			  console.log('Service worker active');
 			}
-			reg.addEventListener('updatefound', function() {
-				console.log('Update found !');
-				trackInstalling(reg.installing);
-			});
 		}).catch(function(error) {
 	  	 console.log('Registration failed with ' + error);
 	  });
@@ -32,23 +33,3 @@ window.addEventListener('load', () => {
 			refreshing = true;
 	  });
 });
-
-function trackInstalling(worker) {
-  var indexController = this;
-	worker.addEventListener('statechange', function() {
-		if (worker.state == 'installed') {
-		  updateReady(worker);
-		}
-	});
-};
-
-function updateReady(worker) {
-	console.log("New version available");
-	/* TODO in Phase 2
-	if (confirm('New version available, press OK to reload the website')) {
-		//  use {action: 'skipWaiting'}
-	} else {
-		alert('Why did you press cancel? You should have confirmed');
-	}
-	*/
-};

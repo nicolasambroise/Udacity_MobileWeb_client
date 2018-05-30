@@ -1,3 +1,4 @@
+/* Styles.scss */
 @charset "utf-8";
 
 /* Font-Face */
@@ -587,6 +588,57 @@ nav h1 a:focus {
     padding: 0 15px;
   }
 }
+/* ============================ Rating ================== */
+/* http://experiments.wemakesites.net/css3-rating-stars-with-selection.html */
+#review-rating,
+#review-rating label::before
+{
+    display: inline-block;
+}
+
+#review-rating label:hover,
+#review-rating label:hover ~ label
+{
+    color: #189800;
+}
+
+#review-rating *
+{
+    margin: 0;
+    padding: 0;
+}
+
+#review-rating input
+{
+    display: none;
+}
+
+#review-rating
+{
+    unicode-bidi: bidi-override;
+    direction: rtl;
+}
+
+#review-rating label
+{
+    color: #ccc;
+}
+
+#review-rating label::before
+{
+    content: "\2605";
+    width: 18px;
+    line-height: 18px;
+    text-align: center;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+#review-rating input:checked ~ label
+{
+    color: #f5b301;
+}
+
 /* ============================ footer ================== */
 footer a{
   padding: 15px 0;

@@ -1,57 +1,55 @@
 const staticCacheName = 'nico-static-resto-v1';
 
+const staticFiles = [
+  './',
+  'index.html',
+  'restaurant.html',
+  'css/styles_all.css',
+  'fonts/subset-CaviarDreams.ttf',
+  'fonts/subset-fontawesome.ttf',
+  'js/script_all.js',
+  'logo/BSicon_REST.png',
+  'logo/BSicon_REST.svg',
+  'img/1_100w.jpg','img/1_100w.webp','img/1_200w.jpg','img/1_200w.webp',
+  'img/1_300w.jpg','img/1_300w.webp','img/1_400w.jpg','img/1_400w.webp',
+  'img/1_800w.jpg','img/1_800w.webp',
+  'img/2_100w.jpg','img/2_100w.webp','img/2_200w.jpg','img/2_200w.webp',
+  'img/2_300w.jpg','img/2_300w.webp','img/2_400w.jpg','img/2_400w.webp',
+  'img/2_800w.jpg','img/2_800w.webp',
+  'img/3_100w.jpg','img/3_100w.webp','img/3_200w.jpg','img/3_200w.webp',
+  'img/3_300w.jpg','img/3_300w.webp','img/3_400w.jpg','img/3_400w.webp',
+  'img/3_800w.jpg','img/3_800w.webp',
+  'img/4_100w.jpg','img/4_100w.webp','img/4_200w.jpg','img/4_200w.webp',
+  'img/4_300w.jpg','img/4_300w.webp','img/4_400w.jpg','img/4_400w.webp',
+  'img/4_800w.jpg','img/4_800w.webp',
+  'img/5_100w.jpg','img/5_100w.webp','img/5_200w.jpg','img/5_200w.webp',
+  'img/5_300w.jpg','img/5_300w.webp','img/5_400w.jpg','img/5_400w.webp',
+  'img/5_800w.jpg','img/5_800w.webp',
+  'img/6_100w.jpg','img/6_100w.webp','img/6_200w.jpg','img/6_200w.webp',
+  'img/6_300w.jpg','img/6_300w.webp','img/6_400w.jpg','img/6_400w.webp',
+  'img/6_800w.jpg','img/6_800w.webp',
+  'img/7_100w.jpg','img/7_100w.webp','img/7_200w.jpg','img/7_200w.webp',
+  'img/7_300w.jpg','img/7_300w.webp','img/7_400w.jpg','img/7_400w.webp',
+  'img/7_800w.jpg','img/7_800w.webp',
+  'img/8_100w.jpg','img/8_100w.webp','img/8_200w.jpg','img/8_200w.webp',
+  'img/8_300w.jpg','img/8_300w.webp','img/8_400w.jpg','img/8_400w.webp',
+  'img/8_800w.jpg','img/8_800w.webp',
+  'img/9_100w.jpg','img/9_100w.webp','img/9_200w.jpg','img/9_200w.webp',
+  'img/9_300w.jpg','img/9_300w.webp','img/9_400w.jpg','img/9_400w.webp',
+  'img/9_800w.jpg','img/9_800w.webp',
+  'img/10_100w.jpg','img/10_100w.webp','img/10_200w.jpg','img/10_200w.webp',
+  'img/10_300w.jpg','img/10_300w.webp','img/10_400w.jpg','img/10_400w.webp',
+  'img/10_800w.jpg','img/10_800w.webp',
+  'img/no-image_100w.jpg','img/no-image_100w.webp','img/no-image_200w.jpg','img/no-image_200w.webp',
+  'img/no-image_300w.jpg','img/no-image_300w.webp','img/no-image_400w.jpg','img/no-image_400w.webp',
+  'img/no-image_800w.jpg','img/no-image_800w.webp',
+  'manifest.json'
+];
+
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(staticCacheName).then(function(cache) {
-      return cache.addAll([
-        '.',
-        'index.html',
-        'restaurant.html',
-        'css/styles.css',
-        'fonts/CaviarDreams.ttf',
-        'fonts/fontawesome-webfont.ttf',
-        'js/dbhelper.js',
-        'js/idb.js',
-        'js/main.js',
-        'js/restaurant_info.js',
-        'js/script.js',
-        'logo/BSicon_REST.png',
-        'logo/BSicon_REST.svg',
-        'img/1_100w.jpg','img/1_100w.webp','img/1_200w.jpg','img/1_200w.webp',
-        'img/1_300w.jpg','img/1_300w.webp','img/1_400w.jpg','img/1_400w.webp',
-        'img/1_800w.jpg','img/1_800w.webp',
-        'img/2_100w.jpg','img/2_100w.webp','img/2_200w.jpg','img/2_200w.webp',
-        'img/2_300w.jpg','img/2_300w.webp','img/2_400w.jpg','img/2_400w.webp',
-        'img/2_800w.jpg','img/2_800w.webp',
-        'img/3_100w.jpg','img/3_100w.webp','img/3_200w.jpg','img/3_200w.webp',
-        'img/3_300w.jpg','img/3_300w.webp','img/3_400w.jpg','img/3_400w.webp',
-        'img/3_800w.jpg','img/3_800w.webp',
-        'img/4_100w.jpg','img/4_100w.webp','img/4_200w.jpg','img/4_200w.webp',
-        'img/4_300w.jpg','img/4_300w.webp','img/4_400w.jpg','img/4_400w.webp',
-        'img/4_800w.jpg','img/4_800w.webp',
-        'img/5_100w.jpg','img/5_100w.webp','img/5_200w.jpg','img/5_200w.webp',
-        'img/5_300w.jpg','img/5_300w.webp','img/5_400w.jpg','img/5_400w.webp',
-        'img/5_800w.jpg','img/5_800w.webp',
-        'img/6_100w.jpg','img/6_100w.webp','img/6_200w.jpg','img/6_200w.webp',
-        'img/6_300w.jpg','img/6_300w.webp','img/6_400w.jpg','img/6_400w.webp',
-        'img/6_800w.jpg','img/6_800w.webp',
-        'img/7_100w.jpg','img/7_100w.webp','img/7_200w.jpg','img/7_200w.webp',
-        'img/7_300w.jpg','img/7_300w.webp','img/7_400w.jpg','img/7_400w.webp',
-        'img/7_800w.jpg','img/7_800w.webp',
-        'img/8_100w.jpg','img/8_100w.webp','img/8_200w.jpg','img/8_200w.webp',
-        'img/8_300w.jpg','img/8_300w.webp','img/8_400w.jpg','img/8_400w.webp',
-        'img/8_800w.jpg','img/8_800w.webp',
-        'img/9_100w.jpg','img/9_100w.webp','img/9_200w.jpg','img/9_200w.webp',
-        'img/9_300w.jpg','img/9_300w.webp','img/9_400w.jpg','img/9_400w.webp',
-        'img/9_800w.jpg','img/9_800w.webp',
-        'img/10_100w.jpg','img/10_100w.webp','img/10_200w.jpg','img/10_200w.webp',
-        'img/10_300w.jpg','img/10_300w.webp','img/10_400w.jpg','img/10_400w.webp',
-        'img/10_800w.jpg','img/10_800w.webp',
-        'img/no-image_100w.jpg','img/no-image_100w.webp','img/no-image_200w.jpg','img/no-image_200w.webp',
-        'img/no-image_300w.jpg','img/no-image_300w.webp','img/no-image_400w.jpg','img/no-image_400w.webp',
-        'img/no-image_800w.jpg','img/no-image_800w.webp',
-        'manifest.json'
-	    ]);
+      return cache.addAll(staticFiles);
     })
   );
 });
@@ -62,28 +60,34 @@ self.addEventListener('fetch', function(event) {
     return null;
   }
   // Exclude parameters from URL with ignoreSearch option for caching "restaurant.html?id=X"
-  event.respondWith(caches.match(event.request, {'ignoreSearch': true}).then(function(response) {
-		if (response !== undefined) {
-		  return response;
-		} else {
-		  return fetch(event.request).then(function (response) {
-			  return response;
-		  }).catch(function () {
-			  return caches.match('');
-		  });
-		}
-	}));
+  event.respondWith(
+    /*
+    caches.match(event.request, {'ignoreSearch': true}).then(function(response) {
+      if (response !== undefined) {
+		    return response;
+		  } else {
+		    return fetch(event.request).then(function (response) {
+			    return response;
+		  }  ).catch(function () {
+			    return caches.match('');
+		    });
+		  }
+	  })
+    */
+    caches.open(staticCacheName).then(cache => {
+      return cache.match(event.request).then(response => {
+        return response || fetch(event.request).then(response => {
+          if (event.request.url.includes('localhost')) {
+            cache.put(e.request, response.clone());
+          }
+          return response;
+        });
+      });
+    })
+  );
 });
-/*
-self.addEventListener('message', function(event) {
-  console.log(event.data.action);
-  if (event.data.action === 'skipWaiting') {
-    self.skipWaiting();
-  }
-});
-*/
 self.addEventListener('activate', function(event) {
-  console.log('Activating new service worker...');
+  // Activating new service worker and deleting old ones.
   var cacheWhitelist = [staticCacheName];
   event.waitUntil(
     caches.keys().then(function(cacheNames) {
@@ -96,4 +100,35 @@ self.addEventListener('activate', function(event) {
       );
     })
   );
+});
+
+self.addEventListener('sync', event => {
+  if(event.tag === 'syncReviews') {
+    DBHelper.openLocalReviewDatabase().then(db => {
+      let tx = db.transaction('localReviewDbs');
+      let restaurantStore = tx.objectStore('localReviewDbs');
+      return restaurantStore.getAll();
+    }).then(val => {
+      val.forEach(function (review) {
+        const url = `${DBHelper.DATABASE_URL}reviews/?restaurant_id=${review.restaurant_id}`;
+        fetch(url, {
+          method: 'POST',
+          body: JSON.stringify(review),
+          headers: {
+            'content-type': 'application/json'
+          },
+        })
+        .then(response => response.json())
+        .then(function (val) {
+          DBHelper.openLocalReviewDatabase().then(function (db) {
+          let tx = db.transaction('localReviewDbs');
+          let restaurantStore = tx.objectStore('localReviewDbs');
+          restaurantStore.delete(review.restaurant_id)
+          });
+        }).catch(function (error) {
+          console.log(error);
+        });
+      });
+    });
+  }
 });

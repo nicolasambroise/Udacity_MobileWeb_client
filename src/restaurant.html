@@ -74,7 +74,6 @@
     </section>
     <section id="restaurant-operatinghours">
        <h3>Operating Hours</h3>
-       <!-- TODO: Mention state Open/Close depending on current datetime-->
        <div>
          <table id="restaurant-hours"></table>
        </div>
@@ -93,13 +92,30 @@
       <ul id="reviews-list"></ul>
     </section>
     <!-- End reviews -->
+    <!-- Beginning form -->
+    <section id="form-container" aria-label="Form Container">
+      <button type="button">Add a comment !</button>
+      <form id="review-form" role="form" aria-label="review form">
+        <input type="text" placeholder="Enter your name" id="review-name" aria-label="review name">
+        <div id="review-rating">
+          <input type="radio" name="review-rating" id="rating-0" value="5" /><label for="rating-0"></label>
+          <input type="radio" name="review-rating" id="rating-1" value="4" /><label for="rating-1"></label>
+          <input type="radio" name="review-rating" id="rating-2" value="3" /><label for="rating-2"></label>
+          <input type="radio" name="review-rating" id="rating-3" value="2" /><label for="rating-3"></label>
+          <input type="radio" name="review-rating" id="rating-4" value="1" /><label for="rating-4"></label>
+        </div>
+        <textarea name="review-comment" id="review-comment" rows="3" placeholder="Leave a comment on this Restaurant" aria-label="review comment"></textarea>
+        <input type="submit">
+      </form>
+    </section>
+    <!-- End form -->
   </main>
   <!-- End main -->
 
   <footer id="footer">
-    Copyright (c) 2017 - All Rights Reserved.<br>
-	<a href="./" aria-label="Home page - Restaurant Reviews" tabindex="0" rel="noopener"><strong>Restaurant Reviews</strong></a> -
-	<a href="javascript:;" id="toTop" aria-label="Back to top" tabindex="0" rel="noopener"><strong>Back to top</strong></a>
+    Copyright (c) 2018 - All Rights Reserved.<br>
+	  <a href="./" aria-label="Home page - Restaurant Reviews" tabindex="0" rel="noopener"><strong>Restaurant Reviews</strong></a> -
+	  <a href="javascript:;" id="toTop" aria-label="Back to top" tabindex="0" rel="noopener"><strong>Back to top</strong></a>
   </footer>
   <!-- inject:js -->
   <script src="js/idb.js"></script>
@@ -110,8 +126,5 @@
   <!-- inject:specificResto:js -->
   <script src="js/restaurant_info.js"></script>
   <!-- endinject -->
-  <!--
-  <script async defer src="https://maps.googleapis.com/maps/api/js?key=
-  AIzaSyC7PG4bxfY8ul6b8YLstueqFeI6eRnnVmk&libraries=places&callback=initMap&force=pwa"></script>-->
-</body>
+  </body>
 </html>

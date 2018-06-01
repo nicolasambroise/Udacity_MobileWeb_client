@@ -24,7 +24,7 @@ document.getElementById('toTop').addEventListener('click', (event) => {
  */
 
 var loadDeferredStyles = function() {
-  console.log('loadDeferredStyles');
+  console.log('[1] loadDeferredStyles');
   var addStylesNode = document.getElementById('deferred-styles');
   var replacement = document.createElement('div');
   replacement.innerHTML = addStylesNode.textContent;

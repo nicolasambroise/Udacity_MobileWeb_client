@@ -6,19 +6,23 @@ var markers = [];
  * Fetch neighborhoods and cuisines as soon as the page is loaded.
  */
 document.addEventListener('DOMContentLoaded', (event) => {
-  console.log('DOMContentLoaded');
+  console.log('[1] DOMContentLoaded');
+  DBHelper.loadDeferredStyles();
+  console.log('[2] Start loading Contents');
   DBHelper.InitializeIndexedDB((error,status) => {
     if (error) {
       console.error(error);
     } else {
-      console.log('Initialization Perfect');
-      // TODO use promise
-      var PromiseNeighborhoods = fetchNeighborhoods();
-      var PromiseCuisines = fetchCuisines();
-      // next
-      Promise.resolve(PromiseNeighborhoods,PromiseCuisines).then(() => {
-        updateRestaurants();
-        loadStaticMap();
+      console.log('[3] Initialization Restaurants Perfect');
+      var PromiseNeighborhoods = retrieveNeighborhoods();
+      var PromiseCuisines = retrieveCuisines();
+      Promise.all([PromiseNeighborhoods,PromiseCuisines]).then(() => {
+        console.log('[4] Data Retrieve Perfect');
+        var PromiseUpdate = updateRestaurants();
+        var PromiseMap = loadStaticMap();
+        Promise.all([PromiseUpdate,PromiseMap]).then(() => {
+          console.log('[5] Load Finish Perfect');
+        });
       });
     }
   });
@@ -27,8 +31,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 /**
  * Fetch all neighborhoods and set their HTML.
  */
-fetchNeighborhoods = () => {
-  DBHelper.fetchNeighborhoods((error, neighborhoods) => {
+retrieveNeighborhoods = () => {
+  DBHelper.retrieveNeighborhoods((error, neighborhoods) => {
     if (error) { // Got an error
       console.error(error);
     } else {
@@ -54,8 +58,8 @@ fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
 /**
  * Fetch all cuisines and set their HTML.
  */
-fetchCuisines = () => {
-  DBHelper.fetchCuisines((error, cuisines) => {
+retrieveCuisines = () => {
+  DBHelper.retrieveCuisines((error, cuisines) => {
     if (error) { // Got an error!
       console.error(error);
     } else {
@@ -94,48 +98,41 @@ updateRestaurants = () => {
   const cuisine = cSelect[cIndex].value;
   const neighborhood = nSelect[nIndex].value;
 
-  console.log('updateRestaurants :'+cuisine+' / '+neighborhood);
+  console.log('[4.1] UpdateRestaurants :'+cuisine+' / '+neighborhood);
 
   if(navigator.onLine && !document.getElementById('gmap-api') && (cuisine !== 'all' || neighborhood !== 'all')){
-    console.log('includeAPI');
+    console.log('[Event] Change Select --> includeAPI ');
     includeAPI();
   }
 
+  console.log('[4.2] Retrieve Restaurants');
   if(cuisine === 'all' && neighborhood === 'all'){
-    DBHelper.fetchRestaurants((error, restaurants) => {
-      if (error) { // Got an error!
-        console.error(error);
-      } else {
+    DBHelper.retrieveRestaurants((error, restaurants) => {
+      if (error) {console.error(error);} else {
         resetRestaurants(restaurants);
         fillRestaurantsHTML();
       }
     });
   }
   else if (cuisine === 'all') {
-    DBHelper.fetchRestaurantByNeighborhood(neighborhood, (error, restaurants) => {
-      if (error) { // Got an error!
-        console.error(error);
-      } else {
+    DBHelper.retrieveRestaurantByNeighborhood(neighborhood, (error, restaurants) => {
+      if (error) {console.error(error);} else {
         resetRestaurants(restaurants);
         fillRestaurantsHTML();
       }
     });
   }
   else if (neighborhood === 'all') {
-    DBHelper.fetchRestaurantByCuisine(cuisine, (error, restaurants) => {
-      if (error) { // Got an error!
-        console.error(error);
-      } else {
+    DBHelper.retrieveRestaurantByCuisine(cuisine, (error, restaurants) => {
+      if (error) {console.error(error);} else {
         resetRestaurants(restaurants);
         fillRestaurantsHTML();
       }
     });
   }
   else {
-    DBHelper.fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
-      if (error) { // Got an error!
-        console.error(error);
-      } else {
+    DBHelper.retrieveRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, (error, restaurants) => {
+      if (error) {console.error(error);} else {
         resetRestaurants(restaurants);
         fillRestaurantsHTML();
       }
@@ -147,6 +144,7 @@ updateRestaurants = () => {
  * Clear current restaurants, their HTML and remove their map markers.
  */
 resetRestaurants = (restaurants) => {
+  console.log('[4.3] Reset Restaurants');
   // Remove all restaurants
   self.restaurants = [];
   const ul = document.getElementById('restaurants-list');
@@ -161,9 +159,8 @@ resetRestaurants = (restaurants) => {
 /**
  * Create all restaurants HTML and add them to the webpage.
  */
-
-// TODO in Phase 3 : Add a pagination to load only the first 12 result ( impove UX and reduce load time)
 fillRestaurantsHTML = (restaurants = self.restaurants) => {
+  console.log('[4.4] Fill Restaurants');
   const ul = document.getElementById('restaurants-list');
   if(restaurants.length > 0){
     restaurants.forEach(restaurant => {
@@ -244,7 +241,6 @@ createRestaurantHTML = (restaurant) => {
   address.innerHTML = restaurant.address;
   div.append(address);
 
-  // TODO: improve the display of the button !
   const more = document.createElement('a');
   more.innerHTML = 'View Details';
   more.href = DBHelper.urlForRestaurant(restaurant);
@@ -256,13 +252,11 @@ createRestaurantHTML = (restaurant) => {
   return li;
 };
 
-
-
-
 /**
  * Render alternative Static Map
  */
 loadStaticMap = () => {
+  console.log('[4.6] Load static map');
   const lat = 40.722216;
   const lng = -73.987501;
   const zoom = 12;
@@ -294,10 +288,14 @@ loadStaticMap = () => {
 
   // load now the google one
   document.getElementById('map-static').addEventListener('click', function(){
-    includeAPI();
+    if(navigator.onLine && !document.getElementById('gmap-api')){
+      console.log('[Event] Click on Map --> includeAPI ');
+      includeAPI();
+    }
   });
   document.addEventListener('scroll', function(){
-    if(flag_scroll === 0){
+    if(navigator.onLine && !document.getElementById('gmap-api') && flag_scroll === 0){
+      console.log('[Event] Scroll --> includeAPI ');
       flag_scroll++;
       includeAPI();
     }
@@ -309,7 +307,7 @@ loadStaticMap = () => {
 * https://codepen.io/svinkle/pen/vJmlt
  */
 includeAPI = () => {
-  console.log('include Google API');
+  console.log('[6.1] Include Google API');
   const gkey = 'AIzaSyC7PG4bxfY8ul6b8YLstueqFeI6eRnnVmk';
   let js;
   let fjs = document.getElementsByTagName('script')[0];
@@ -318,7 +316,7 @@ includeAPI = () => {
     js.id = 'gmap-api';
     js.setAttribute('async', '');
     js.setAttribute('defer', '');
-    js.src = 'https://maps.googleapis.com/maps/api/js?key='+gkey+'&sensor=false&libraries=places&force=pwa&callback=initMap';
+    js.src = 'https://maps.googleapis.com/maps/api/js?key='+gkey+'&libraries=places&force=pwa&callback=initMap';
     fjs.parentNode.insertBefore(js, fjs);
   }
 };
@@ -332,6 +330,7 @@ initMap = () => {
     lng: -73.987501
   };
   if (navigator.onLine) {
+    console.log('[6.2] Initialize GMap');
     self.map = new google.maps.Map(document.getElementById('map'), {
       zoom: 12,
       center: loc,
@@ -340,9 +339,8 @@ initMap = () => {
     });
     addMarkersToMap();
 
-    console.log('Initialize GMap');
+    console.log('[6.3] Add title to iframe');
     const iframeloaded = document.querySelector('#map iframe') !== null;
-    console.log('add title to iframe');
     if(iframeloaded){
       document.querySelector('#map iframe').setAttribute('title', 'New York City Map of Restaurants');
     }
@@ -354,7 +352,7 @@ initMap = () => {
  * Add markers for current restaurants to the map.
  */
 addMarkersToMap = (restaurants = self.restaurants) => {
-  console.log('addMarkersToMap');
+  console.log('[4.5] Add Markers To Map');
   console.log(restaurants);
   if (typeof google === 'object' && typeof google.maps === 'object' && restaurants !== null && restaurants !== undefined && restaurants.length > 0) {
     restaurants.forEach(restaurant => {

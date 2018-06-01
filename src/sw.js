@@ -1,13 +1,26 @@
 const staticCacheName = 'nico-static-resto-v1';
 
+const srcFiles = [
+  'css/styles.css',
+  'css/normalize.css',
+  'css/small.css',
+  'js/dbhelper.js',
+  'js/idb.js',
+  'js/main.js',
+  'js/restaurant_info.js'
+]
+
+const distFiles = [
+  'css/styles_all.css',
+  'js/script_all.js'
+]
+
 const staticFiles = [
   './',
   'index.html',
   'restaurant.html',
-  'css/styles_all.css',
   'fonts/subset-CaviarDreams.ttf',
   'fonts/subset-fontawesome.ttf',
-  'js/script_all.js',
   'logo/BSicon_REST.png',
   'logo/BSicon_REST.svg',
   'img/1_100w.jpg','img/1_100w.webp','img/1_200w.jpg','img/1_200w.webp',
@@ -49,7 +62,8 @@ const staticFiles = [
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(staticCacheName).then(function(cache) {
-      return cache.addAll(staticFiles);
+        return cache.addAll(staticFiles.concat(srcFiles)); // Dev env.
+        //return cache.addAll(staticFiles.concat(distFiles)); // Production env.
     })
   );
 });

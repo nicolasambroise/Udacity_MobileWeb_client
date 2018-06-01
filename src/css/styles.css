@@ -524,13 +524,27 @@ nav h1 a:focus {
 
 /* ============================ Rating ================== */
 /* http://experiments.wemakesites.net/css3-rating-stars-with-selection.html */
+#form-container {
+  max-width: 800px;
+  margin: 10px auto; }
+
+#review-form {
+  padding: 10px;
+  border: 2px #ccc;
+  border-style: dashed;
+  margin: 10px; }
+
+#review-comment {
+  width: 100%;
+  margin-top: 5px; }
+
 #review-rating,
 #review-rating label::before {
   display: inline-block; }
 
 #review-rating label:hover,
 #review-rating label:hover ~ label {
-  color: #189800; }
+  color: #ff9800; }
 
 #review-rating * {
   margin: 0;
@@ -540,22 +554,13 @@ nav h1 a:focus {
   display: none; }
 
 #review-rating {
-  unicode-bidi: bidi-override;
   direction: rtl; }
 
 #review-rating label {
   color: #ccc; }
 
-#review-rating label::before {
-  content: "\2605";
-  width: 18px;
-  line-height: 18px;
-  text-align: center;
-  font-size: 18px;
-  cursor: pointer; }
-
 #review-rating input:checked ~ label {
-  color: #f5b301; }
+  color: #8b0000; }
 
 /* ============================ footer ================== */
 footer a {

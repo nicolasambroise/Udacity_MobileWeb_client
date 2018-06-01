@@ -590,54 +590,31 @@ nav h1 a:focus {
 }
 /* ============================ Rating ================== */
 /* http://experiments.wemakesites.net/css3-rating-stars-with-selection.html */
+
+#form-container{
+	max-width: 800px;
+  margin: 10px auto;
+}
+#review-form{
+	padding: 10px;
+  border: 2px $border-color;
+  border-style: dashed;
+  margin: 10px;
+}
+#review-comment{
+	width: 100%;
+  margin-top: 5px;
+}
+
 #review-rating,
-#review-rating label::before
-{
-    display: inline-block;
-}
-
+#review-rating label::before{display: inline-block;}
 #review-rating label:hover,
-#review-rating label:hover ~ label
-{
-    color: #189800;
-}
-
-#review-rating *
-{
-    margin: 0;
-    padding: 0;
-}
-
-#review-rating input
-{
-    display: none;
-}
-
-#review-rating
-{
-    unicode-bidi: bidi-override;
-    direction: rtl;
-}
-
-#review-rating label
-{
-    color: #ccc;
-}
-
-#review-rating label::before
-{
-    content: "\2605";
-    width: 18px;
-    line-height: 18px;
-    text-align: center;
-    font-size: 18px;
-    cursor: pointer;
-}
-
-#review-rating input:checked ~ label
-{
-    color: #f5b301;
-}
+#review-rating label:hover ~ label{color: $hover-color;}
+#review-rating *{margin: 0;padding: 0;}
+#review-rating input{display: none;}
+#review-rating{direction: rtl;}
+#review-rating label{color: $border-color;}
+#review-rating input:checked ~ label{color: $main-color;}
 
 /* ============================ footer ================== */
 footer a{

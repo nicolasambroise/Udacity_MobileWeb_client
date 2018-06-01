@@ -30,7 +30,7 @@
   <!-- Apple -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <link rel="apple-touch-icon" href="./logo/BSicon_REST.svg">
-  <link rel="canonical" href="https://www.nicolasambroise.com/mws/restaurant.html" />
+  <!--<link rel="canonical" href="https://www.nicolasambroise.com/mws/restaurant.html" />-->
   <!-- inject:head:css -->
   <link rel="stylesheet" href="css/small.css">
   <link rel="stylesheet" href="css/normalize.css" rel="preload">
@@ -94,18 +94,17 @@
     <!-- End reviews -->
     <!-- Beginning form -->
     <section id="form-container" aria-label="Form Container">
-      <button type="button">Add a comment !</button>
       <form id="review-form" role="form" aria-label="review form">
         <input type="text" placeholder="Enter your name" id="review-name" aria-label="review name">
         <div id="review-rating">
-          <input type="radio" name="review-rating" id="rating-0" value="5" /><label for="rating-0"></label>
-          <input type="radio" name="review-rating" id="rating-1" value="4" /><label for="rating-1"></label>
-          <input type="radio" name="review-rating" id="rating-2" value="3" /><label for="rating-2"></label>
-          <input type="radio" name="review-rating" id="rating-3" value="2" /><label for="rating-3"></label>
-          <input type="radio" name="review-rating" id="rating-4" value="1" /><label for="rating-4"></label>
+          <input type="radio" name="review-rating" id="rating-0" value="5" /><label for="rating-0" class="fa fa-star"></label>
+          <input type="radio" name="review-rating" id="rating-1" value="4" /><label for="rating-1" class="fa fa-star"></label>
+          <input type="radio" name="review-rating" id="rating-2" value="3" /><label for="rating-2" class="fa fa-star"></label>
+          <input type="radio" name="review-rating" id="rating-3" value="2" /><label for="rating-3" class="fa fa-star"></label>
+          <input type="radio" name="review-rating" id="rating-4" value="1" /><label for="rating-4" class="fa fa-star"></label>
         </div>
         <textarea name="review-comment" id="review-comment" rows="3" placeholder="Leave a comment on this Restaurant" aria-label="review comment"></textarea>
-        <input type="submit">
+        <input type="submit" value="Add a review !">
       </form>
     </section>
     <!-- End form -->
@@ -120,7 +119,6 @@
   <!-- inject:js -->
   <script src="js/idb.js"></script>
   <script src="js/dbhelper.js"></script>
-  <script src="js/script.js"></script>
   <script src="app.js"></script>
   <!-- endinject -->
   <!-- inject:specificResto:js -->

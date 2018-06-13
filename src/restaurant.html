@@ -29,14 +29,29 @@
   <meta name="og:type" content="website">
   <!-- Apple -->
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <link rel="apple-touch-icon" href="./logo/BSicon_REST.svg">
-  <!--<link rel="canonical" href="https://www.nicolasambroise.com/mws/restaurant.html" />-->
+  <meta name="msapplication-TileColor" content="#ffffff">
+  <meta name="msapplication-TileImage" content="./logo/BSicon_REST_144w.png">
+
+  <!--<link rel="canonical" href="https://www.nicolasambroise.com/mws/" />-->
+  <link rel="apple-touch-icon" sizes="57x57" href="./logo/BSicon_REST_57w.png">
+  <link rel="apple-touch-icon" sizes="60x60" href="./logo/BSicon_REST_60w.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="./logo/BSicon_REST_72w.png">
+  <link rel="apple-touch-icon" sizes="76x76" href="./logo/BSicon_REST_76w.png">
+  <link rel="apple-touch-icon" sizes="114x114" href="./logo/BSicon_REST_114w.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="./logo/BSicon_REST_120w.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="./logo/BSicon_REST_144w.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="./logo/BSicon_REST_152w.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="./logo/BSicon_REST_180w.png">
+  <link rel="icon" type="image/png" sizes="192x192"  href="./logo/BSicon_REST_192w.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="./logo/BSicon_REST_32w.png">
+  <link rel="icon" type="image/png" sizes="96x96" href="./logo/BSicon_REST_96w.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="./logo/BSicon_REST_16w.png">
+
   <!-- inject:head:css -->
   <link rel="stylesheet" href="css/small.css">
   <link rel="stylesheet" href="css/normalize.css" rel="preload">
   <link rel="stylesheet" href="css/styles.css" rel="preload">
   <!-- endinject -->
-  <link rel="icon" type="image/png" sizes="16x16" href="./logo/BSicon_REST.png">
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#444">
 </head>
@@ -73,12 +88,12 @@
        </div>
     </section>
     <section id="restaurant-operatinghours">
+       <h3>Address</h3>
+         <p id="restaurant-address"></p>
        <h3>Operating Hours</h3>
        <div>
          <table id="restaurant-hours"></table>
        </div>
-       <h3>Address</h3>
-       <p id="restaurant-address"></p>
     </section>
     <!-- end restaurant -->
     <!-- Beginning map -->
@@ -95,15 +110,15 @@
     <!-- Beginning form -->
     <section id="form-container" aria-label="Form Container">
       <form id="review-form" role="form" aria-label="review form">
-        <input type="text" placeholder="Enter your name" id="review-name" aria-label="review name">
+        <input type="text" placeholder="Enter your name" id="review-name" aria-label="review name" required>
         <div id="review-rating">
-          <input type="radio" name="review-rating" id="rating-0" value="5" /><label for="rating-0" class="fa fa-star"></label>
+          <input type="radio" name="review-rating" id="rating-0" value="5" required/><label for="rating-0" class="fa fa-star"></label>
           <input type="radio" name="review-rating" id="rating-1" value="4" /><label for="rating-1" class="fa fa-star"></label>
           <input type="radio" name="review-rating" id="rating-2" value="3" /><label for="rating-2" class="fa fa-star"></label>
           <input type="radio" name="review-rating" id="rating-3" value="2" /><label for="rating-3" class="fa fa-star"></label>
           <input type="radio" name="review-rating" id="rating-4" value="1" /><label for="rating-4" class="fa fa-star"></label>
         </div>
-        <textarea name="review-comment" id="review-comment" rows="3" placeholder="Leave a comment on this Restaurant" aria-label="review comment"></textarea>
+        <textarea name="review-comment" id="review-comment" rows="3" placeholder="Leave a comment on this Restaurant" aria-label="review comment"  minlength="10" required></textarea>
         <input type="submit" value="Add a review !">
       </form>
     </section>
@@ -112,9 +127,7 @@
   <!-- End main -->
 
   <footer id="footer">
-    Copyright (c) 2018 - All Rights Reserved.<br>
-	  <a href="./" aria-label="Home page - Restaurant Reviews" tabindex="0" rel="noopener"><strong>Restaurant Reviews</strong></a> -
-	  <a href="javascript:;" id="toTop" aria-label="Back to top" tabindex="0" rel="noopener"><strong>Back to top</strong></a>
+    Copyright (c) 2018 - <a href="javascript:;" id="toTop" aria-label="Back to top" tabindex="0" rel="noopener"><strong>Back to top</strong></a>
   </footer>
   <!-- inject:js -->
   <script src="js/idb.js"></script>

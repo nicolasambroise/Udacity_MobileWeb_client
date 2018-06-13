@@ -17,11 +17,12 @@ const distFiles = [
 
 const staticFiles = [
   './',
-  'index.html',
+  'index.php',  /* Conflict if we use index.html on Heroku */
+  'home.html',  /* Conflict if we use index.html on Heroku */
   'restaurant.html',
   'fonts/subset-CaviarDreams.ttf',
   'fonts/subset-fontawesome.ttf',
-  'logo/BSicon_REST.png',
+  'logo/BSicon_REST_16w.png',
   'logo/BSicon_REST.svg',
   'img/1_100w.jpg','img/1_100w.webp','img/1_200w.jpg','img/1_200w.webp',
   'img/1_300w.jpg','img/1_300w.webp','img/1_400w.jpg','img/1_400w.webp',
@@ -62,7 +63,8 @@ const staticFiles = [
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(staticCacheName).then(function(cache) {
-        return cache.addAll(staticFiles.concat(srcFiles)); // Dev env.
+        arrayFiles = staticFiles.concat(srcFiles);
+        return cache.addAll(arrayFiles); // Dev env.
         //return cache.addAll(staticFiles.concat(distFiles)); // Production env.
     })
   );
@@ -75,29 +77,18 @@ self.addEventListener('fetch', function(event) {
   }
   // Exclude parameters from URL with ignoreSearch option for caching "restaurant.html?id=X"
   event.respondWith(
-    /*
     caches.match(event.request, {'ignoreSearch': true}).then(function(response) {
       if (response !== undefined) {
+        if((event.request).indexOf('html') > 0){ console.log('* SW cache '+ event.request)}
 		    return response;
 		  } else {
 		    return fetch(event.request).then(function (response) {
 			    return response;
-		  }  ).catch(function () {
+		    }).catch(function () {
 			    return caches.match('');
 		    });
 		  }
 	  })
-    */
-    caches.open(staticCacheName).then(cache => {
-      return cache.match(event.request).then(response => {
-        return response || fetch(event.request).then(response => {
-          if (event.request.url.includes('localhost')) {
-            cache.put(e.request, response.clone());
-          }
-          return response;
-        });
-      });
-    })
   );
 });
 self.addEventListener('activate', function(event) {
@@ -114,35 +105,4 @@ self.addEventListener('activate', function(event) {
       );
     })
   );
-});
-
-self.addEventListener('sync', event => {
-  if(event.tag === 'syncReviews') {
-    DBHelper.openLocalReviewDatabase().then(db => {
-      let tx = db.transaction('localReviewDbs');
-      let restaurantStore = tx.objectStore('localReviewDbs');
-      return restaurantStore.getAll();
-    }).then(val => {
-      val.forEach(function (review) {
-        const url = `${DBHelper.DATABASE_URL}reviews/?restaurant_id=${review.restaurant_id}`;
-        fetch(url, {
-          method: 'POST',
-          body: JSON.stringify(review),
-          headers: {
-            'content-type': 'application/json'
-          },
-        })
-        .then(response => response.json())
-        .then(function (val) {
-          DBHelper.openLocalReviewDatabase().then(function (db) {
-          let tx = db.transaction('localReviewDbs');
-          let restaurantStore = tx.objectStore('localReviewDbs');
-          restaurantStore.delete(review.restaurant_id)
-          });
-        }).catch(function (error) {
-          console.log(error);
-        });
-      });
-    });
-  }
 });

@@ -38,14 +38,14 @@ getRestaurantFromURL = (callback) => {
       if (error) {
         console.error(error);
       } else {
-        console.log('[2.6] Retrieve Restaurant');
+        console.log('[2.8] Retrieve Restaurant');
         DBHelper.retrieveRestaurantById(id, (error, restaurant) => {
           self.restaurant = restaurant;
           if (!restaurant) {
             console.error(error);
             return;
           }
-          console.log('[2.7] Fill Restaurant');
+          console.log('[2.9] Fill Restaurant');
           fillRestaurantHTML();
           callback(null, restaurant);
         });
@@ -70,7 +70,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 
 	   // Webp for Chrome
 	  const source_800webp = document.createElement('source');
-	  source_800webp.media = '(min-width:800px)';
+	  source_800webp.media = '(min-width:1000px)';
 	  source_800webp.srcset = DBHelper.imageUrlForRestaurant(restaurant,800,'webp');
 	  picture.append(source_800webp);
 	  const source_400webp = document.createElement('source');
@@ -86,7 +86,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 	  picture.append(source_200webp);
 	  // Jpg for other
   	  const source_800jpg = document.createElement('source');
-  	  source_800jpg.media = '(min-width:800px)';
+  	  source_800jpg.media = '(min-width:1000px)';
   	  source_800jpg.srcset = DBHelper.imageUrlForRestaurant(restaurant,800,'jpg');
   	  picture.append(source_800jpg);
   	  const source_400jpg = document.createElement('source');
@@ -150,6 +150,7 @@ getReviewsByRestaurant = () => {
  */
 fillReviewsHTML = (reviews) => {
   const container = document.getElementById('reviews-container');
+  container.innerHTML = ''; // reset
   const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
   container.appendChild(title);
@@ -160,9 +161,10 @@ fillReviewsHTML = (reviews) => {
     container.appendChild(noReviews);
     return;
   }
-  const ul = document.getElementById('reviews-list');
+  const ul = document.createElement('ul');
+  ul.id = 'reviews-list';
   reviews.forEach(review => {
-    ul.appendChild(createReviewHTML(review));
+    ul.appendChild(createReviewHTML(review,null));
   });
   container.appendChild(ul);
 
@@ -173,24 +175,29 @@ fillReviewsHTML = (reviews) => {
 /**
  * Create review HTML and add it to the webpage.
  */
-createReviewHTML = (review) => {
+createReviewHTML = (review,type) => {
   const li = document.createElement('li');
   // Add class blur only if review.comments > 100 character ( 2 lines)
   if(review.comments.length > 100){li.className = 'blur';}
+  // Add class temp for not synchronize elements
+  if(type == 'temp'){li.className = 'temp';}
+
   const div = document.createElement('div');
   const info = document.createElement('div');
   const name = document.createElement('p');
   name.innerHTML = review.name;
   info.appendChild(name);
-  const date = document.createElement('p');
-  // TODO add a note if updated.
-  const review_date = new Date(review.createdAt*1000);
-  date.innerHTML = review_date;
+  const date = document.createElement('em');
+  const review_date = new Date(review.createdAt);
+  const review_date_formated = ("00" + review_date.getDate()).slice(-2) + "/" + ("00" + (review_date.getMonth() + 1)).slice(-2) + "/" + (review_date.getFullYear()) + " " + ("00" + review_date.getHours()).slice(-2) + ":" + ("00" + review_date.getMinutes()).slice(-2)+" ";
+  date.innerHTML = review_date_formated;
   info.appendChild(date);
   div.appendChild(info);
+  /*
   const rating = document.createElement('span');
-  rating.innerHTML = `Rating: ${review.rating}`;
+  rating.innerHTML = `Rating:`;
   div.appendChild(rating);
+  */
   for (let indexCount = 0; indexCount < 5; indexCount++) {
     let rating = parseInt(review.rating);
     let star = document.createElement('i');
@@ -250,13 +257,13 @@ reviewUnblur = () => {
  */
 document.getElementById('review-form').addEventListener("submit", function(event) {
   event.preventDefault();
-  console.log('initReviewForm');
+  console.log('[7.1] Init Review Form');
   const name = document.getElementById('review-form').elements['review-name'].value;
   const rating = document.getElementById('review-form').elements['review-rating'].value;
   const comment = document.getElementById('review-form').elements['review-comment'].value;
   const url = new URL(window.location.href);
   const restaurant = url.searchParams.get("id");
-  alert(`The form was submitted [${name}/${rating}/${comment}/${restaurant}]`);
+  console.log(`[7.2] The form was submitted [${name}/${rating}/${comment}/${restaurant}]`);
 
 /*
 Endpoint
@@ -267,13 +274,57 @@ POST http://localhost:1337/reviews/
     "rating": <rating>,
     "comments": <comment_text>
 }
-
-if user online --> post data
-else put data in ibd ? or wait for online to proceed all the queue.
 */
+  const JSONtext = `{
+      "restaurant_id": ${restaurant},
+      "name": "${name}",
+      "rating": ${rating},
+      "comments": "${comment}"
+  }`;
+  console.log('[7.3] Create JSON data');
+  console.log(JSONtext);
+  console.log(JSON.parse(JSONtext));
 
+  if (navigator.onLine) {
+    console.log(`[7.4] online : create Review : ${DBHelper.DATABASE_URL}reviews/`);
 
+    var createNewReviewPromise = new Promise(resolve => DBHelper.createNewReview(JSON.parse(JSONtext),resolve));
+    createNewReviewPromise.then((JsonNewReview) =>{
+      console.log('[7.5] Success add Review ');
+      console.log(JsonNewReview);
 
+      // Update review HTML
+      const ul = document.getElementById('reviews-list');
+      ul.appendChild(createReviewHTML(JsonNewReview,null));
+
+      // Update IDB
+      var storeReviewsPromise = new Promise(resolve => DBHelper.storeReview(JsonNewReview,resolve));
+      storeReviewsPromise.then(() =>{
+        console.log('[7.6] FINISH New Review')
+      })
+
+    });
+
+  }
+  else{
+    console.log(`[7.7] offline : create Review : ${DBHelper.DATABASE_URL}reviews/`);
+
+    // Update review HTML
+    const ul = document.getElementById('reviews-list');
+    ul.appendChild(createReviewHTML(JSON.parse(JSONtext),'temp'));
+
+    // Update IDB
+    var storeTempReviewsPromise = new Promise(resolve => DBHelper.storeTempReview(JSON.parse(JSONtext),resolve));
+    storeTempReviewsPromise.then(() =>{
+      console.log('[7.x] Temp review added, waiting for online event')
+    })
+  }
+
+  // reset form
+  document.getElementById('review-form').elements['review-name'].value = "";
+  document.getElementById('review-form').elements['review-comment'].value = "";
+  var rating_radio = document.getElementById('review-form').elements['review-rating'];
+  for(var i=0;i<rating_radio.length;i++){rating_radio[i].checked = false;}
 }, true);
 
 

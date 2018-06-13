@@ -21,7 +21,7 @@ ol, ul, li {
   color: #444; }
 
 a {
-  color: #8b0000;
+  color: #283db5;
   text-decoration: none; }
 
 a img {
@@ -43,7 +43,7 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
   color: #eee;
   font-size: 12px;
   letter-spacing: 1px;
-  padding: 25px;
+  padding: 15px;
   text-align: center;
   text-transform: uppercase; }
 
@@ -79,36 +79,8 @@ nav h1 a {
   max-width: 100%; }
 
 /* ====================== breadcrumb ====================== */
-#breadcrumb ol {
-  padding: 0;
-  list-style: none;
-  background-color: #eee;
-  border-bottom: 1px solid #ccc;
-  font-size: 16px;
-  margin: 0;
-  width: 100%;
-  text-align: left; }
-
-/* Display list items side by side */
-#breadcrumb ol li {
-  display: inline; }
-
-/* Marge for breadcrumb */
-#breadcrumb ol li:first-child {
-  padding-left: 20px; }
-
-/* Add a slash symbol (/) before/behind each list item */
-#breadcrumb ol li + li:before {
-  padding: 8px;
-  color: #000;
-  content: "/\00a0"; }
-
-/* Add a color to all links inside the list */
-#breadcrumb ol li a {
-  color: #8b0000;
-  text-decoration: none;
-  padding: 10px 0;
-  display: inline-block; }
+#breadcrumb {
+  display: none; }
 
 /* ====================== Map ====================== */
 #map-container {
@@ -128,6 +100,9 @@ nav h1 a {
   text-align: center;
   display: none;
   overflow: hidden; }
+
+body:not(.inside) #map-static {
+  background-color: #444; }
 
 #map-static img {
   margin: 0 -100%; }

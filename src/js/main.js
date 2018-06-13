@@ -10,20 +10,30 @@ document.addEventListener('DOMContentLoaded', (event) => {
   DBHelper.loadDeferredStyles();
   console.log('[2] Start loading Contents');
   DBHelper.InitializeIndexedDB((error,status) => {
-    if (error) {
-      console.error(error);
-    } else {
+    if (error) {console.error(error); }
+    else {
       console.log('[3] Initialization Restaurants Perfect');
-      var PromiseNeighborhoods = retrieveNeighborhoods();
-      var PromiseCuisines = retrieveCuisines();
-      Promise.all([PromiseNeighborhoods,PromiseCuisines]).then(() => {
-        console.log('[4] Data Retrieve Perfect');
-        var PromiseUpdate = updateRestaurants();
-        var PromiseMap = loadStaticMap();
-        Promise.all([PromiseUpdate,PromiseMap]).then(() => {
-          console.log('[5] Load Finish Perfect');
-        });
+      console.log(status);
+
+
+      //Promise.all([retrieveNeighborhoods(),retrieveCuisines()]).then(data) => {
+      retrieveNeighborhoods((error,status) => {
+        if (error) {console.error(error); } else {
+          retrieveCuisines((error,status) => {
+            if (error) {console.error(error); } else {
+              console.log('[4] Data Retrieve Perfect');
+              updateRestaurants(() => {
+                console.log("[4.6] Update done ");
+              });
+            }
+          });
+        }
       });
+    }
+  });
+  loadStaticMap((error,status) => {
+    if (error) {console.error(error); } else {
+      console.log('[5.2] Load Static Map Success');
     }
   });
 });
@@ -31,13 +41,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
 /**
  * Fetch all neighborhoods and set their HTML.
  */
-retrieveNeighborhoods = () => {
+retrieveNeighborhoods = (callback) => {
   DBHelper.retrieveNeighborhoods((error, neighborhoods) => {
     if (error) { // Got an error
       console.error(error);
+      callback(error,null);
     } else {
       self.neighborhoods = neighborhoods;
       fillNeighborhoodsHTML();
+      callback(null,"Success");
     }
   });
 };
@@ -58,13 +70,15 @@ fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
 /**
  * Fetch all cuisines and set their HTML.
  */
-retrieveCuisines = () => {
+retrieveCuisines = (callback) => {
   DBHelper.retrieveCuisines((error, cuisines) => {
     if (error) { // Got an error!
       console.error(error);
+      callback(error,null);
     } else {
       self.cuisines = cuisines;
       fillCuisinesHTML();
+      callback(null,"Success");
     }
   });
 };
@@ -74,7 +88,6 @@ retrieveCuisines = () => {
  */
 fillCuisinesHTML = (cuisines = self.cuisines) => {
   const select = document.getElementById('cuisines-select');
-
   cuisines.forEach(cuisine => {
     const option = document.createElement('option');
     option.innerHTML = cuisine;
@@ -255,8 +268,8 @@ createRestaurantHTML = (restaurant) => {
 /**
  * Render alternative Static Map
  */
-loadStaticMap = () => {
-  console.log('[4.6] Load static map');
+loadStaticMap = (callback) => {
+  console.log('[5.1] Load static map');
   const lat = 40.722216;
   const lng = -73.987501;
   const zoom = 12;
@@ -300,6 +313,8 @@ loadStaticMap = () => {
       includeAPI();
     }
   });
+
+  callback(null,"Success")
 };
 
 /*
@@ -364,5 +379,7 @@ addMarkersToMap = (restaurants = self.restaurants) => {
       self.markers.push(marker);
     });
   }
-  else{console.log('Google map not loaded !');}
+  else{
+    console.log('Google map not loaded !');
+  }
 };

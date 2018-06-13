@@ -38,11 +38,11 @@ ol, ul, li {
   color: #444; }
 
 a {
-  color: #8b0000;
+  color: #283db5;
   text-decoration: none; }
 
 a:hover, a:focus {
-  color: #ff9800;
+  color: #aadaff;
   text-decoration: none; }
 
 a img {
@@ -64,7 +64,7 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
   color: #eee;
   font-size: 12px;
   letter-spacing: 1px;
-  padding: 25px;
+  padding: 15px;
   text-align: center;
   text-transform: uppercase; }
 
@@ -90,7 +90,7 @@ nav h1 a {
 
 nav h1 a:hover,
 nav h1 a:focus {
-  color: #ff9800; }
+  color: #aadaff; }
 
 /* ====================== Logo ====================== */
 .logo {
@@ -108,7 +108,7 @@ nav h1 a:focus {
   position: absolute;
   top: -40px;
   left: 0;
-  background-color: #ff9800;
+  background-color: #aadaff;
   color: #000;
   padding: 8px;
   z-index: 100; }
@@ -117,6 +117,10 @@ nav h1 a:focus {
   top: 0; }
 
 /* ====================== breadcrumb ====================== */
+#breadcrumb {
+  display: none;
+  height: 50px; }
+
 #breadcrumb ol {
   padding: 0;
   list-style: none;
@@ -143,7 +147,7 @@ nav h1 a:focus {
 
 /* Add a color to all links inside the list */
 #breadcrumb ol li a {
-  color: #8b0000;
+  color: #283db5;
   text-decoration: none;
   padding: 10px 0;
   display: inline-block; }
@@ -151,8 +155,12 @@ nav h1 a:focus {
 /* Add a color on mouse-over */
 #breadcrumb ol li a:hover,
 #breadcrumb ol li a:focus {
-  color: #ff9800;
+  color: #aadaff;
   text-decoration: underline; }
+
+@media screen and (min-width: 500px) {
+  #breadcrumb {
+    display: block; } }
 
 /* ====================== Map ====================== */
 #map-container {
@@ -173,12 +181,15 @@ nav h1 a:focus {
   display: none;
   overflow: hidden; }
 
+body:not(.inside) #map-static {
+  background-color: #444; }
+
 #map-static img {
   margin: 0 -100%; }
 
 #map a:focus,
 #map div:focus {
-  background-color: #ff9800;
+  background-color: #aadaff;
   color: #000;
   padding: 8px;
   z-index: 100; }
@@ -226,7 +237,7 @@ nav h1 a:focus {
   width: 190px; }
 
 .filter-options select:focus {
-  background-color: #ff9800; }
+  background-color: #aadaff; }
 
 .filter-options i {
   color: white;
@@ -283,10 +294,10 @@ nav h1 a:focus {
   margin: 10px; }
 
 #restaurants-list li h2 {
-  color: #8b0000;
+  color: #283db5;
   font-family: Arial,sans-serif;
   font-size: 20px;
-  font-weight: 200;
+  font-weight: bold;
   letter-spacing: 0;
   line-height: 1;
   margin: 5px 0;
@@ -296,7 +307,7 @@ nav h1 a:focus {
   display: none; }
 
 #restaurants-list li a {
-  background-color: #8b0000;
+  background-color: #283db5;
   color: #fff;
   display: inline-block;
   font-size: 16px;
@@ -317,7 +328,7 @@ nav h1 a:focus {
   -webkit-transition: 500ms;
   transition: 500ms;
   color: #000;
-  background-color: #ff9800; }
+  background-color: #aadaff; }
 
 #restaurants-list li > div p {
   margin: 0; }
@@ -341,8 +352,9 @@ nav h1 a:focus {
 @media screen and (min-width: 800px) {
   #restaurants-list li {
     width: 275px;
-    display: inline-block;
-    margin: 5px; }
+    display: inline-table;
+    margin: 5px;
+    min-height: 360px; }
   #restaurants-list li a {
     margin: 15px auto 0 auto;
     display: block; }
@@ -379,7 +391,7 @@ nav h1 a:focus {
   padding: 25px 0; }
 
 .inside h2 {
-  color: #8b0000;
+  color: #283db5;
   font-size: 20px;
   font-weight: 300;
   letter-spacing: -1px;
@@ -393,7 +405,7 @@ nav h1 a:focus {
 
 /* Restaurent */
 #restaurant-name {
-  color: #8b0000;
+  color: #283db5;
   font-family: Arial,sans-serif;
   font-size: 20px;
   font-weight: 200;
@@ -431,6 +443,9 @@ nav h1 a:focus {
   padding: 5px 10px;
   margin: 0 auto; }
 
+#restaurant-operatinghours {
+  padding-left: 15px; }
+
 #restaurant-operatinghours h3 {
   margin-top: 10px; }
 
@@ -458,7 +473,8 @@ nav h1 a:focus {
   width: 100%;
   margin: 5px 0 10px 0; }
 
-#reviews-list li p {
+#reviews-list li p,
+#reviews-list li em {
   margin: 10px;
   display: inline-block; }
 
@@ -470,7 +486,7 @@ nav h1 a:focus {
 
 #reviews-list li i {
   line-height: 1.5;
-  color: #8b0000; }
+  color: #283db5; }
 
 @media screen and (max-width: 499px) {
   #reviews-list .blur {
@@ -498,7 +514,7 @@ nav h1 a:focus {
     color: black;
     text-align: right; }
   #reviews-list li.blur:hover:after {
-    color: #8b0000; } }
+    color: #283db5; } }
 
 #restaurant-hours td {
   color: #666; }
@@ -534,9 +550,16 @@ nav h1 a:focus {
   border-style: dashed;
   margin: 10px; }
 
+#review-name {
+  padding: 5px 10px; }
+
 #review-comment {
   width: 100%;
-  margin-top: 5px; }
+  max-width: 100%;
+  padding: 5px 10px;
+  margin: 5px 0;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box; }
 
 #review-rating,
 #review-rating label::before {
@@ -544,7 +567,7 @@ nav h1 a:focus {
 
 #review-rating label:hover,
 #review-rating label:hover ~ label {
-  color: #ff9800; }
+  color: #aadaff; }
 
 #review-rating * {
   margin: 0;
@@ -560,7 +583,21 @@ nav h1 a:focus {
   color: #ccc; }
 
 #review-rating input:checked ~ label {
-  color: #8b0000; }
+  color: #283db5; }
+
+#review-form input[type=submit] {
+  color: #fff;
+  padding: 5px 10px;
+  background-color: #283db5;
+  border: none;
+  cursor: pointer; }
+
+#review-form input[type=submit]:hover,
+#review-form input[type=submit]:focus {
+  background-color: #aadaff;
+  -webkit-transition: 500ms;
+  transition: 500ms;
+  color: #000; }
 
 /* ============================ footer ================== */
 footer a {
@@ -570,7 +607,7 @@ footer a {
 
 footer a:hover,
 footer a:focus {
-  color: #ff9800; }
+  color: #aadaff; }
 
 /* ============================= FontAwesome =============== */
 .fa {

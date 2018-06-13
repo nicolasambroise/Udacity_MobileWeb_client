@@ -31,8 +31,8 @@ $font-title : "Dreams", Helvetica, Arial, sans-serif;
 /* Color */
 $bg-light-color : #eee;
 $bg-dark-color : #444;
-$main-color : #8b0000; // rouge foncé
-$hover-color : #ff9800; // orange
+$main-color : #283db5; // blue
+$hover-color : #aadaff; // light blue
 $black-color : #000;
 $text-dark-color : #444; // dark gray
 $text-medium-color : #666;
@@ -98,7 +98,7 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
   color: $text-light-color;
   font-size: $font-small;
   letter-spacing: 1px;
-  padding: 25px;
+  padding: 15px;
   text-align: center;
   text-transform: uppercase;
 }
@@ -151,6 +151,11 @@ nav h1 a:focus {
 	top: 0;
 }
 /* ====================== breadcrumb ====================== */
+#breadcrumb{
+	display:none;
+	height: 50px;
+}
+
 #breadcrumb ol{
     padding: 0;
     list-style: none;
@@ -193,6 +198,10 @@ nav h1 a:focus {
   color: $hover-color;
   text-decoration: underline;
 }
+
+@media screen and (min-width: $break-small) {
+	#breadcrumb{display:block;}
+}
 /* ====================== Map ====================== */
 
 #map-container{
@@ -215,6 +224,9 @@ nav h1 a:focus {
   text-align: center;
   display: none;
   overflow: hidden;
+}
+body:not(.inside) #map-static{
+		background-color: $bg-dark-color;
 }
 
 #map-static img{
@@ -336,7 +348,7 @@ nav h1 a:focus {
   color: $main-color;
   font-family: Arial,sans-serif;
   font-size: $font-large;
-  font-weight: 200;
+  font-weight: bold;
   letter-spacing: 0;
   line-height: 1;
   margin: 5px 0;
@@ -392,9 +404,10 @@ nav h1 a:focus {
 }
 @media screen and (min-width: $break-medium) {
   #restaurants-list li{
-	width: 275px;
-    display: inline-block;
+	  width: 275px;
+    display: inline-table;
     margin: 5px;
+		min-height: 360px;
   }
   #restaurants-list li a{
 	margin: 15px auto 0 auto;
@@ -491,6 +504,9 @@ nav h1 a:focus {
   padding: 5px 10px;
   margin: 0 auto;
 }
+#restaurant-operatinghours{
+	padding-left: 15px;
+}
 #restaurant-operatinghours h3{
   margin-top: 10px;
 }
@@ -518,7 +534,8 @@ nav h1 a:focus {
   width: 100%;
   margin: 5px 0 10px 0;
 }
-#reviews-list li p {
+#reviews-list li p,
+#reviews-list li em {
   margin: 10px;
   display: inline-block;
 }
@@ -601,9 +618,15 @@ nav h1 a:focus {
   border-style: dashed;
   margin: 10px;
 }
+#review-name{
+	padding: 5px 10px;
+}
 #review-comment{
 	width: 100%;
-  margin-top: 5px;
+	max-width: 100%;
+	padding: 5px 10px;
+  margin: 5px 0;
+	box-sizing: border-box;
 }
 
 #review-rating,
@@ -616,6 +639,20 @@ nav h1 a:focus {
 #review-rating label{color: $border-color;}
 #review-rating input:checked ~ label{color: $main-color;}
 
+#review-form input[type=submit]{
+	color: $white-color;
+	padding: 5px 10px;
+	background-color: $main-color;
+	border: none;
+	cursor: pointer;
+}
+
+#review-form input[type=submit]:hover,
+#review-form input[type=submit]:focus{
+	background-color: $hover-color;
+	transition: 500ms;
+	color: $black-color;
+}
 /* ============================ footer ================== */
 footer a{
   padding: 15px 0;

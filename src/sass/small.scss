@@ -4,8 +4,8 @@
 /* Color */
 $bg-light-color : #eee;
 $bg-dark-color : #444;
-$main-color : #8b0000; // rouge foncé
-$hover-color : #ff9800; // orange
+$main-color : #283db5; // blue
+$hover-color : #aadaff; // light blue
 $black-color : #000;
 $text-dark-color : #444; // dark gray
 $text-medium-color : #666;
@@ -18,7 +18,6 @@ $font-small : 12px;
 $font-medium : 16px;
 $font-large : 20px;
 $font-xlarge : 24px;
-
 
 /** BreakPoint */
 $break-small : 500px;
@@ -67,7 +66,7 @@ article, aside, canvas, details, figcaption, figure, footer, header, hgroup, men
   color: $text-light-color;
   font-size: $font-small;
   letter-spacing: 1px;
-  padding: 25px;
+  padding: 15px;
   text-align: center;
   text-transform: uppercase;
 }
@@ -104,40 +103,8 @@ nav h1 a {
 	max-width: 100%;
 }
 /* ====================== breadcrumb ====================== */
-#breadcrumb ol{
-    padding: 0;
-    list-style: none;
-		background-color: $bg-light-color;
-    border-bottom: 1px solid $border-color;
-    font-size: $font-medium;
-    margin: 0;
-		width: 100%;
-		text-align: left;
-}
-
-/* Display list items side by side */
-#breadcrumb ol li {
-    display: inline;
-}
-
-/* Marge for breadcrumb */
-#breadcrumb ol li:first-child {
-		padding-left: 20px;
-}
-
-/* Add a slash symbol (/) before/behind each list item */
-#breadcrumb ol li+li:before {
-    padding: 8px;
-    color: $black-color;
-    content: "/\00a0";
-}
-
-/* Add a color to all links inside the list */
-#breadcrumb ol li a {
-  color: $main-color;
-  text-decoration: none;
-  padding: 10px 0;
-  display: inline-block;
+#breadcrumb{
+	display:none;
 }
 
 /* ====================== Map ====================== */
@@ -162,6 +129,9 @@ nav h1 a {
   text-align: center;
   display: none;
   overflow: hidden;
+}
+body:not(.inside) #map-static{
+		background-color: $bg-dark-color;
 }
 
 #map-static img{

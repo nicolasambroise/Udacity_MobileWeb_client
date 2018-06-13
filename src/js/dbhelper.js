@@ -37,6 +37,7 @@ class DBHelper {
     }
     const dbNameRestaurants = 'Time4FoodRestaurantsDatabase';
     const dbNameReviews = 'Time4FoodReviewsDatabase';
+    const dbNameTempReviews = 'Time4FoodTempReviewsDatabase';
 
     var dbPromiseRestaurants = idb.open(dbNameRestaurants, 1,function(upgradeDb) {
       console.log('[2.2.1] Creating the restaurants object store');
@@ -53,33 +54,58 @@ class DBHelper {
       var store = upgradeDb.transaction.objectStore('reviews');
       store.createIndex('restaurant_id', 'restaurant_id');
     });
-    Promise.all([dbPromiseRestaurants,dbPromiseReviews]).then(() => {
-      console.log("[2.2.3] DBPromise Finish");
+
+    var dbPromiseTempReviews =idb.open(dbNameTempReviews, 1,function(upgradeDb) {
+      console.log('[2.2.3] Creating the temp reviews object store');
+      upgradeDb.createObjectStore('tempReviews', {keyPath: "id", autoIncrement:true}); // Add AutoIncrementation
+      var store = upgradeDb.transaction.objectStore('tempReviews');
+      store.autoIncrement
+    });
+
+    console.log("[2.2] Wait for All store created");
+    Promise.all([dbPromiseRestaurants,dbPromiseReviews,dbPromiseTempReviews])
+    .then(data => {
+      console.log(data);
+      console.log("[2.3] DBPromise Finish");
 
       // Step 2 : Get data as JSON or wait for it
       if (navigator.onLine) {
-        initFetch()
+        initFetch((error,status) => {
+          if(error){callback(error,null);}
+          else{callback(null,'Online');}
+        });
       }
       else{
         console.log('offline');
         window.addEventListener('online', function(e) {
-          initFetch()
+          initFetch((error,status) => {
+            if(error){callback(error,null);}
+            else{callback(null,'Online');}
+          });
         });
-        callback(null,'offline');
+        callback(null,'Offline');
       }
     });
 
-    function initFetch(){
-      var PromisefetchRestaurants = fetchRestaurants();
-      var PromisefetchReviews = fetchReviews();
-      Promise.all([PromisefetchRestaurants,PromisefetchReviews]).then(() => {
-        console.log('[2.5] finish fetching data');
-        callback(null,'Success');
+    function initFetch(callback) {
+
+      console.log("[2.4-5-6] Wait for All data fetched");
+
+      const promises = [
+        new Promise(resolve => fetchRestaurants(resolve)),
+        new Promise(resolve => fetchReviews(resolve)),
+        new Promise(resolve => checkTempStore(resolve)),
+      ];
+      Promise.all(promises)
+      .then(data => {
+        console.log(data);
+        console.log('[2.7] finish fetching data');
+        callback(null,'[initFetch] Success');
       });
     }
 
-    function fetchRestaurants(){
-      console.log('[2.3.1] online : fetch Restaurants');
+    function fetchRestaurants(resolve){
+      console.log('[2.4.1] online : fetch Restaurants');
       if(self.fetch) {
         // FETCH
         fetch(`${DBHelper.DATABASE_URL}restaurants`, {
@@ -88,7 +114,10 @@ class DBHelper {
             'Accept': 'application/json'
           }})
           .then(response => response.json())
-          .then(function(restaurantsJson) {storeRestaurants(restaurantsJson);})
+          .then(restaurantsJson => {
+            var storeRestaurantsPromise = new Promise(resolve => storeRestaurants(restaurantsJson,resolve));
+            storeRestaurantsPromise.then(() =>{resolve('Restaurant Ok'); })
+          })
           .catch(error => callback(error, null));
       } else {
         // XHR
@@ -97,7 +126,8 @@ class DBHelper {
         xhr.onload = () => {
           if (xhr.status === 200) { // Got a success response from server!
             const restaurants = JSON.parse(xhr.responseText);
-            storeRestaurants(restaurantsJson);
+            var storeRestaurantsPromise = new Promise(resolve => storeRestaurants(restaurantsJson,resolve));
+            storeRestaurantsPromise.then(() =>{resolve('Restaurant Ok'); })
           } else { // Oops!. Got an error from server.
             const error = (`Request failed. Returned status of ${xhr.status}`);
             callback(error, null);
@@ -107,8 +137,8 @@ class DBHelper {
         xhr.send();
       }
     }
-    function fetchReviews(){
-      console.log('[2.4.1] online : fetch Reviews');
+    function fetchReviews(resolve){
+      console.log('[2.5.1] online : fetch Reviews');
       if(self.fetch) {
         // FETCH
         fetch(`${DBHelper.DATABASE_URL}reviews`, {
@@ -117,7 +147,10 @@ class DBHelper {
             'Accept': 'application/json'
           }})
           .then(response => response.json())
-          .then(function(reviewsJson) {storeReviews(reviewsJson);})
+          .then(reviewsJson => {
+            var storeReviewsPromise = new Promise(resolve => storeReviews(reviewsJson,resolve));
+            storeReviewsPromise.then(() =>{resolve('Reviews Ok'); })
+          })
           .catch(error => callback(error, null));
       } else {
         // XHR
@@ -126,7 +159,8 @@ class DBHelper {
         xhr.onload = () => {
           if (xhr.status === 200) { // Got a success response from server!
             const reviews = JSON.parse(xhr.responseText);
-            storeReviews(reviewsJson);
+            var storeReviewsPromise = new Promise(resolve => storeReviews(reviewsJson,resolve));
+            storeReviewsPromise.then(() =>{resolve('Reviews Ok'); })
           } else { // Oops!. Got an error from server.
             const error = (`Request failed. Returned status of ${xhr.status}`);
             callback(error, null);
@@ -137,9 +171,32 @@ class DBHelper {
       }
     }
 
+    function checkTempStore(resolve){
+      if (navigator.onLine) {
+        var TempReviewsPromise = DBHelper.retrieveTempReviews((error, JsonTempReview) => {
+          if(JsonTempReview){
+            console.log('[2.6.1] Temp Review not empty ');
+            console.log(JsonTempReview);
+
+            // TODO add a loop here
+            var NewReviewPromise = DBHelper.createNewReview(JsonTempReview); //JSON.parse(JsonTempReview))
+            NewReviewPromise.then(() => {
+              console.log('[2.6.2] Success add Review ');
+              getReviewsByRestaurant();
+              resolve('tempReviews Ok');
+            });
+          }
+          else{
+            console.log('[2.6] Temp Review empty ');
+            resolve('tempReviews empty');
+          }
+        });
+      }
+    }
+
     // Step 3 : Put data in IDB
-    function storeRestaurants(JsonRestaurants) {
-      console.log('[2.3.2] Store Restaurants in IndexedDB');
+    function storeRestaurants(JsonRestaurants,resolve) {
+      console.log('[2.4.2] Store Restaurants in IndexedDB');
       console.log(JsonRestaurants);
 
       dbPromiseRestaurants.then(function(db) {
@@ -152,12 +209,13 @@ class DBHelper {
         ).catch(function(e) {
           tx.abort();
         }).then(function() {
-          console.log('[2.3.3] All Restaurants items added successfully!');
+          console.log('[2.4.3] All Restaurants items added successfully!');
+          resolve("ok");
         });
       });
     }
-    function storeReviews(JsonReviews) {
-      console.log('[2.4.2] Store Reviews in IndexedDB');
+    function storeReviews(JsonReviews,resolve) {
+      console.log('[2.5.2] Store Reviews in IndexedDB');
       console.log(JsonReviews);
 
       dbPromiseReviews.then(function(db) {
@@ -171,13 +229,12 @@ class DBHelper {
         ).catch(function(e) {
           tx.abort();
         }).then(function() {
-          console.log('[2.4.3] All Reviews items added successfully!');
+          console.log('[2.5.3] All Reviews items added successfully!');
+          resolve("ok");
         });
-      });
+      })
     }
-
-    // end  InitializeIndexedDB
-  }
+  } // end  InitializeIndexedDB
 
   /**
    * Fetch all restaurants.
@@ -376,10 +433,167 @@ class DBHelper {
        var restoIndex = store.index('restaurant_id');
        return restoIndex.getAll(parseInt(id));
      }).then(function(val){
+       callback(null, val);
+     });
+   }
+
+   /**
+    * Retrieve a reviews by review ID.
+    */
+   static retrieveReviewsByReviewId(id, callback) {
+     console.log('*** Retrieve Reviews By ID #'+id);
+     const dbName = 'Time4FoodReviewsDatabase';
+     var dbPromise = idb.open(dbName);
+     dbPromise.onerror = function(event) {alert('error opening IndexedDB.');};
+     dbPromise.onsuccess = function(event) {db = dbPromise.result;};
+     dbPromise.then(function(db) {
+       var tx = db.transaction('reviews');
+       tx.onerror = function(event) { callback('error starting transaction.',null);};
+       var store = tx.objectStore('reviews');
+       return store.get(parseInt(id));
+     }).then(function(val){
        console.log(val);
        callback(null, val);
      });
    }
+
+   /***********************************************************************************************************************************
+    * Temp Review database
+    */
+
+    static createNewReview(JSONdata,resolve){
+        console.log(`*** create Temp Review : ${DBHelper.DATABASE_URL}reviews/`);
+        if(self.fetch) {
+          console.log(JSONdata);
+
+          /* // TODO:
+          Nous avons ici un Array JSON il faut donc faire un Fetch dans une loop !
+          et stingify uniquement le JSONdata[i]
+          */
+
+          console.log(JSON.stringify(JSONdata));
+          // FETCH
+          fetch(`${DBHelper.DATABASE_URL}reviews/`, {
+            headers : {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json'
+            },
+            method: 'post',
+            body: JSON.stringify(JSONdata)
+          })
+          .then(response => response.json())
+          .then(function(JsonSuccess) {
+            console.log(JsonSuccess);
+            alert('Well done ! Your comment is successfully created !');
+            resolve(JsonSuccess);
+          });
+        } else {
+          // XHR
+          let xhr = new XMLHttpRequest();
+          xhr.open('POST', `${DBHelper.DATABASE_URL}reviews/`,true);
+          xhr.onload = () => {
+            if (xhr.status === 200) { // Got a success response from server!
+              const JsonSuccess = JSON.parse(xhr.responseText);
+              alert('Well done ! Your comment is successfully created !');
+              resolve(JsonSuccess);
+            } else { // Oops!. Got an error from server.
+              const error = (`Request failed. Returned status of ${xhr.status}`);
+              alert(error);
+            }
+          };
+          xhr.onerror = () => {console.log('An error occurred');};
+          xhr.send();
+        }
+    }
+
+    /**
+     * Store temp reviews
+     */
+    static storeTempReview(JsonReview,resolve) {
+      console.log('*** Store Temp Reviews in IndexedDB');
+      console.log(JsonReview);
+      const dbName = 'Time4FoodTempReviewsDatabase';
+      var dbPromise = idb.open(dbName);
+      dbPromise.onerror = function(event) {alert('error opening IndexedDB.');};
+      dbPromise.onsuccess = function(event) {db = dbPromise.result;};
+      dbPromise.then(function(db) {
+        console.log('open transaction with store : tempReviews');
+        var tx = db.transaction('tempReviews','readwrite');
+        tx.oncomplete = function(event) {console.log('*** Transaction done.');};
+        tx.onerror = function(event) {console.log('*** Transaction error.');};
+        var store = tx.objectStore('tempReviews');
+        console.log(typeof(JsonReview));
+        var storePromise = store.add(JsonReview);
+        storePromise.then(function() {
+          console.log('[7.X] Review items added successfully to temp!');
+          resolve('ok');
+        });
+      });
+    }
+
+    static storeReview(JsonReview,resolve) {
+      console.log('*** Store Reviews in IndexedDB');
+      console.log(JsonReview);
+      const dbName = 'Time4FoodReviewsDatabase';
+      var dbPromise = idb.open(dbName);
+      dbPromise.onerror = function(event) {alert('error opening IndexedDB.');};
+      dbPromise.onsuccess = function(event) {db = dbPromise.result;};
+      dbPromise.then(function(db) {
+        console.log('open transaction with store : reviews');
+        var tx = db.transaction('reviews','readwrite');
+        tx.oncomplete = function(event) {console.log('*** Transaction done.');};
+        tx.onerror = function(event) {console.log('*** Transaction error.');};
+        var store = tx.objectStore('reviews');
+        console.log(typeof(JsonReview));
+        var storePromise = store.add(JsonReview);
+        storePromise.then(function() {
+          console.log('[7.X] Review items added successfully to temp!');
+          resolve('ok');
+        });
+      });
+    }
+    /**
+     * Retrieve temp reviews
+     */
+    static retrieveTempReviews(callback) {
+      const dbName = 'Time4FoodTempReviewsDatabase';
+      var dbPromise = idb.open(dbName);
+      dbPromise.onerror = function(event) {alert('error opening IndexedDB.');};
+      dbPromise.onsuccess = function(event) {db = dbPromise.result;};
+      dbPromise.then(function(db) {
+        var tx = db.transaction('tempReviews');
+        tx.onerror = function(event) { callback('error starting transaction.',null);};
+        var store = tx.objectStore('tempReviews');
+        return store.getAll();
+      }).then(function(val){
+        if(val.length > 0){
+          console.log('[7.X] Retrieve Temp reviews : ');
+          console.log(val);
+          callback(null, val);
+        } else {
+          callback("empty",null)
+        }
+
+      });
+    }
+
+    /**
+     * Delete temp reviews
+     */
+    static deleteTempReviews() {
+      const dbName = 'Time4FoodTempReviewsDatabase';
+      var dbPromise = idb.open(dbName);
+      dbPromise.onerror = function(event) {alert('error opening IndexedDB.');};
+      dbPromise.onsuccess = function(event) {db = dbPromise.result;};
+      dbPromise.then(function(db) {
+        var tx = db.transaction('tempReviews');
+        tx.onerror = function(event) { callback('error starting transaction.',null);};
+        var store = tx.objectStore('tempReviews');
+        return store.clear();
+      }).then(function(val){
+        console.log('[7.X] Clear Temp reviews done : '+ val);
+      });
+    }
 
    /**************************************************************************************************************************
     * Other Script
@@ -412,7 +626,7 @@ class DBHelper {
    static imageUrlForRestaurant(restaurant,size,extension='jpg') {
  	  // Add suffix 100, 200, 400 or 800w
  	  // Rename extension : WebP for Chrome , Jpg for other
-     // Use Svg if no picture found
+     // Use default image if no picture found
      if (window.location.href.indexOf('nicolasambroise') > -1) {
        return (restaurant.photograph)? `/mws/img/${restaurant.photograph}_${size}w.${extension}`:`/mws/img/no-image_${size}w.${extension}`;
      }

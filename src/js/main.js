@@ -59,6 +59,7 @@ retrieveNeighborhoods = (callback) => {
  */
 fillNeighborhoodsHTML = (neighborhoods = self.neighborhoods) => {
   const select = document.getElementById('neighborhoods-select');
+  select.innerHTML = '<option value="all" selected>All Neighborhoods</option>'; // reset select
   neighborhoods.forEach(neighborhood => {
     const option = document.createElement('option');
     option.innerHTML = neighborhood;
@@ -88,6 +89,7 @@ retrieveCuisines = (callback) => {
  */
 fillCuisinesHTML = (cuisines = self.cuisines) => {
   const select = document.getElementById('cuisines-select');
+  select.innerHTML = '<option value="all" selected>All Cuisines</option>'; // reset select
   cuisines.forEach(cuisine => {
     const option = document.createElement('option');
     option.innerHTML = cuisine;

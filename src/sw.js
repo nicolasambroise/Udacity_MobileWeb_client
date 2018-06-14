@@ -63,23 +63,25 @@ const staticFiles = [
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(staticCacheName).then(function(cache) {
-        arrayFiles = staticFiles.concat(srcFiles);
+        arrayFiles = staticFiles.concat(srcFiles); //distFiles --> Production env.
         return cache.addAll(arrayFiles); // Dev env.
-        //return cache.addAll(staticFiles.concat(distFiles)); // Production env.
     })
   );
 });
 
 self.addEventListener('fetch', function(event) {
   // Exclude map file from cache
-  if(event.request.url.indexOf("https://maps.gstatic.com/mapfiles/") > -1){
-    return null;
+  if(event.request.url.indexOf("https://maps.gstatic.com/mapfiles/") > -1){return null;}
+  // check for parameter
+  if(event.request.url.indexOf('html') > -1){
+    console.log('* SW cache '+ event.request.url);
+    if(event.request.url.indexOf("?") > -1){ console.log('* SW param '+event.request.url);}
   }
+
   // Exclude parameters from URL with ignoreSearch option for caching "restaurant.html?id=X"
   event.respondWith(
     caches.match(event.request, {'ignoreSearch': true}).then(function(response) {
       if (response !== undefined) {
-        if((event.request).indexOf('html') > 0){ console.log('* SW cache '+ event.request)}
 		    return response;
 		  } else {
 		    return fetch(event.request).then(function (response) {

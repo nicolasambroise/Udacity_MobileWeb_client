@@ -187,10 +187,15 @@ createReviewHTML = (review,type) => {
   const name = document.createElement('p');
   name.innerHTML = review.name;
   info.appendChild(name);
-  const date = document.createElement('em');
-  const review_date = new Date(review.createdAt);
-  const review_date_formated = ("00" + review_date.getDate()).slice(-2) + "/" + ("00" + (review_date.getMonth() + 1)).slice(-2) + "/" + (review_date.getFullYear()) + " " + ("00" + review_date.getHours()).slice(-2) + ":" + ("00" + review_date.getMinutes()).slice(-2)+" ";
-  date.innerHTML = review_date_formated;
+  const date = document.createElement('em');;
+  if(review.createdAt != null){
+    const review_date = new Date(review.createdAt);
+    const review_date_formated = ("00" + review_date.getDate()).slice(-2) + "/" + ("00" + (review_date.getMonth() + 1)).slice(-2) + "/" + (review_date.getFullYear()) + " " + ("00" + review_date.getHours()).slice(-2) + ":" + ("00" + review_date.getMinutes()).slice(-2)+" ";
+    date.innerHTML = review_date_formated;
+  }
+  else{
+    date.innerHTML = 'pending synchronization ';
+  }
   info.appendChild(date);
   div.appendChild(info);
   /*
@@ -316,7 +321,7 @@ POST http://localhost:1337/reviews/
     // Update IDB
     var storeTempReviewsPromise = new Promise(resolve => DBHelper.storeTempReview(JSON.parse(JSONtext),resolve));
     storeTempReviewsPromise.then(() =>{
-      console.log('[7.x] Temp review added, waiting for online event')
+      console.log('[7.X] Temp review added, waiting for online event')
     })
   }
 

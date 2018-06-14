@@ -40,26 +40,42 @@ class DBHelper {
     const dbNameTempReviews = 'Time4FoodTempReviewsDatabase';
 
     var dbPromiseRestaurants = idb.open(dbNameRestaurants, 1,function(upgradeDb) {
-      console.log('[2.2.1] Creating the restaurants object store');
-      upgradeDb.createObjectStore('restaurants', {keyPath: 'id'});
-      var store = upgradeDb.transaction.objectStore('restaurants');
-      store.createIndex('neighborhood', 'neighborhood');
-      store.createIndex('cuisine_type', 'cuisine_type');
-      store.createIndex('neighborhood,cuisine_type', ['neighborhood', 'cuisine_type']);
+      if (!upgradeDb.objectStoreNames.contains('restaurants')) {
+        console.log('[2.2.1] Creating the restaurants object store');
+        upgradeDb.createObjectStore('restaurants', {keyPath: 'id'});
+        var store = upgradeDb.transaction.objectStore('restaurants');
+        store.createIndex('neighborhood', 'neighborhood');
+        store.createIndex('cuisine_type', 'cuisine_type');
+        store.createIndex('neighborhood,cuisine_type', ['neighborhood', 'cuisine_type']);
+      }
+      else {
+        console.log('[2.2.1] Restaurants object store already exist');
+      }
     });
 
     var dbPromiseReviews = idb.open(dbNameReviews, 1,function(upgradeDb) {
-      console.log('[2.2.2] Creating the reviews object store');
-      upgradeDb.createObjectStore('reviews', {keyPath: 'id'});
-      var store = upgradeDb.transaction.objectStore('reviews');
-      store.createIndex('restaurant_id', 'restaurant_id');
+      if (!upgradeDb.objectStoreNames.contains('reviews')) {
+        console.log('[2.2.2] Creating the reviews object store');
+        upgradeDb.createObjectStore('reviews', {keyPath: 'id'});
+        var store = upgradeDb.transaction.objectStore('reviews');
+        store.createIndex('restaurant_id', 'restaurant_id');
+      }
+      else {
+        console.log('[2.2.2] Reviews object store already exist');
+      }
     });
 
     var dbPromiseTempReviews =idb.open(dbNameTempReviews, 1,function(upgradeDb) {
-      console.log('[2.2.3] Creating the temp reviews object store');
-      upgradeDb.createObjectStore('tempReviews', {keyPath: "id", autoIncrement:true}); // Add AutoIncrementation
-      var store = upgradeDb.transaction.objectStore('tempReviews');
-      store.autoIncrement
+      if (!upgradeDb.objectStoreNames.contains('tempReviews')) {
+        console.log('[2.2.3] Creating the temp reviews object store');
+      //upgradeDb.createObjectStore('tempReviews', {keyPath: "id", autoIncrement:true}); // Add AutoIncrementation
+      // upgradeDb.createObjectStore('tempReviews', {keyPath: 'id'});
+        upgradeDb.createObjectStore('tempReviews', {autoIncrement:true});
+        var store = upgradeDb.transaction.objectStore('tempReviews');
+      }
+      else {
+        console.log('[2.2.3] Temp review object store already exist');
+      }
     });
 
     console.log("[2.2] Wait for All store created");
@@ -68,6 +84,7 @@ class DBHelper {
       console.log(data);
       console.log("[2.3] DBPromise Finish");
 
+      console.log("check off/on line "+navigator.onLine);
       // Step 2 : Get data as JSON or wait for it
       if (navigator.onLine) {
         initFetch((error,status) => {
@@ -177,12 +194,29 @@ class DBHelper {
           if(JsonTempReview){
             console.log('[2.6.1] Temp Review not empty ');
             console.log(JsonTempReview);
+            // loop on each result
+            var items = JsonTempReview;
+            const ul = document.getElementById('reviews-list');
 
-            // TODO add a loop here
-            var NewReviewPromise = DBHelper.createNewReview(JsonTempReview); //JSON.parse(JsonTempReview))
-            NewReviewPromise.then(() => {
+            return Promise.all(items.map(function(item) {
+              console.log(item);
+              var createNewReviewPromise = new Promise(resolve => DBHelper.createNewReview(item,resolve));
+              return createNewReviewPromise.then((item) =>{
+                console.log('[7.5] Success add Review ('+item.id+')');
+                // Update review HTML
+                ul.appendChild(createReviewHTML(item,null));
+                // Update IDB
+                var storeReviewsPromise = new Promise(resolve => DBHelper.storeReview(item,resolve));
+                storeReviewsPromise.then(() =>{
+                  console.log('[7.6] FINISH New Review ('+item.id+')');
+                })
+              })
+            })).catch(function(e) {
+              tx.abort();
+            }).then(function() {
               console.log('[2.6.2] Success add Review ');
-              getReviewsByRestaurant();
+              //delete all temp
+              DBHelper.deleteTempReviews();
               resolve('tempReviews Ok');
             });
           }
@@ -222,7 +256,6 @@ class DBHelper {
         var tx = db.transaction('reviews','readwrite');
         var store = tx.objectStore('reviews');
         var items = JsonReviews;
-
         return Promise.all(items.map(function(item) {
           return store.put(item);
         })
@@ -462,15 +495,9 @@ class DBHelper {
     */
 
     static createNewReview(JSONdata,resolve){
-        console.log(`*** create Temp Review : ${DBHelper.DATABASE_URL}reviews/`);
+        console.log(`*** create New Review : ${DBHelper.DATABASE_URL}reviews/`);
         if(self.fetch) {
           console.log(JSONdata);
-
-          /* // TODO:
-          Nous avons ici un Array JSON il faut donc faire un Fetch dans une loop !
-          et stingify uniquement le JSONdata[i]
-          */
-
           console.log(JSON.stringify(JSONdata));
           // FETCH
           fetch(`${DBHelper.DATABASE_URL}reviews/`, {
@@ -523,9 +550,10 @@ class DBHelper {
         tx.onerror = function(event) {console.log('*** Transaction error.');};
         var store = tx.objectStore('tempReviews');
         console.log(typeof(JsonReview));
+        console.log(JsonReview);
         var storePromise = store.add(JsonReview);
         storePromise.then(function() {
-          console.log('[7.X] Review items added successfully to temp!');
+          console.log('[7.X] Review items added successfully to temp Idb!');
           resolve('ok');
         });
       });
@@ -545,9 +573,10 @@ class DBHelper {
         tx.onerror = function(event) {console.log('*** Transaction error.');};
         var store = tx.objectStore('reviews');
         console.log(typeof(JsonReview));
+        console.log(JsonReview);
         var storePromise = store.add(JsonReview);
         storePromise.then(function() {
-          console.log('[7.X] Review items added successfully to temp!');
+          console.log('[7.X] Review items added successfully to review Idb!');
           resolve('ok');
         });
       });
@@ -586,7 +615,7 @@ class DBHelper {
       dbPromise.onerror = function(event) {alert('error opening IndexedDB.');};
       dbPromise.onsuccess = function(event) {db = dbPromise.result;};
       dbPromise.then(function(db) {
-        var tx = db.transaction('tempReviews');
+        var tx = db.transaction('tempReviews', 'readwrite');
         tx.onerror = function(event) { callback('error starting transaction.',null);};
         var store = tx.objectStore('tempReviews');
         return store.clear();

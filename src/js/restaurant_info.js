@@ -180,17 +180,17 @@ createReviewHTML = (review,type) => {
   // Add class blur only if review.comments > 100 character ( 2 lines)
   if(review.comments.length > 100){li.className = 'blur';}
   // Add class temp for not synchronize elements
-  if(type == 'temp'){li.className = 'temp';}
+  if(type === 'temp'){li.className = 'temp';}
 
   const div = document.createElement('div');
   const info = document.createElement('div');
   const name = document.createElement('p');
   name.innerHTML = review.name;
   info.appendChild(name);
-  const date = document.createElement('em');;
-  if(review.createdAt != null){
+  const date = document.createElement('em');
+  if(review.createdAt !== null && review.createdAt !== undefined){
     const review_date = new Date(review.createdAt);
-    const review_date_formated = ("00" + review_date.getDate()).slice(-2) + "/" + ("00" + (review_date.getMonth() + 1)).slice(-2) + "/" + (review_date.getFullYear()) + " " + ("00" + review_date.getHours()).slice(-2) + ":" + ("00" + review_date.getMinutes()).slice(-2)+" ";
+    const review_date_formated = ('00' + review_date.getDate()).slice(-2) + '/' + ('00' + (review_date.getMonth() + 1)).slice(-2) + '/' + (review_date.getFullYear()) + ' ' + ('00' + review_date.getHours()).slice(-2) + ':' + ('00' + review_date.getMinutes()).slice(-2)+' ';
     date.innerHTML = review_date_formated;
   }
   else{
@@ -260,31 +260,31 @@ reviewUnblur = () => {
 /**
  * Form Submit Review with Rating & comment
  */
-document.getElementById('review-form').addEventListener("submit", function(event) {
+document.getElementById('review-form').addEventListener('submit', function(event) {
   event.preventDefault();
   console.log('[7.1] Init Review Form');
   const name = document.getElementById('review-form').elements['review-name'].value;
   const rating = document.getElementById('review-form').elements['review-rating'].value;
   const comment = document.getElementById('review-form').elements['review-comment'].value;
   const url = new URL(window.location.href);
-  const restaurant = url.searchParams.get("id");
+  const restaurant = url.searchParams.get('id');
   console.log(`[7.2] The form was submitted [${name}/${rating}/${comment}/${restaurant}]`);
 
-/*
-Endpoint
-POST http://localhost:1337/reviews/
-{
+  /*
+  Endpoint
+  POST http://localhost:1337/reviews/
+  {
     "restaurant_id": <restaurant_id>,
     "name": <reviewer_name>,
     "rating": <rating>,
     "comments": <comment_text>
-}
-*/
+  }
+  */
   const JSONtext = `{
-      "restaurant_id": ${restaurant},
-      "name": "${name}",
-      "rating": ${rating},
-      "comments": "${comment}"
+    "restaurant_id": ${restaurant},
+    "name": "${name}",
+    "rating": ${rating},
+    "comments": "${comment}"
   }`;
   console.log('[7.3] Create JSON data');
   console.log(JSONtext);
@@ -305,11 +305,9 @@ POST http://localhost:1337/reviews/
       // Update IDB
       var storeReviewsPromise = new Promise(resolve => DBHelper.storeReview(JsonNewReview,resolve));
       storeReviewsPromise.then(() =>{
-        console.log('[7.6] FINISH New Review')
-      })
-
+        console.log('[7.6] FINISH New Review');
+      });
     });
-
   }
   else{
     console.log(`[7.7] offline : create Review : ${DBHelper.DATABASE_URL}reviews/`);
@@ -321,13 +319,19 @@ POST http://localhost:1337/reviews/
     // Update IDB
     var storeTempReviewsPromise = new Promise(resolve => DBHelper.storeTempReview(JSON.parse(JSONtext),resolve));
     storeTempReviewsPromise.then(() =>{
-      console.log('[7.X] Temp review added, waiting for online event')
-    })
+      console.log('[7.X] offline : Temp review added, waiting for online event');
+      window.addEventListener('online', function(e) {
+        console.log('[7.X] online : reload de la page');
+        location.reload();
+      });
+
+
+    });
   }
 
   // reset form
-  document.getElementById('review-form').elements['review-name'].value = "";
-  document.getElementById('review-form').elements['review-comment'].value = "";
+  document.getElementById('review-form').elements['review-name'].value = '';
+  document.getElementById('review-form').elements['review-comment'].value = '';
   var rating_radio = document.getElementById('review-form').elements['review-rating'];
   for(var i=0;i<rating_radio.length;i++){rating_radio[i].checked = false;}
 }, true);

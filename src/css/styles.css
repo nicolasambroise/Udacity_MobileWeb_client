@@ -437,11 +437,11 @@ body:not(.inside) #map-static {
 
 #restaurant-hours {
   width: 100%;
-  max-width: 350px;
+  max-width: 405px;
   background-color: #fff;
   border-left: solid 2px #ccc;
   padding: 5px 10px;
-  margin: 0 auto; }
+  margin: 0 auto 20px auto; }
 
 #restaurant-operatinghours {
   padding-left: 15px; }

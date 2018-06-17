@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             if (error) {console.error(error); } else {
               console.log('[4] Data Retrieve Perfect');
               updateRestaurants(() => {
-                console.log("[4.6] Update done ");
+                console.log('[4.6] Update done');
               });
             }
           });
@@ -49,7 +49,7 @@ retrieveNeighborhoods = (callback) => {
     } else {
       self.neighborhoods = neighborhoods;
       fillNeighborhoodsHTML();
-      callback(null,"Success");
+      callback(null,'Success');
     }
   });
 };
@@ -79,7 +79,7 @@ retrieveCuisines = (callback) => {
     } else {
       self.cuisines = cuisines;
       fillCuisinesHTML();
-      callback(null,"Success");
+      callback(null,'Success');
     }
   });
 };
@@ -316,7 +316,7 @@ loadStaticMap = (callback) => {
     }
   });
 
-  callback(null,"Success")
+  callback(null,'Success');
 };
 
 /*

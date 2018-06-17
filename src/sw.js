@@ -3,16 +3,11 @@ const staticCacheName = 'nico-static-resto-v1';
 const srcFiles = [
   'css/styles.css',
   'css/normalize.css',
-  'css/small.css',
-  'js/dbhelper.js',
-  'js/idb.js',
-  'js/main.js',
-  'js/restaurant_info.js'
+  'css/small.css'
 ]
 
 const distFiles = [
-  'css/styles_all.css',
-  'js/script_all.js'
+  'css/styles.css'
 ]
 
 const staticFiles = [
@@ -20,6 +15,10 @@ const staticFiles = [
   'index.php',  /* Conflict if we use index.html on Heroku */
   'home.html',  /* Conflict if we use index.html on Heroku */
   'restaurant.html',
+  'js/dbhelper.js',
+  'js/idb.js',
+  'js/main.js',
+  'js/restaurant_info.js',
   'fonts/subset-CaviarDreams.ttf',
   'fonts/subset-fontawesome.ttf',
   'logo/BSicon_REST_16w.png',
@@ -63,8 +62,8 @@ const staticFiles = [
 self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(staticCacheName).then(function(cache) {
-        arrayFiles = staticFiles.concat(srcFiles); //distFiles --> Production env.
-        return cache.addAll(arrayFiles); // Dev env.
+        arrayFiles = staticFiles.concat(distFiles); //srcFiles --> Dev env | distFiles --> Production env.
+        return cache.addAll(arrayFiles);
     })
   );
 });

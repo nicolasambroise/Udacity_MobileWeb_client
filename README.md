@@ -9,11 +9,16 @@ For the **Restaurant Reviews** projects, you will incrementally convert a static
 ### Goals
 
 - Make a mobile-ready app with responsive design.
-- Upgrade app performance
-- Make the app available for offline use
+- Upgrade app performance (reach lighthouse audit min 90% for each critera)
+- Make the app available for offline use (submit review in both online and offline mode)
 - Improve accessibility/UX with tabindex and Aria
 
-### How to use it
+
+### Demo
+- Demo App (on heroku) : https://nia-mws.herokuapp.com
+- Demo Server (on heroku) : https://nia-mws-3.herokuapp.com/restaurants/, https://nia-mws-3.herokuapp.com/reviews/
+
+### How to use it - How to run it locally
 
 #### 1) Download this repository (or fork it !)
 
@@ -54,29 +59,51 @@ In Add MIME Type box, enter **.webp** as the file name extension and **image/web
 `gulp serve`
 4. The browser open automatically in the dist folder
 
+##### 3.4 With Heroku -> run your app on heroku cloud
+1. Install Node and npm (if not previously installed)
+2. Install dependencies (if not previously installed)
+`npm install -g`
+3. In the Node Console :
+`gulp`
+4. Create an account on Heroku
+5. Install Heroku CLI and open cmd :
+`heroku login
+heroku create YOUR_NAME
+git init
+heroku git:remote -a YOUR_NAME
+git add .
+git commit -m 'YOUR_COMMENT'
+git push heroku master`
+6. Go to https://YOUR_NAME.herokuapp.com to see your app
 
-##### 4) Install & Run the Backend Server as specify in the MWS2
-`https://github.com/nicolasambroise/mws-restaurant-stage-2`
+_Use Heroku for HTML pages :_ [help] https://gist.github.com/wh1tney/2ad13aa5fbdd83f6a489, http://www.lemiffe.com/how-to-deploy-a-static-page-to-heroku-the-easy-way/
+1. Use a PHP index page with a redirect
+
+##### 4) Install & Run the Backend Server as specify in the MWS3
+`https://github.com/nicolasambroise/mws-restaurant-stage-3`
 
 _Note about version :_ Backend Server depends on node.js LTS Version: v6.11.2 , npm, and sails.js Please make sure you have these installed before proceeding forward.
 
 
 ##### 5) With your server running, visit the site: `http://localhost:8000`
 
-### LightHouse Score (12/05/2018)
+### LightHouse Score (17/06/2018)
+Score are based on heroku demo app and heroku server (links above)
+LightHouse option : Mobile + 3G
 
 | Tool\Pages | [Prod] index.html | [Prod] restaurant.html |
 | --- | --- | --- |
-| Performance | 93 | 87 |
-| PWA | 100 | 100 |
-| Best Practice | 88 | 88 |
+| Performance | 93 | 96 |
+| PWA | 91 | 91 |
+| Best Practice | 94 | 94 |
 | accessibility | 100 | 100 |
 | SEO | 100 | 100 |
 
-Explanation
-- PWA in production use HTTPS (9 points more than with localhost) !
-- Performance, fetch are slower in production
-
+_Note about blob file error :_ since 10th of june an error appear in the console about blob loading error from inject.preload.js
+for people using Adblock 3.1 (more info https://issues.adblockplus.org/ticket/6744, https://stackoverflow.com/questions/50849510/inject-preload-js-failing-to-load-a-file-in-chrome-from-my-dev-environment)
 
 ### TODO List
-- Use HTTP/2 (?)
+- Performance : Display text while font are loading
+- PWA : Redirect HTTPS To HTTP (htaccess is ready, check how to enable it on Herokuapp)
+- Best Practice : Use HTTP/2 (check a host with HTTP/2 available)
+- Other : Load map async instead of waiting for an event

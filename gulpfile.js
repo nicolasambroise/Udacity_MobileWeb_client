@@ -42,9 +42,8 @@ var plugins = require("gulp-load-plugins")({pattern: ["gulp-*", "gulp.*"], repla
 
 /* ************* JS FILE ************* */
 // minify JS
-/* ==> OK */
 gulp.task("JSminify", function() {
-  return gulp.src(src + "/js/all.js")
+  return gulp.src(src + "/js/*.js")
     .pipe(babel())
     .pipe(uglify())
     .pipe(plugins.rename({suffix: ".min"}))
@@ -54,7 +53,7 @@ gulp.task("JSminify", function() {
 
 // Check JS code for error with ES lint
 gulp.task("JSlint", function() {
-  return gulp.src([src + "/js/*.js","!node_modules/**", "!"+src + "/js/all.js"])
+  return gulp.src([src + "/js/*.js","!node_modules/**"])
     .pipe(eslint({configFile: 'eslintrc.json'}))
     .pipe(eslint.format())
     .pipe(eslint.result(result => {
@@ -67,7 +66,7 @@ gulp.task("JSlint", function() {
 });
 // Idem as previous but with a fail if error
 gulp.task("JSlintFail", function() {
-  return gulp.src([src + "/js/*.js","!node_modules/**", "!"+src + "/js/all.js"])
+  return gulp.src([src + "/js/*.js","!node_modules/**"])
     .pipe(eslint({configFile: 'eslintrc.json'}))
     .pipe(eslint.format())
     .pipe(eslint.failAfterError());
@@ -75,25 +74,19 @@ gulp.task("JSlintFail", function() {
 
 
 // Copy SW to dist
-/* ==> OK  */
 gulp.task('JScopy', function (cb) {
   return gulp.src([src + "/sw.js", src + "/app.js"])
     .pipe(plugins.rename({suffix: ".min"}))
     .pipe(replace('.css', '.min.css'))
     .pipe(replace('.js', '.min.js'))
+    .pipe(replace('.min.json', '.json'))
     .pipe(uglify())
     .pipe(gulp.dest(dist + "/"))
     .pipe(plugins.notify({title: "Gulp",message: "JScopy Done"}));
 });
 
-gulp.task('JSconcat', () => {
-    return gulp.src(src + "/js/*.js")
-      .pipe(concat('all.js'))
-      .pipe(gulp.dest(src + "/js"));
-});
-
 /* ************* CSS FILE ************* */
-/* ==> OK */
+// Sass
 gulp.task("CSSsass", function() {
   return gulp.src(src+"/sass/*.scss")
     .pipe(plugins.sass())
@@ -103,7 +96,6 @@ gulp.task("CSSsass", function() {
   });
 
 // Concatenate CSS
-/* ==> OK */
 gulp.task("CSSconcat", function() {
   return gulp.src([src + "/css/*.css","!"+ src+"/css/*.min.css","!"+ src+"/css/small.css"]) // ATTENTION Exeption sur les min.css
     .pipe(plugins.concat("styles.css"))
@@ -111,8 +103,7 @@ gulp.task("CSSconcat", function() {
     .pipe(plugins.notify({title: "Gulp",message: "CSSconcat Done"}));
   });
 
-// Minify CSS ( styles.css --> styles.min.css et ???.css --> ???.min.css) -- OK
-/* ==> OK */
+// Minify CSS
 gulp.task("CSSminify", function() {
   return gulp.src([dist + "/css/*.css", "!"+ dist + "/css/*.min.css", src+"/css/small.css"])
     .pipe(plugins.csso())
@@ -124,7 +115,6 @@ gulp.task("CSSminify", function() {
 /* ************* HTML FILE ************* */
 
 // Minify HTMLpages
-/* ==> OK */
 gulp.task("HTMLpages", function() {
   return gulp.src(dist + "/*.html")
     .pipe(plugins.htmlclean())
@@ -152,7 +142,6 @@ gulp.task('HTMLinject', function () {
 /* ************* IMAGES ************* */
 
 // Optimize .jpg picture
-/* ==> OK */
 gulp.task("IMGoptimize", function() {
   return gulp.src([src + "/img/*.jpg", src + "/img/*.webp"])
     .pipe(imagemin([
@@ -162,7 +151,6 @@ gulp.task("IMGoptimize", function() {
   });
 
 // Optimize logo
-/* ==> OK */
 gulp.task("LOGOoptimize", function() {
   return gulp.src([src + "/logo/*.png",src + "/logo/*.svg"])
   .pipe(imagemin([
@@ -174,25 +162,35 @@ gulp.task("LOGOoptimize", function() {
 /* *************** MOVE & COPY ************* */
 
 // copy FONTS
- /* ==> OK */
 gulp.task("FONTScopy", function() {
   return gulp.src(src + "/fonts/*")
   .pipe(gulp.dest(dist + "/fonts/"))
 });
 
 // copy JSON
-/* ==> OK */
 gulp.task("JSONcopy", function() {
   return gulp.src(src + "/manifest.json")
   .pipe(gulp.dest(dist + "/"))
 });
 
 // copy JSON
-/* ==> OK */
 gulp.task("HTACCESScopy", function() {
   return gulp.src(src + "/.htaccess")
   .pipe(gulp.dest(dist + "/"))
 });
+
+// copy XML
+gulp.task("XMLcopy", function() {
+  return gulp.src(src + "/sitemap.xml")
+  .pipe(gulp.dest(dist + "/"))
+});
+
+// copy TXT
+gulp.task("TXTcopy", function() {
+  return gulp.src(src + "/robots.txt")
+  .pipe(gulp.dest(dist + "/"))
+});
+
 
 
 /* ************* TASKS MANAGER ************* */
@@ -204,7 +202,7 @@ gulp.task("Run_style", function(cb) {
 
 //  "Run_script" Task
 gulp.task("Run_script", function(cb) {
-    sequence(["JScopy", "JSconcat"], "JSminify", cb);
+    sequence("JScopy", "JSminify", cb);
 });
 
 
@@ -215,7 +213,7 @@ gulp.task("Run_images", function(cb) {
 
 //  "Run_pages" Task
 gulp.task("Run_pages", function(cb) {
-    sequence("HTMLinject",["FONTScopy","JSONcopy", "HTACCESScopy"],"HTMLpages", cb);
+    sequence("HTMLinject",["FONTScopy","JSONcopy", "HTACCESScopy","XMLcopy","TXTcopy"],"HTMLpages", cb);
 });
 
 // Server live editing
